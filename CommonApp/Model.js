@@ -1,4 +1,4 @@
 ﻿
-guidedModel =// @startlock
+model =
 {
-};// @endlock
+};
