@@ -10,6 +10,8 @@ function constructor (id) {
 	this.name = 'AddressEntryAndVerify';
 	// @endregion// @endlock
 
+//	localization.changeLanguage($$('comboboxLanguage').getValue());
+
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
