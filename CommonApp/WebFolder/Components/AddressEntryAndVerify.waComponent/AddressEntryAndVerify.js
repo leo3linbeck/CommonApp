@@ -48,23 +48,19 @@ function constructor (id) {
 				if (response) {
 					if (!response.success) {
 						alert('Address not found');
-						$$(getHtmlId('buttonVerifyAddress')).enable();
 					}
 					else {
 						$$(getHtmlId('textFieldZipEntry')).setValue(response.fullAddress.components.zipcode + '-' + response.fullAddress.components.plus4_code);
 						$$(getHtmlId('richTextUSPSLine1')).setValue(response.USPS[0]);
 						$$(getHtmlId('richTextUSPSLine2')).setValue(response.USPS[1]);
-						$$(getHtmlId('buttonVerifyAddress')).disable();
 					}
 				}
 				else {
 					alert('Validation failed');
-					$$(getHtmlId('buttonVerifyAddress')).enable();
 				}
 			},
 			onError: function(error) {
 				alert('Validation error');
-				$$(getHtmlId('buttonVerifyAddress')).enable();
 			},
 			params: [ {	addr1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 						addr2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
