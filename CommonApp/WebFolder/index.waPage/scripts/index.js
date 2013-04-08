@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var iconHome = {};	// @icon
 	var documentEvent = {};	// @document
 	var comboboxLanguage = {};	// @combobox
 	var buttonNextStep = {};	// @button
@@ -11,14 +12,19 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	iconHome.click = function iconHome_click (event)// @startlock
+	{// @endlock
+		$$('componentAddressEntry').hide();
+	};// @lock
+
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
-		localization.changeLanguage($$('comboboxLanguage').getValue());
+		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
 	};// @lock
 
 	comboboxLanguage.change = function comboboxLanguage_change (event)// @startlock
 	{// @endlock
-		localization.changeLanguage($$('comboboxLanguage').getValue());
+		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
 	};// @lock
 
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
@@ -47,6 +53,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("iconHome", "click", iconHome.click, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");
 	WAF.addListener("comboboxLanguage", "change", comboboxLanguage.change, "WAF");
 	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
