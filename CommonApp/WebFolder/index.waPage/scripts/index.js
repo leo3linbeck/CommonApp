@@ -14,7 +14,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	iconHome.click = function iconHome_click (event)// @startlock
 	{// @endlock
-		$$('componentAddressEntry').hide();
+		L3.stack.forEach(function(e) {
+			$$(e).hide();
+		});
+		L3.stack.length = 0;
+		
+		$$('iconHome').hide();
+		$$('buttonGoBack').hide();
+		$$('buttonNextStep').hide();
+		
+		$$('buttonStart').show();
+		$$('richTextSplashDescription').show();
 	};// @lock
 
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
@@ -29,27 +39,48 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
 	{// @endlock
-		$$('componentAddressEntry').hide();
+		var current, next;
+		
+		if (L3.stack.length < L3.step.length) {
+			current = L3.step[L3.stack.length-1];
+			next = L3.step[L3.stack.length];
+			$$(current).hide();
+			$$(next).show();
+			L3.stack.push(next);
+		}
 	};// @lock
 
 	buttonGoBack.click = function buttonGoBack_click (event)// @startlock
 	{// @endlock
-		$$('buttonGoBack').hide();
-		$$('buttonNextStep').hide();
-		$$('componentAddressEntry').hide();
+		var old = L3.stack.pop();
+		$$(old).hide();
 		
-		$$('buttonStart').show();
-		$$('richTextSplashDescription').show();
+		if (L3.stack.length === 0) {
+			$$('iconHome').hide();
+			$$('buttonGoBack').hide();
+			$$('buttonNextStep').hide();
+			
+			$$('buttonStart').show();
+			$$('richTextSplashDescription').show();
+		}
+		else {
+			$$(L3.stack[L3.stack.length-1]).show();
+		}
 	};// @lock
 
 	buttonStart.click = function buttonStart_click (event)// @startlock
 	{// @endlock
+		var next = L3.step[0];
+		
 		$$('buttonStart').hide();
 		$$('richTextSplashDescription').hide();
 		
+		$$('iconHome').show();
 		$$('buttonGoBack').show();
 		$$('buttonNextStep').show();
-		$$('componentAddressEntry').show();
+
+		L3.stack.push(next);
+		$$(next).show();
 	};// @lock
 
 // @region eventManager// @startlock
