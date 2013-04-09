@@ -13,12 +13,19 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldChildAge = {};	// @textField
 	var textFieldChildBirthdate = {};	// @textField
 	var textFieldChildMiddleName = {};	// @textField
 	var textFieldChildFirstName = {};	// @textField
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
+
+	textFieldChildAge.change = function textFieldChildAge_change (event)// @startlock
+	{// @endlock
+		familyName = L3.toTitleCase(this.getValue());
+		source.familyName.sync();
+	};// @lock
 
 	textFieldChildBirthdate.change = function textFieldChildBirthdate_change (event)// @startlock
 	{// @endlock
@@ -39,6 +46,7 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldChildAge", "change", textFieldChildAge.change, "WAF");
 	WAF.addListener(this.id + "_textFieldChildBirthdate", "change", textFieldChildBirthdate.change, "WAF");
 	WAF.addListener(this.id + "_textFieldChildMiddleName", "change", textFieldChildMiddleName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldChildFirstName", "change", textFieldChildFirstName.change, "WAF");
