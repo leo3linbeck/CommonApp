@@ -19,8 +19,6 @@ function constructor (id) {
 	var textFieldMotherFirstName = {};	// @textField
 	var textFieldFatherMiddleName = {};	// @textField
 	var textFieldFatherFirstName = {};	// @textField
-	var textFieldChildMiddleName = {};	// @textField
-	var textFieldChildFirstName = {};	// @textField
 	var textFieldFamilyName = {};	// @textField
 	// @endregion// @endlock
 
@@ -62,18 +60,6 @@ function constructor (id) {
 		source.familyName.sync();
 	};// @lock
 
-	textFieldChildMiddleName.change = function textFieldChildMiddleName_change (event)// @startlock
-	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
-	};// @lock
-
-	textFieldChildFirstName.change = function textFieldChildFirstName_change (event)// @startlock
-	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
-	};// @lock
-
 	textFieldFamilyName.change = function textFieldFamilyName_change (event)// @startlock
 	{// @endlock
 		familyName = L3.toTitleCase(this.getValue());
@@ -87,8 +73,6 @@ function constructor (id) {
 	WAF.addListener(this.id + "_textFieldMotherFirstName", "change", textFieldMotherFirstName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldFatherMiddleName", "change", textFieldFatherMiddleName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldFatherFirstName", "change", textFieldFatherFirstName.change, "WAF");
-	WAF.addListener(this.id + "_textFieldChildMiddleName", "change", textFieldChildMiddleName.change, "WAF");
-	WAF.addListener(this.id + "_textFieldChildFirstName", "change", textFieldChildFirstName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldFamilyName", "change", textFieldFamilyName.change, "WAF");
 	// @endregion// @endlock
 
