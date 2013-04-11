@@ -45,8 +45,10 @@ function constructor (id) {
 				if (response) {
 					if (!response.success) {
 						alert('Address not found');
+						L3.currentAddress = null;
 					}
 					else {
+						L3.currentAddress = response.fullAddress;
 						$$(getHtmlId('textFieldZipEntry')).setValue(response.fullAddress.components.zipcode + '-' + response.fullAddress.components.plus4_code);
 						$$(getHtmlId('richTextUSPSLine1')).setValue(response.USPS[0]);
 						$$(getHtmlId('richTextUSPSLine2')).setValue(response.USPS[1]);
@@ -54,10 +56,12 @@ function constructor (id) {
 				}
 				else {
 					alert('Validation failed');
+					L3.currentAddress = null;
 				}
 			},
 			onError: function(error) {
 				alert('Validation error');
+				L3.currentAddress = null;
 			},
 			params: [ {	addr1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 						addr2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),

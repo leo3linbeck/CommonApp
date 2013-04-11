@@ -26,6 +26,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		L3.stack.length = 0;
 		
 		$$('iconHome').hide();
+		$$('iconLogin').hide();
 		$$('buttonGoBack').hide();
 		$$('buttonNextStep').hide();
 		
@@ -63,6 +64,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		
 		if (L3.stack.length === 0) {
 			$$('iconHome').hide();
+			$$('iconLogin').hide();
 			$$('buttonGoBack').hide();
 			$$('buttonNextStep').hide();
 			
@@ -82,6 +84,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		$$('richTextSplashDescription').hide();
 		
 		$$('iconHome').show();
+		$$('iconLogin').show();
 		$$('buttonGoBack').show();
 		$$('buttonNextStep').show();
 
