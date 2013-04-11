@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var iconLogin = {};	// @icon
 	var iconHome = {};	// @icon
 	var documentEvent = {};	// @document
 	var comboboxLanguage = {};	// @combobox
@@ -11,6 +12,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 // @endregion// @endlock
 
 // eventHandlers// @lock
+
+	iconLogin.click = function iconLogin_click (event)// @startlock
+	{// @endlock
+		alert('login - to come');
+	};// @lock
 
 	iconHome.click = function iconHome_click (event)// @startlock
 	{// @endlock
@@ -84,6 +90,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
 	WAF.addListener("iconHome", "click", iconHome.click, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");
 	WAF.addListener("comboboxLanguage", "change", comboboxLanguage.change, "WAF");

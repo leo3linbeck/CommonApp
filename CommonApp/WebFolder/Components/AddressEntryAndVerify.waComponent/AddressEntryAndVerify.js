@@ -25,20 +25,17 @@ function constructor (id) {
 
 	textFieldCityEntry.change = function textFieldCityEntry_change (event)// @startlock
 	{// @endlock
-		homeCity = L3.toTitleCase(this.getValue());
-		source.homeCity.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldStreet2Entry.change = function textFieldStreet2Entry_change (event)// @startlock
 	{// @endlock
-		homeAddress2 = L3.toTitleCase(this.getValue());
-		source.homeAddress2.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldStreet1Entry.change = function textFieldStreet1Entry_change (event)// @startlock
 	{// @endlock
-		homeAddress1 = L3.toTitleCase(this.getValue());
-		source.homeAddress1.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock

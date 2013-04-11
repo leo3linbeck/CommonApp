@@ -13,6 +13,8 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldChildSuffix = {};	// @textField
+	var textFieldChildLastName = {};	// @textField
 	var textFieldChildAge = {};	// @textField
 	var textFieldChildBirthdate = {};	// @textField
 	var textFieldChildMiddleName = {};	// @textField
@@ -21,31 +23,39 @@ function constructor (id) {
 
 	// eventHandlers// @lock
 
+	textFieldChildSuffix.change = function textFieldChildSuffix_change (event)// @startlock
+	{// @endlock
+		L3.convertToTitleCase(this);
+	};// @lock
+
+	textFieldChildLastName.change = function textFieldChildLastName_change (event)// @startlock
+	{// @endlock
+		L3.convertToTitleCase(this);
+	};// @lock
+
 	textFieldChildAge.change = function textFieldChildAge_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldChildBirthdate.change = function textFieldChildBirthdate_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldChildMiddleName.change = function textFieldChildMiddleName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldChildFirstName.change = function textFieldChildFirstName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldChildSuffix", "change", textFieldChildSuffix.change, "WAF");
+	WAF.addListener(this.id + "_textFieldChildLastName", "change", textFieldChildLastName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldChildAge", "change", textFieldChildAge.change, "WAF");
 	WAF.addListener(this.id + "_textFieldChildBirthdate", "change", textFieldChildBirthdate.change, "WAF");
 	WAF.addListener(this.id + "_textFieldChildMiddleName", "change", textFieldChildMiddleName.change, "WAF");

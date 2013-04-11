@@ -26,44 +26,37 @@ function constructor (id) {
 
 	textFieldGuardianMiddleName.change = function textFieldGuardianMiddleName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldGuardianFirstName.change = function textFieldGuardianFirstName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldMotherMiddleName.change = function textFieldMotherMiddleName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldMotherFirstName.change = function textFieldMotherFirstName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldFatherMiddleName.change = function textFieldFatherMiddleName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldFatherFirstName.change = function textFieldFatherFirstName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldFamilyName.change = function textFieldFamilyName_change (event)// @startlock
 	{// @endlock
-		familyName = L3.toTitleCase(this.getValue());
-		source.familyName.sync();
+		L3.convertToTitleCase(this);
 	};// @lock
 
 	// @region eventManager// @startlock
