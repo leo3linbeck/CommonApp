@@ -16,9 +16,9 @@ function constructor (id) {
 	// @endregion// @endlock
 
 	if (L3.currentAddress) {
-		$$(getHtmlId('googleMapsBuildSchoolList')).setCenter(L3.currentAddress.metadata.latitude + ',' + L3.currentAddress.metadata.latitude);
-		$$(getHtmlId('googleMapsBuildSchoolList')).setMarker(null, L3.currentAddress.metadata.latitude + ',' + L3.currentAddress.metadata.latitude, {title: 'Your Home'});
-		$$(getHtmlId('googleMapsBuildSchoolList')).setZoom(15);
+		$$(getHtmlId('googleMapBuildSchoolList')).setCenter(L3.currentAddress.metadata.latitude + ',' + L3.currentAddress.metadata.latitude);
+		$$(getHtmlId('googleMapBuildSchoolList')).setMarker(null, L3.currentAddress.metadata.latitude + ',' + L3.currentAddress.metadata.latitude, {title: 'Your Home'});
+//		$$(getHtmlId('googleMapsBuildSchoolList')).setZoom(15);
 	}
 
 	// eventHandlers// @lock
