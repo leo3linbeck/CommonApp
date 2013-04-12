@@ -15,6 +15,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var buttonSelectFamily = {};	// @button
 	var textFieldCityEntry = {};	// @textField
 	var textFieldStreet2Entry = {};	// @textField
 	var textFieldStreet1Entry = {};	// @textField
@@ -22,6 +23,12 @@ function constructor (id) {
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
+
+	buttonSelectFamily.click = function buttonSelectFamily_click (event)// @startlock
+	{// @endlock
+		sources.family.name = '';
+		$$(getHtmlId("dialogSelectFamily")).closeDialog(); //ok button
+	};// @lock
 
 	textFieldCityEntry.change = function textFieldCityEntry_change (event)// @startlock
 	{// @endlock
@@ -37,49 +44,42 @@ function constructor (id) {
 	{// @endlock
 		L3.convertToTitleCase(this);
 	};// @lock
+	
 
 	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock
 	{// @endlock
-		CommonApp.verifyAddressAsync({
-			onSuccess: function(response) {
-				var a;
-				
-				if (response) {
-					if (!response.success) {
-						alert('Address not found');
-						L3.currentAddress = null;
+		sources.family.addressLookup(
+			{	street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
+				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
+				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
+				zip: $$(getHtmlId('textFieldZipEntry')).getValue(),
+				debug: false 
+			},
+			{
+				onSuccess: function(response) {
+					var r = response.result;
+
+					if (response.result) {
+						sources.family.setEntityCollection(response.result);
+						sources.family.autoDispatch();
+						$$(getHtmlId('dialogSelectFamily')).displayDialog();
+						$$(getHtmlId('textFieldZipEntry')).setValue(sources.family.homeZipCode);
+						$$(getHtmlId('richTextUSPSLine1')).setValue(sources.family.uspsLine1);
+						$$(getHtmlId('richTextUSPSLine2')).setValue(sources.family.uspsLine2);
 					}
 					else {
-						a = response.fullAddress;
-						source.family.mapCoords = a.metadata.latitude + ',' + a.metadata.longitude;
-						
-						$$(getHtmlId('textFieldZipEntry')).setValue(response.fullAddress.components.zipcode + '-' + response.fullAddress.components.plus4_code);
-						$$(getHtmlId('richTextUSPSLine1')).setValue(response.USPS[0]);
-						$$(getHtmlId('richTextUSPSLine2')).setValue(response.USPS[1]);
+						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
 					}
+				},
+				onError: function(error) {
+					$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
 				}
-				else {
-					alert('Validation failed');
-					L3.currentAddress = null;
-				}
-//				googleMapString = L3.currentAddress.metadata.latitude + ',' + L3.currentAddress.metadata.latitude;
-//				source.googleMapString.sync();
-//				$$('componentSchoolMap_googleMapsBuildSchoolList').setCenter(googleMapString);
-//				$$('componentSchoolMap_googleMapsBuildSchoolList').setMarker(sources.googleMapString.getID(), googleMapString, {title: 'Your Home'});
-		//		$$(getHtmlId('googleMapsBuildSchoolList')).setZoom(15);
-			},
-			onError: function(error) {
-				alert('Validation error');
-				L3.currentAddress = null;
-			},
-			params: [ {	addr1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
-						addr2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
-						city: $$(getHtmlId('textFieldCityEntry')).getValue(),
-						zip: $$(getHtmlId('textFieldZipEntry')).getValue() }, false ]
-		});
+			}
+		);
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_buttonSelectFamily", "click", buttonSelectFamily.click, "WAF");
 	WAF.addListener(this.id + "_textFieldCityEntry", "change", textFieldCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet2Entry", "change", textFieldStreet2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet1Entry", "change", textFieldStreet1Entry.change, "WAF");
