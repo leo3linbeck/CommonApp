@@ -20,26 +20,31 @@ function constructor (id) {
 
 	buttonLoadSchools.click = function buttonLoadSchools_click (event)// @startlock
 	{// @endlock
-		source.family.getNearbySchools(
-			{
-				familyID: source.family.ID,
-				distance: $$(getHtmlId('textFieldDistance')).getValue(),
-				debug: false 
-			},
-			{
-				onSuccess: function(response) {
-					if (response.result) {
-						sources.familySchools.setEntityCollection(response.result);
-					}
-					else {
-						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
-					}
+		var d;
+		
+		d = $$(getHtmlId('textFieldDistance')).getValue();
+		if (d) {
+			source.family.getNearbySchools(
+				{
+					familyID: source.family.ID,
+					distance: d,
+					debug: false 
 				},
-				onError: function(error) {
-					$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
+				{
+					onSuccess: function(response) {
+						if (response.result) {
+							$comp.sources.familySchool.setEntityCollection(response.result);
+						}
+						else {
+							$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
+						}
+					},
+					onError: function(error) {
+						$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
+					}
 				}
-			}
-		);
+			);
+		}
 	};// @lock
 
 	// @region eventManager// @startlock
