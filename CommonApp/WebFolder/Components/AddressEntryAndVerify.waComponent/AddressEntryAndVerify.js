@@ -42,13 +42,17 @@ function constructor (id) {
 	{// @endlock
 		CommonApp.verifyAddressAsync({
 			onSuccess: function(response) {
+				var a;
+				
 				if (response) {
 					if (!response.success) {
 						alert('Address not found');
 						L3.currentAddress = null;
 					}
 					else {
-						L3.currentAddress = response.fullAddress;
+						a = response.fullAddress;
+						source.family.mapCoords = a.metadata.latitude + ',' + a.metadata.longitude;
+						
 						$$(getHtmlId('textFieldZipEntry')).setValue(response.fullAddress.components.zipcode + '-' + response.fullAddress.components.plus4_code);
 						$$(getHtmlId('richTextUSPSLine1')).setValue(response.USPS[0]);
 						$$(getHtmlId('richTextUSPSLine2')).setValue(response.USPS[1]);
@@ -58,6 +62,11 @@ function constructor (id) {
 					alert('Validation failed');
 					L3.currentAddress = null;
 				}
+//				googleMapString = L3.currentAddress.metadata.latitude + ',' + L3.currentAddress.metadata.latitude;
+//				source.googleMapString.sync();
+//				$$('componentSchoolMap_googleMapsBuildSchoolList').setCenter(googleMapString);
+//				$$('componentSchoolMap_googleMapsBuildSchoolList').setMarker(sources.googleMapString.getID(), googleMapString, {title: 'Your Home'});
+		//		$$(getHtmlId('googleMapsBuildSchoolList')).setZoom(15);
 			},
 			onError: function(error) {
 				alert('Validation error');
