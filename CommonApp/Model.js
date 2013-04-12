@@ -1,6 +1,10 @@
-﻿model = new DataStoreCatalog();
+﻿var L3 = L3 || {};
 
-var NEW_FAMILY_TEXT = 'SELECT TO ADD NEW FAMILY';
+model = new DataStoreCatalog();
+
+include('Javascript/addresses.js');
+
+L3.NEW_FAMILY_TEXT = 'SELECT TO ADD NEW FAMILY';
 
 var fam = model.addClass('Family','Families');
 fam.addAttribute('ID', 'storage','uuid', 'key auto');
@@ -28,24 +32,15 @@ fam.addMethod('addressLookup', 'dataClass',
 			debugger;
 		}
 		
-		try {
-			xhr = new XMLHttpRequest(); 
-			getString = 'https://api.smartystreets.com/street-address?street=' + param.street1 + (param.street2 ? '&street2=' + param.street2 : '') + '&city=' + param.city + '&state=TX&zipcode=' + param.zipCode + '&candidates=5&auth-id=fd972f01-719a-4d50-88e6-b0ce3f936098&auth-token=sEv4KscGrL2PJMD6WKCoxWpR%2BhsXCj6ht%2F9aU4VfpebYfRKwSO8rO%2BwkPohcjMyLpu6ujyDryvou5dqMZvSLzg%3D%3D';
-			xhr.open('GET', getString.replace(/ /g,'+'), false); // to connect to a Web site synchronously
-			xhr.send(); // send the request
-		} catch (e) {
-			return null;
-		}
-
-		if (xhr.status === 200) {
-			v = JSON.parse(xhr.responseText)[0];
+		v = L3.getAddressInfo(param);
 			
+		if (v) {
 			families = ds.Family.query('uspsDeliveryPoint = :1', v.delivery_point_barcode);
 			
-			c = families.find('name == :1', NEW_FAMILY_TEXT);
+			c = families.find('name == :1',L3. NEW_FAMILY_TEXT);
 			if (c === null) {
 				c = ds.Family.createEntity();
-				c.name = NEW_FAMILY_TEXT;
+				c.name = L3.NEW_FAMILY_TEXT;
 				c.uspsDeliveryPoint = v.delivery_point_barcode;
 				families.add(c);
 			}
@@ -64,6 +59,39 @@ fam.addMethod('addressLookup', 'dataClass',
 		else {
 			return null;
 		}
+	},
+'public');
+fam.addMethod('getNearbySchools', 'dataClass',
+	function getNearbySchools(param) {
+		var a, f;
+
+		if (param.debug) {
+			debugger;
+		}
+			
+		f = ds.Family(param.familyID);
+		a = ds.School.all().forEach(
+			function (e, i) {
+				
+			}
+		);
+		if (c === null) {
+			c = ds.Family.createEntity();
+			c.name = NEW_FAMILY_TEXT;
+			c.uspsDeliveryPoint = v.delivery_point_barcode;
+			families.add(c);
+		}
+		c.homeStreet1 = param.street1;
+		c.homeStreet2 = param.street2;
+		c.homeCity = param.city;
+		c.homeState = v.components.state_abbreviation;
+		c.homeZipCode = v.components.zipcode + '-' + v.components.plus4_code;
+		c.uspsLine1 = v.delivery_line_1;
+		c.uspsLine2 = v.last_line;
+		c.mapCoords = v.metadata.latitude + ',' + v.metadata.longitude;
+		c.save();
+		
+		return families;
 	},
 'public');
 
