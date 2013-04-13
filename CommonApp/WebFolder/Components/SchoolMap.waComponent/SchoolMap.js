@@ -21,7 +21,9 @@ function constructor (id) {
 
 	dataGridSchools.onRowDraw = function dataGridSchools_onRowDraw (event)// @startlock
 	{// @endlock
-		L3.addGoogleMapMarker(event.element.schoolMapCoords, 'blue');
+		if (event.element) {
+			L3.addGoogleMapMarker(event.element.schoolMapCoords, 'blue');				
+		}
 	};// @lock
 
 	dataGridSchools.onRowClick = function dataGridSchools_onRowClick (event)// @startlock
