@@ -13,10 +13,16 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldMiddleName = {};	// @textField
 	var textFieldStudentHomePhone = {};	// @textField
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
+
+	textFieldMiddleName.change = function textFieldMiddleName_change (event)// @startlock
+	{// @endlock
+		L3.convertToTitleCase(this);
+	};// @lock
 
 	textFieldStudentHomePhone.change = function textFieldStudentHomePhone_change (event)// @startlock
 	{// @endlock
@@ -24,6 +30,7 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldMiddleName", "change", textFieldMiddleName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentHomePhone", "change", textFieldStudentHomePhone.change, "WAF");
 	// @endregion// @endlock
 
