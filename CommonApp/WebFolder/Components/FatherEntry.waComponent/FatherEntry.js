@@ -14,14 +14,12 @@ function constructor (id) {
 
 	// @region namespaceDeclaration// @startlock
 	var checkboxSameAddress = {};	// @checkbox
-	var textFieldWorkZipEntry = {};	// @textField
 	var textFieldWorkCityEntry = {};	// @textField
 	var textFieldWorkAddress2Entry = {};	// @textField
 	var textFieldWorkAddress1Entry = {};	// @textField
 	var textFieldHomeAddress1Entry = {};	// @textField
 	var textFieldHomeCityEntry = {};	// @textField
 	var textFieldHomeAddress2Entry = {};	// @textField
-	var textFieldSuffix = {};	// @textField
 	var textFieldLastName = {};	// @textField
 	var textFieldMiddleName = {};	// @textField
 	var textFieldFirstName = {};	// @textField
@@ -45,11 +43,6 @@ function constructor (id) {
 			father.homeZipCode = '';
 		}
 		source.father.autoDispatch();
-	};// @lock
-
-	textFieldWorkZipEntry.change = function textFieldWorkZipEntry_change (event)// @startlock
-	{// @endlock
-		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
@@ -82,11 +75,6 @@ function constructor (id) {
 		L3.convertToTitleCase(this);
 	};// @lock
 
-	textFieldSuffix.change = function textFieldSuffix_change (event)// @startlock
-	{// @endlock
-		L3.convertToTitleCase(this);
-	};// @lock
-
 	textFieldLastName.change = function textFieldLastName_change (event)// @startlock
 	{// @endlock
 		L3.convertToTitleCase(this);
@@ -104,14 +92,12 @@ function constructor (id) {
 
 	// @region eventManager// @startlock
 	WAF.addListener(this.id + "_checkboxSameAddress", "change", checkboxSameAddress.change, "WAF");
-	WAF.addListener(this.id + "_textFieldWorkZipEntry", "change", textFieldWorkZipEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkCityEntry", "change", textFieldWorkCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress2Entry", "change", textFieldWorkAddress2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress1Entry", "change", textFieldWorkAddress1Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldHomeAddress1Entry", "change", textFieldHomeAddress1Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldHomeCityEntry", "change", textFieldHomeCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldHomeAddress2Entry", "change", textFieldHomeAddress2Entry.change, "WAF");
-	WAF.addListener(this.id + "_textFieldSuffix", "change", textFieldSuffix.change, "WAF");
 	WAF.addListener(this.id + "_textFieldLastName", "change", textFieldLastName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldMiddleName", "change", textFieldMiddleName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldFirstName", "change", textFieldFirstName.change, "WAF");

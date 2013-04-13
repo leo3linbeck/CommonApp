@@ -14,7 +14,6 @@ function constructor (id) {
 
 	// @region namespaceDeclaration// @startlock
 	var checkboxSameAddress = {};	// @checkbox
-	var textFieldWorkZipEntry = {};	// @textField
 	var textFieldWorkCityEntry = {};	// @textField
 	var textFieldWorkAddress2Entry = {};	// @textField
 	var textFieldWorkAddress1Entry = {};	// @textField
@@ -43,11 +42,6 @@ function constructor (id) {
 			mother.homeZipCode = '';
 		}
 		source.mother.autoDispatch();
-	};// @lock
-
-	textFieldWorkZipEntry.change = function textFieldWorkZipEntry_change (event)// @startlock
-	{// @endlock
-		L3.convertToTitleCase(this);
 	};// @lock
 
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
@@ -97,7 +91,6 @@ function constructor (id) {
 
 	// @region eventManager// @startlock
 	WAF.addListener(this.id + "_checkboxSameAddress", "change", checkboxSameAddress.change, "WAF");
-	WAF.addListener(this.id + "_textFieldWorkZipEntry", "change", textFieldWorkZipEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkCityEntry", "change", textFieldWorkCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress2Entry", "change", textFieldWorkAddress2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress1Entry", "change", textFieldWorkAddress1Entry.change, "WAF");
