@@ -15,6 +15,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var richTextStepTitle = {};	// @richText
 	var buttonSelectFamily = {};	// @button
 	var textFieldCityEntry = {};	// @textField
 	var textFieldStreet2Entry = {};	// @textField
@@ -23,6 +24,14 @@ function constructor (id) {
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
+
+	richTextStepTitle.click = function richTextStepTitle_click (event)// @startlock
+	{// @endlock
+		$$(getHtmlId('textFieldStreet1Entry')).setValue('2132 Rice Blvd');
+		$$(getHtmlId('textFieldStreet2Entry')).setValue('');
+		$$(getHtmlId('textFieldCityEntry')).setValue('Houston');
+		$$(getHtmlId('textFieldZipEntry')).setValue('77005');
+	};// @lock
 
 	buttonSelectFamily.click = function buttonSelectFamily_click (event)// @startlock
 	{// @endlock
@@ -61,11 +70,12 @@ function constructor (id) {
 
 					if (response.result) {
 						sources.family.setEntityCollection(response.result);
-						sources.family.autoDispatch();
-						$$(getHtmlId('dialogSelectFamily')).displayDialog();
 						$$(getHtmlId('textFieldZipEntry')).setValue(sources.family.homeZipCode);
 						$$(getHtmlId('richTextUSPSLine1')).setValue(sources.family.uspsLine1);
 						$$(getHtmlId('richTextUSPSLine2')).setValue(sources.family.uspsLine2);
+						if (sources.family.length > 1) {
+							$$(getHtmlId('dialogSelectFamily')).displayDialog();
+						}
 					}
 					else {
 						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
@@ -79,6 +89,7 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_richTextStepTitle", "click", richTextStepTitle.click, "WAF");
 	WAF.addListener(this.id + "_buttonSelectFamily", "click", buttonSelectFamily.click, "WAF");
 	WAF.addListener(this.id + "_textFieldCityEntry", "change", textFieldCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet2Entry", "change", textFieldStreet2Entry.change, "WAF");

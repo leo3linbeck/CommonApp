@@ -53,6 +53,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			next = L3.step[L3.stack.length];
 			$$(current).hide();
 			$$(next).show();
+			if (next === 'componentSchoolMap') {
+				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, 'red');
+			}
 			L3.stack.push(next);
 		}
 	};// @lock
