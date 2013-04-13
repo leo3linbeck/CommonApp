@@ -18,6 +18,7 @@ L3.fam.addAttribute('uspsDeliveryPoint', 'storage','string', 'btree');
 L3.fam.addAttribute('fplStatus', 'storage','string', 'btree');
 L3.fam.addAttribute('mapCoords', 'storage','string', 'btree');
 L3.fam.addAttribute('schoolChoices', 'relatedEntities', 'SchoolChoices', 'family', {reversePath: true});
+L3.fam.addAttribute('members', 'relatedEntities', 'FamilyMembers', 'belongsTo', {reversePath: true});
 
 L3.smo = model.addClass('SMO','SMOs');
 L3.smo.addAttribute('ID', 'storage','uuid', 'key auto');
@@ -53,6 +54,7 @@ L3.sch.addAttribute('zipCode', 'storage','string', 'btree');
 L3.sch.addAttribute('mainPhone', 'storage','string', 'btree');
 L3.sch.addAttribute('uspsDeliveryPoint', 'storage','string', 'btree');
 L3.sch.addAttribute('mapCoords', 'storage','string', 'btree');
+L3.sch.addAttribute('enrolledStudents', 'relatedEntities', 'Students', 'enrolledAt', {reversePath: true});
 
 L3.famChoice = model.addClass('SchoolChoice','SchoolChoices');
 L3.famChoice.addAttribute('ID', 'storage','uuid', 'key auto');
@@ -61,6 +63,25 @@ L3.famChoice.addAttribute('school', 'relatedEntity', 'School', 'School');
 L3.famChoice.addAttribute('distance', 'storage','number', 'btree');
 L3.famChoice.addAttribute('schoolName', 'alias', 'string', 'school.name');
 L3.famChoice.addAttribute('schoolMapCoords', 'alias', 'string', 'school.mapCoords');
+
+L3.per = model.addClass('Person','People');
+L3.per.addAttribute('ID', 'storage','uuid', 'key auto');
+L3.per.addAttribute('firstName', 'storage','string', 'btree');
+L3.per.addAttribute('middleName', 'storage','string', 'btree');
+L3.per.addAttribute('lastName', 'storage','string', 'btree');
+L3.per.addAttribute('suffix', 'storage','string', 'btree');
+L3.per.addAttribute('name', 'storage','string', 'btree');
+L3.per.addAttribute('gender', 'storage','string', 'cluster');
+L3.per.addAttribute('birthdate', 'storage','date', 'btree');
+L3.per.addAttribute('isMultiple', 'storage','boolean');
+L3.per.addAttribute('livesWith', 'storage','string', 'cluster');
+L3.per.addAttribute('nextGradeLevel', 'storage','number', 'cluster');
+
+L3.famMem = model.addClass('FamilyMember','FamilyMembers', 'public', 'Person');
+L3.famMem.addAttribute('belongsTo', 'relatedEntity', 'Family', 'Family');
+
+L3.stu = model.addClass('Student','Students', 'public', 'FamilyMember');
+L3.stu.addAttribute('enrolledAt', 'relatedEntity', 'School', 'School');
 
 // class methods
 

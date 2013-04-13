@@ -61,6 +61,7 @@ function constructor (id) {
 
 	textFieldDistance.change = function textFieldDistance_change (event)// @startlock
 	{// @endlock
+		L3.clearGoogleMapMarkers();
 		updateSchoolList();
 		L3.googleMap.setZoom(parseInt(12 - 0.12 * this.getValue()));
 		google.maps.event.trigger(L3.googleMap, 'resize');
