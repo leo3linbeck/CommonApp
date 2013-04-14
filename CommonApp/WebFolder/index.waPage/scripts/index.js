@@ -12,14 +12,36 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	var buttonStart = {};	// @button
 // @endregion// @endlock
 
+	function validateField(w, test) {
+		var v = $$(w);
+		if (!test) {
+			test = v.getValue();
+		}
+		if (test) {
+			v.setBackgroundColor('white');
+		}
+		else {
+			v.focus();
+			v.setBackgroundColor('red');
+		}
+		
+		return test;
+	}
+	
 	function validateCurrentPage(current) {
-		var r = true;
+		var r = true, v;
 		
 		switch (current) {
 			case 'componentAddressEntry':
+				r = sources.family.uspsDeliveryPoint;
 				break;
 			case 'componentSchoolMap':
 				r = sources.family.ID
+				break;
+			case 'componentFamilyInfoEntry':
+				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfChildren');
+				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfApplicants');
+				L3.buildStepArray();
 				break;
 		}
 		
@@ -29,7 +51,24 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	function prepareNextPage(next) {
 		switch (next) {
 			case 'componentAddressEntry':
-				$$('buttonNextStep').disable();
+				if (sources.family.uspsDeliveryPoint) {
+					$$(next + '_textFieldStreet1Entry').setValue(sources.family.mainStreet1);
+					$$(next + '_textFieldStreet2Entry').setValue(sources.family.mainStreet2);
+					$$(next + '_textFieldCityEntry').setValue(sources.family.mainCity);
+					$$(next + '_textFieldZipCodeEntry').setValue(sources.family.mainZipCode);
+					$$(next + '_richTextUSPSLine1').setValue(sources.family.uspsLine1);
+					$$(next + '_richTextUSPSLine2').setValue(sources.family.uspsLine2);
+					$$('buttonNextStep').enable();
+				}
+				else {
+					$$(next + '_textFieldStreet1Entry').setValue('');
+					$$(next + '_textFieldStreet2Entry').setValue('');
+					$$(next + '_textFieldCityEntry').setValue('');
+					$$(next + '_textFieldZipCodeEntry').setValue('');
+					$$(next + '_richTextUSPSLine1').setValue('');
+					$$(next + '_richTextUSPSLine2').setValue('');
+					$$('buttonNextStep').disable();
+				}
 				break;
 			case 'componentSchoolMap':
 				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
@@ -79,8 +118,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		
 		if (L3.stack.length < L3.step.length) {
 			current = L3.step[L3.stack.length-1];
-			next = L3.step[L3.stack.length];
 			if (validateCurrentPage(current)) {
+				next = L3.step[L3.stack.length];
+				sources.family.save();
 				$$(current).hide();
 				$$(next).show();
 				L3.stack.push(next);
@@ -103,6 +143,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 		else {
 			$$(L3.stack[L3.stack.length-1]).show();
+			$$('buttonNextStep').enable();
 		}
 	};// @lock
 

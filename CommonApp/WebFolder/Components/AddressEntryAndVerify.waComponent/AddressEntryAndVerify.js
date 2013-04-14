@@ -67,7 +67,9 @@ function constructor (id) {
 	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock
 	{// @endlock
 		sources.family.addressLookup(
-			{	street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
+			{	
+				familyID: sources.family.ID,
+				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
 				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
 				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
