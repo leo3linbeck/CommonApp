@@ -1,1 +1,1 @@
-﻿L3.getFullName = function getFullName(e) {	return e.firstName + (e.middleName ? ' ' + e.middleName : '') + (e.lastName ? ' ' + e.lastName : '') + (e.suffix ? ' ' + e.suffix : '')}
+﻿L3.personGetFullName = function getFullName() {	return this.firstName + (this.middleName ? ' ' + this.middleName : '') + (this.lastName ? ' ' + this.lastName : '') + (this.suffix ? ' ' + this.suffix : '')}

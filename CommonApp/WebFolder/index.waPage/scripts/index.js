@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
 	var iconHome = {};	// @icon
 	var documentEvent = {};	// @document
@@ -12,20 +13,40 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 // @endregion// @endlock
 
 	function validateCurrentPage(current) {
-		return true;
+		var r = true;
+		
+		switch (current) {
+			case 'componentAddressEntry':
+				break;
+			case 'componentSchoolMap':
+				r = sources.family.ID
+				break;
+		}
+		
+		return r;
 	}
 	
 	function prepareNextPage(next) {
-		if (next === 'componentSchoolMap') {
-			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
+		switch (next) {
+			case 'componentAddressEntry':
+				$$('buttonNextStep').disable();
+				break;
+			case 'componentSchoolMap':
+				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
+				break;
 		}
 	}
 
 // eventHandlers// @lock
 
+	loginMain.login = function loginMain_login (event)// @startlock
+	{// @endlock
+		$$('iconSettings').show();
+	};// @lock
+
 	iconLogin.click = function iconLogin_click (event)// @startlock
 	{// @endlock
-		alert('login - to come');
+		$$('loginMain').showLoginDialog();
 	};// @lock
 
 	iconHome.click = function iconHome_click (event)// @startlock
@@ -35,8 +56,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		});
 		L3.stack.length = 0;
 		
-		$$('iconHome').hide();
-		$$('iconLogin').hide();
 		$$('buttonGoBack').hide();
 		$$('buttonNextStep').hide();
 		
@@ -46,7 +65,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
-		$$('buttonNextStep').disable();
 		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
 	};// @lock
 
@@ -77,8 +95,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		$$(old).hide();
 		
 		if (L3.stack.length === 0) {
-			$$('iconHome').hide();
-			$$('iconLogin').hide();
 			$$('buttonGoBack').hide();
 			$$('buttonNextStep').hide();
 			
@@ -97,8 +113,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		$$('buttonStart').hide();
 		$$('richTextSplashDescription').hide();
 		
-		$$('iconHome').show();
-		$$('iconLogin').show();
 		$$('buttonGoBack').show();
 		$$('buttonNextStep').show();
 
@@ -107,6 +121,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
 	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
 	WAF.addListener("iconHome", "click", iconHome.click, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");

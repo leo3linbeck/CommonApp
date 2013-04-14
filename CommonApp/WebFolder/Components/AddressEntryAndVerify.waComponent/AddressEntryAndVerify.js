@@ -17,7 +17,6 @@ function constructor (id) {
 	// @region namespaceDeclaration// @startlock
 	var textFieldZipCodeEntry = {};	// @textField
 	var richTextStepTitle = {};	// @richText
-	var buttonSelectFamily = {};	// @button
 	var textFieldCityEntry = {};	// @textField
 	var textFieldStreet2Entry = {};	// @textField
 	var textFieldStreet1Entry = {};	// @textField
@@ -44,12 +43,6 @@ function constructor (id) {
 		$$(getHtmlId('textFieldStreet2Entry')).setValue('');
 		$$(getHtmlId('textFieldCityEntry')).setValue('Houston');
 		$$(getHtmlId('textFieldZipCodeEntry')).setValue('77005');
-	};// @lock
-
-	buttonSelectFamily.click = function buttonSelectFamily_click (event)// @startlock
-	{// @endlock
-		sources.family.name = '';
-		$$(getHtmlId("dialogSelectFamily")).closeDialog(); //ok button
 	};// @lock
 
 	textFieldCityEntry.change = function textFieldCityEntry_change (event)// @startlock
@@ -89,9 +82,6 @@ function constructor (id) {
 						$$(getHtmlId('textFieldZipCodeEntry')).setValue(sources.family.mainZipCode);
 						$$(getHtmlId('richTextUSPSLine1')).setValue(sources.family.uspsLine1);
 						$$(getHtmlId('richTextUSPSLine2')).setValue(sources.family.uspsLine2);
-						if (sources.family.length > 1) {
-							$$(getHtmlId('dialogSelectFamily')).displayDialog();
-						}
 						$$('buttonNextStep').enable();
 					}
 					else {
@@ -110,7 +100,6 @@ function constructor (id) {
 	// @region eventManager// @startlock
 	WAF.addListener(this.id + "_textFieldZipCodeEntry", "change", textFieldZipCodeEntry.change, "WAF");
 	WAF.addListener(this.id + "_richTextStepTitle", "click", richTextStepTitle.click, "WAF");
-	WAF.addListener(this.id + "_buttonSelectFamily", "click", buttonSelectFamily.click, "WAF");
 	WAF.addListener(this.id + "_textFieldCityEntry", "change", textFieldCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet2Entry", "change", textFieldStreet2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet1Entry", "change", textFieldStreet1Entry.change, "WAF");
