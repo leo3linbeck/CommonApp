@@ -28,6 +28,7 @@ function constructor (id) {
 		$$('buttonNextStep').disable();
 		$$(getHtmlId('richTextUSPSLine1')).setValue('');
 		$$(getHtmlId('richTextUSPSLine2')).setValue('');
+		$$(getHtmlId('richTextVerifyAddressError')).setValue('');
 	}
 
 	// eventHandlers// @lock
@@ -76,7 +77,7 @@ function constructor (id) {
 			{	street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
 				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
-				zip: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
+				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
 				debug: false 
 			},
 			{
@@ -85,7 +86,7 @@ function constructor (id) {
 
 					if (response.result) {
 						sources.family.setEntityCollection(response.result);
-						$$(getHtmlId('textFieldZipCodeEntry')).setValue(sources.family.homeZipCode);
+						$$(getHtmlId('textFieldZipCodeEntry')).setValue(sources.family.mainZipCode);
 						$$(getHtmlId('richTextUSPSLine1')).setValue(sources.family.uspsLine1);
 						$$(getHtmlId('richTextUSPSLine2')).setValue(sources.family.uspsLine2);
 						if (sources.family.length > 1) {
@@ -94,13 +95,13 @@ function constructor (id) {
 						$$('buttonNextStep').enable();
 					}
 					else {
-						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
 						unverifyAddress();
+						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
 					}
 				},
 				onError: function(error) {
-					$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
 					unverifyAddress();
+					$$(getHtmlId('richTextVerifyAddressError')).setValue(JSON.stringify(error));
 				}
 			}
 		);

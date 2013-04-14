@@ -13,6 +13,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldNumberOfChildren = {};	// @textField
 	var comboboxLanguageSpokenAtHome = {};	// @combobox
 	var comboboxNativeLanguage = {};	// @combobox
 	var comboboxFatherStatus = {};	// @combobox
@@ -30,6 +31,11 @@ function constructor (id) {
 		}
 	}
 	// eventHandlers// @lock
+
+	textFieldNumberOfChildren.change = function textFieldNumberOfChildren_change (event)// @startlock
+	{// @endlock
+		L3.convertToTitleCase(this);
+	};// @lock
 
 	comboboxLanguageSpokenAtHome.change = function comboboxLanguageSpokenAtHome_change (event)// @startlock
 	{// @endlock
@@ -52,6 +58,7 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldNumberOfChildren", "change", textFieldNumberOfChildren.change, "WAF");
 	WAF.addListener(this.id + "_comboboxLanguageSpokenAtHome", "change", comboboxLanguageSpokenAtHome.change, "WAF");
 	WAF.addListener(this.id + "_comboboxNativeLanguage", "change", comboboxNativeLanguage.change, "WAF");
 	WAF.addListener(this.id + "_comboboxFatherStatus", "change", comboboxFatherStatus.change, "WAF");

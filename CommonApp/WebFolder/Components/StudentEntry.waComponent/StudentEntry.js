@@ -14,7 +14,6 @@ function constructor (id) {
 
 	// @region namespaceDeclaration// @startlock
 	var textFieldStudentLastName = {};	// @textField
-	var textFieldStudentBirthdate = {};	// @textField
 	var textFieldStudentMiddleName = {};	// @textField
 	var textFieldStudentFirstName = {};	// @textField
 	// @endregion// @endlock
@@ -22,11 +21,6 @@ function constructor (id) {
 	// eventHandlers// @lock
 
 	textFieldStudentLastName.change = function textFieldStudentLastName_change (event)// @startlock
-	{// @endlock
-		L3.convertToTitleCase(this);
-	};// @lock
-
-	textFieldStudentBirthdate.change = function textFieldStudentBirthdate_change (event)// @startlock
 	{// @endlock
 		L3.convertToTitleCase(this);
 	};// @lock
@@ -43,7 +37,6 @@ function constructor (id) {
 
 	// @region eventManager// @startlock
 	WAF.addListener(this.id + "_textFieldStudentLastName", "change", textFieldStudentLastName.change, "WAF");
-	WAF.addListener(this.id + "_textFieldStudentBirthdate", "change", textFieldStudentBirthdate.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentMiddleName", "change", textFieldStudentMiddleName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentFirstName", "change", textFieldStudentFirstName.change, "WAF");
 	// @endregion// @endlock

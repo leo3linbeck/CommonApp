@@ -1,7 +1,14 @@
 ﻿<!DOCTYPE html><section data-group="[]" class="default">
     <meta name="generator" content="Wakanda GUIDesigner"/>
     <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="object" data-source="student" data-scope="global" data-lib="WAF" data-id="student" data-dataType="string" data-autoLoad="true" data-attributes="firstName:string,middleName:string,lastName:string,suffix:string,birthdate:date,age:string,isMultiple:boolean,gender:string,currentSchool:string,nextGradeLevel:string" content="student"/>
-    <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="School" data-scope="local" data-lib="WAF" data-id="{id}currentSchool" data-dataType="string" data-autoLoad="false" content="currentSchool"/>
+    <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="School" data-scope="local" data-lib="WAF" data-id="{id}school" data-dataType="string" data-autoLoad="false" content="school"/>
+    
+    
+    
+    
+    
+    
+    
     
     
 	<label id="{id}label1" for="{id}textFieldStudentFirstName" data-valign="middle" data-type="label" data-margin="5" data-lib="WAF" class="waf-widget waf-label default inherited  waf-label-textField ">{studentName}</label>
@@ -25,7 +32,7 @@
 			<input type="text" tabindex="3" id="{id}textFieldStudentLastName" data-type="textField" data-readOnly="false" data-password="false" data-multiline="false" data-lib="WAF" data-label-position="left" data-label="" data-datapicker-on="false" data-datapicker-icon-only="false" data-constraint-top="true" data-constraint-left="true" data-binding="student.lastName" class="waf-widget waf-textField default inherited  waf-project-CATextLabel "/>
 		<input type="text" tabindex="4" id="{id}textFieldStudentSuffix" data-type="textField" data-readOnly="false" data-password="false" data-multiline="false" data-lib="WAF" data-label-position="left" data-label="" data-datapicker-on="false" data-datapicker-icon-only="false" data-constraint-top="true" data-constraint-left="true" data-binding="student.suffix" class="waf-widget waf-textField default inherited  waf-project-CATextLabel "/>
 			<label id="{id}label8" for="{id}comboboxCurrentSchool" data-valign="middle" data-type="label" data-margin="5" data-lib="WAF" class="waf-widget waf-label default inherited  waf-label-combobox ">{studentCurrentSchool}</label>
-		<div tabindex="9" id="{id}comboboxCurrentSchool" data-type="combobox" data-limit="5" data-lib="WAF" data-label-position="left" data-label="{studentCurrentSchool}" data-editable="true" data-constraint-top="true" data-constraint-left="true" data-binding-out="student.currentSchool" data-binding-options="[name] " data-binding-key="ID" data-binding="{id}currentSchool" data-autoDispatch="true" class="waf-widget waf-combobox default inherited  "><select><option value="">[name] </option></select></div>
+		<div tabindex="9" id="{id}comboboxCurrentSchool" data-type="combobox" data-limit="5" data-lib="WAF" data-label-position="left" data-label="{studentCurrentSchool}" data-editable="true" data-constraint-top="true" data-constraint-left="true" data-binding-out="student.currentSchool" data-binding-options="[name] " data-binding-key="ID" data-binding="{id}school" data-autoDispatch="true" class="waf-widget waf-combobox default inherited  "><select><option value="">[name] </option></select></div>
 		<label id="{id}label9" for="{id}comboboxStudentLivesWith" data-valign="middle" data-type="label" data-margin="5" data-lib="WAF" class="waf-widget waf-label default inherited  waf-label-combobox ">{studentLivesWith}</label>
 		<div tabindex="8" id="{id}comboboxStudentLivesWith" data-type="combobox" data-limit="5" data-lib="WAF" data-label-position="left" data-label="{studentLivesWith}" data-editable="false" data-constraint-top="true" data-constraint-left="true" data-binding-out="familyTree.studentResidesWith" data-autoDispatch="true" class="waf-widget waf-combobox default inherited  "><select><option value="both">Both Parents</option><option value="mother">Mother</option><option value="father">Father</option><option value="guardian">Guardian</option><option value="other">Other</option></select></div>
 	</section>

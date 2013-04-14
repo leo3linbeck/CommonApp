@@ -11,6 +11,16 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	var buttonStart = {};	// @button
 // @endregion// @endlock
 
+	function validateCurrentPage(current) {
+		return true;
+	}
+	
+	function prepareNextPage(next) {
+		if (next === 'componentSchoolMap') {
+			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords);
+		}
+	}
+
 // eventHandlers// @lock
 
 	iconLogin.click = function iconLogin_click (event)// @startlock
@@ -52,12 +62,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		if (L3.stack.length < L3.step.length) {
 			current = L3.step[L3.stack.length-1];
 			next = L3.step[L3.stack.length];
-			$$(current).hide();
-			$$(next).show();
-			if (next === 'componentSchoolMap') {
-				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, 'red');
+			if (validateCurrentPage(current)) {
+				$$(current).hide();
+				$$(next).show();
+				L3.stack.push(next);
+				prepareNextPage(next);
 			}
-			L3.stack.push(next);
 		}
 	};// @lock
 
