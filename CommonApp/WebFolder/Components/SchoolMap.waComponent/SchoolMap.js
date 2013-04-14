@@ -62,28 +62,41 @@ function constructor (id) {
 		);
 	}
 
-	function showSelectedSchools() {
-		var d = getDistance();
-		
-		$comp.sources.schoolOption.query('family.ID === :1 AND distance <= :2 AND selected === true',
-			{
-				onSuccess: function(response) {
-//					L3.addGoogleMapMarker($comp.sources.schoolMapCoords, 'green');
-				},
-				onError: function(error) {
-					$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
-				},
-				params: [source.family.ID, d]
-			}
-		);
-	}
+//	function showSelectedSchools() {
+//		var d = getDistance();
+//		
+//		$comp.sources.schoolOption.query('family.ID === :1 AND distance <= :2 AND selected === true',
+//			{
+//				onSuccess: function(response) {
+////					L3.addGoogleMapMarker($comp.sources.schoolMapCoords, 'green');
+//				},
+//				onError: function(error) {
+//					$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
+//				},
+//				params: [source.family.ID, d]
+//			}
+//		);
+//	}
 
 	// eventHandlers// @lock
+	
+	function getInfoWindowText(d) {
+		return ('<h4>' + d.schoolName + '</h4><span>' +
+				'<br/>Starting Grade: ' + L3.gradeMap[d.schoolStart] + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +
+				'Ending Grade: ' + L3.gradeMap[d.schoolEnd] + 
+				'<br/>Enrollment: ' + d.schoolEnroll +  '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +
+				'Rating: ' + d.schoolRating + ' (out of 100)' +
+				'<br/>Attendance: ' + d.schoolAttend +  '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +
+				'Graduation: ' + d.schoolGraduate + '</span>'
+			);
+	}
 
 	schoolOptionEvent.onCurrentElementChange = function schoolOptionEvent_onCurrentElementChange (event)// @startlock
 	{// @endlock
 		if (event.dataSource.schoolMapCoords) {
-			L3.addGoogleMapMarker(event.dataSource.schoolMapCoords, 'green');
+			var d = event.dataSource;
+			var info = getInfoWindowText(d);
+			L3.addGoogleMapMarker(event.dataSource.schoolMapCoords, 'green', d.schoolCategory, info);
 		}
 	};// @lock
 
@@ -95,7 +108,9 @@ function constructor (id) {
 	dataGridSchools.onRowDraw = function dataGridSchools_onRowDraw (event)// @startlock
 	{// @endlock
 		if (event.element) {
-			L3.addGoogleMapMarker(event.element.schoolMapCoords, 'blue');				
+			var d = event.element;
+			var info = getInfoWindowText(d);
+			L3.addGoogleMapMarker(event.element.schoolMapCoords, 'blue', d.schoolCategory, info);				
 		}
 	};// @lock
 

@@ -70,7 +70,14 @@ L3.SchoolOption.addAttribute('school', 			'relatedEntity', 	'School', 		'School'
 L3.SchoolOption.addAttribute('distance',		'storage',			'number', 		'btree'			);
 L3.SchoolOption.addAttribute('selected',		'storage',			'bool', 		'btree'			);
 L3.SchoolOption.addAttribute('schoolName', 		'alias', 			'string', 		'school.name'	);
-L3.SchoolOption.addAttribute('schoolMapCoords',	'alias', 			'string', 		'school.mapCoords'	);
+L3.SchoolOption.addAttribute('schoolMapCoords',	'alias', 			'string', 		'school.mapCoords'		);
+L3.SchoolOption.addAttribute('schoolStart',		'alias', 			'string', 		'school.startingGrade'	);
+L3.SchoolOption.addAttribute('schoolEnd',		'alias', 			'string', 		'school.endingGrade'	);
+L3.SchoolOption.addAttribute('schoolCategory',	'alias', 			'string', 		'school.category'		);
+L3.SchoolOption.addAttribute('schoolEnroll',	'alias', 			'string', 		'school.enrollment'		);
+L3.SchoolOption.addAttribute('schoolRating',	'alias', 			'string', 		'school.rating'			);
+L3.SchoolOption.addAttribute('schoolAttend',	'alias', 			'string', 		'school.attendance'		);
+L3.SchoolOption.addAttribute('schoolGraduate',	'alias', 			'string', 		'school.graduationRate'	);
 
 L3.Person = model.addClass('Person','People');
 L3.Person.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);

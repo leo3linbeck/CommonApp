@@ -17,7 +17,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 	function prepareNextPage(next) {
 		if (next === 'componentSchoolMap') {
-			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords);
+			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 		}
 	}
 
