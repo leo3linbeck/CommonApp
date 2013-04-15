@@ -34,21 +34,29 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		switch (current) {
 			case 'componentAddressEntry':
 				r = sources.family.uspsDeliveryPoint;
+				sources.family.save();
 				break;
 			case 'componentSchoolMap':
 				r = sources.family.ID
+				sources.family.save();
 				break;
 			case 'componentFamilyInfoEntry':
 				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfChildren');
 				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfApplicants');
 				L3.buildStepArray();
 				break;
+			case 'componentMotherEntry':
+				sources.mother.save();
+			case 'componentFatherEntry':
+				sources.mother.save();
 		}
 		
 		return r;
 	}
 	
 	function prepareNextPage(next) {
+		var v;
+		
 		switch (next) {
 			case 'componentAddressEntry':
 				if (sources.family.uspsDeliveryPoint) {
@@ -70,10 +78,35 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					$$('buttonNextStep').disable();
 				}
 				break;
+			case 'componentMotherEntry':
+				if (!sources.mother.ID) {
+					sources.mother.addNewElement();
+					sources.mother.serverRefresh(
+						{
+							onSuccess: function(event) {
+								sources.mother.lastName = sources.family.name;
+							}
+						}
+					);
+				}
+				break;
+			case 'componentFatherEntry':
+				if (!sources.father.ID) {
+					sources.father.addNewElement();
+					sources.father.serverRefresh(
+						{
+							onSuccess: function(event) {
+								sources.father.lastName = sources.family.name;
+							}
+						}
+					);
+				}
+				break;
 			case 'componentSchoolMap':
 				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 				break;
 		}
+		$$(next).show();
 	}
 
 // eventHandlers// @lock
@@ -120,9 +153,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			current = L3.step[L3.stack.length-1];
 			if (validateCurrentPage(current)) {
 				next = L3.step[L3.stack.length];
-				sources.family.save();
 				$$(current).hide();
-				$$(next).show();
 				L3.stack.push(next);
 				prepareNextPage(next);
 			}

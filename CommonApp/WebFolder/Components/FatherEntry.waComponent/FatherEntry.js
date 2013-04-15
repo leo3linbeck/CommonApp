@@ -29,65 +29,58 @@ function constructor (id) {
 
 	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
 	{// @endlock
-		debugger;
 		if(this.getValue()) {
-			father.homeAddress1 = homeAddress1;
-			father.homeAddress2 = homeAddress2;
-			father.homeCity = homeCity;
-			father.homeZipCode = homeZipCode;
+			sources.father.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
+			sources.father.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
+			sources.father.getAttribute('homeCity').setValue(sources.family.mainCity);
+			sources.father.getAttribute('homeState').setValue(sources.family.mainState);
+			sources.father.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
 		}
-		else {
-			father.homeAddress1 = '';
-			father.homeAddress2 = '';
-			father.homeCity = '';
-			father.homeZipCode = '';
-		}
-		source.father.autoDispatch();
 	};// @lock
 
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldWorkAddress2Entry.change = function textFieldWorkAddress2Entry_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldWorkAddress1Entry.change = function textFieldWorkAddress1Entry_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldHomeAddress1Entry.change = function textFieldHomeAddress1Entry_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldHomeCityEntry.change = function textFieldHomeCityEntry_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldHomeAddress2Entry.change = function textFieldHomeAddress2Entry_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldLastName.change = function textFieldLastName_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldMiddleName.change = function textFieldMiddleName_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldFirstName.change = function textFieldFirstName_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	// @region eventManager// @startlock
