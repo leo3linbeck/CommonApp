@@ -22,17 +22,17 @@ function constructor (id) {
 
 	textFieldStudentLastName.change = function textFieldStudentLastName_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldStudentMiddleName.change = function textFieldStudentMiddleName_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldStudentFirstName.change = function textFieldStudentFirstName_change (event)// @startlock
 	{// @endlock
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	// @region eventManager// @startlock

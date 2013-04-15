@@ -59,8 +59,24 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		return r;
 	}
 	
+	function createFamilyRelation(role) {
+		if (!sources[role].ID) {
+			sources.person.addNewElement();
+			sources.person.getAttribute('lastName').setValue(sources.family.name);
+			sources.person.save(
+				{
+					onSuccess: function(event) {
+						sources.family[role].set(sources.person);
+						sources.family.save();
+						sources[role].serverRefresh();
+					}
+				}
+			);
+		}
+	}
+	
 	function prepareNextPage(next) {
-		var v;
+		var i, v;
 		
 		switch (next) {
 			case 'componentAddressEntry':
@@ -84,33 +100,23 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 				break;
 			case 'componentMotherEntry':
-				if (!sources.mother.ID) {
-					sources.person.addNewElement();
-					sources.person.getAttribute('lastName').setValue(sources.family.name);
-					sources.person.save(
-						{
-							onSuccess: function(event) {
-								sources.family.mother.set(sources.person);
-								sources.family.save();
-								sources.mother.serverRefresh();
-							}
-						}
-					);
-				}
+				createFamilyRelation('mother');
 				break;
 			case 'componentFatherEntry':
-				if (!sources.father.ID) {
-					sources.person.addNewElement();
-					sources.person.getAttribute('lastName').setValue(sources.family.name);
-					sources.person.save(
-						{
-							onSuccess: function(event) {
-								sources.family.father.set(sources.person);
-								sources.family.save();
-								sources.father.serverRefresh();
-							}
-						}
-					);
+				createFamilyRelation('father');
+				break;
+			case 'componentGuardianEntry':
+				createFamilyRelation('guardian');
+				break;
+			case 'componentChildEntry':
+				if (sources.family.numberOfChildren < sources.family.childrenToEnter) {
+					for (i = sources.family.numberOfChildren; i < sources.family.childrenToEnter; i += 1) {
+						sources.children.addNewElement();
+						v = sources.children.getCurrentElement();
+						v.lastName = sources.family.name;
+						v.save();
+					}
+					sources.children.serverRefresh();
 				}
 				break;
 			case 'componentSchoolMap':
