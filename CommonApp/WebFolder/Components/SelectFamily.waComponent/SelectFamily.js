@@ -13,6 +13,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var buttonCreateFamily = {};	// @button
 	var textFieldFamilyName = {};	// @textField
 	// @endregion// @endlock
 	
@@ -28,6 +29,13 @@ function constructor (id) {
 		}
 	)
 	// eventHandlers// @lock
+
+	buttonCreateFamily.click = function buttonCreateFamily_click (event)// @startlock
+	{// @endlock
+		sources.family.addNewElement();
+		sources.family.getAttribute('name').setValue($$(getHtmlId('textFieldFamilyName')).getValue());
+		sources.family.save();
+	};// @lock
 
 	textFieldFamilyName.keyup = function textFieldFamilyName_keyup (event)// @startlock
 	{// @endlock
@@ -46,6 +54,7 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_buttonCreateFamily", "click", buttonCreateFamily.click, "WAF");
 	WAF.addListener(this.id + "_textFieldFamilyName", "keyup", textFieldFamilyName.keyup, "WAF");
 	// @endregion// @endlock
 

@@ -43,12 +43,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			case 'componentFamilyInfoEntry':
 				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfChildren');
 				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfApplicants');
-				L3.buildStepArray();
+				if (r) {
+					sources.family.save();
+					L3.buildStepArray();
+				}
 				break;
 			case 'componentMotherEntry':
 				sources.mother.save();
+				sources.family.save();
 			case 'componentFatherEntry':
-				sources.mother.save();
+				sources.father.save();
+				sources.family.save();
 		}
 		
 		return r;
@@ -80,11 +85,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentMotherEntry':
 				if (!sources.mother.ID) {
-					sources.mother.addNewElement();
-					sources.mother.serverRefresh(
+					sources.person.addNewElement();
+					sources.person.getAttribute('lastName').setValue(sources.family.name);
+					sources.person.save(
 						{
 							onSuccess: function(event) {
-								sources.mother.lastName = sources.family.name;
+								sources.family.mother.set(sources.person);
+								sources.family.save();
+								sources.mother.serverRefresh();
 							}
 						}
 					);
@@ -92,11 +100,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentFatherEntry':
 				if (!sources.father.ID) {
-					sources.father.addNewElement();
-					sources.father.serverRefresh(
+					sources.person.addNewElement();
+					sources.person.getAttribute('lastName').setValue(sources.family.name);
+					sources.person.save(
 						{
 							onSuccess: function(event) {
-								sources.father.lastName = sources.family.name;
+								sources.family.father.set(sources.person);
+								sources.family.save();
+								sources.father.serverRefresh();
 							}
 						}
 					);
