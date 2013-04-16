@@ -109,15 +109,26 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				createFamilyRelation('guardian');
 				break;
 			case 'componentChildEntry':
-				if (sources.family.numberOfChildren < sources.family.childrenToEnter) {
-					for (i = sources.family.numberOfChildren; i < sources.family.childrenToEnter; i += 1) {
-						sources.children.addNewElement();
-						v = sources.children.getCurrentElement();
-						v.lastName = sources.family.name;
-						v.save();
+				sources.person.query('ID in :1',
+					{
+						onSuccess: function(event) {
+							debugger;
+//							if (event.dataSource.length < sources.family.childrenToEnter) {
+//								for (i = sources.family.numberOfChildren; i < sources.family.childrenToEnter; i += 1) {
+//									sources
+//									sources.children.addNewElement();
+//									v = sources.children.getCurrentElement();
+//									v.lastName = sources.family.name;
+//									v.save();
+//								}
+//								sources.children.serverRefresh();
+//							}
+						},
+						params: [sources.family.children.person.ID]
 					}
-					sources.children.serverRefresh();
-				}
+
+				);
+				$$('componentChildEntry_imageButtonPrevChild').hide();
 				break;
 			case 'componentSchoolMap':
 				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
