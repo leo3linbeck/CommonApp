@@ -26,8 +26,6 @@ L3.Family.addAttribute('fatherStatus', 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('childCustody', 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('nativeLanguage',		'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('languageSpokenAtHome',	'storage',			'string', 		'cluster'		);
-L3.Family.addAttribute('childrenToEnter',		'storage',			'long', 		'cluster'		);
-L3.Family.addAttribute('applicationsToEnter',	'storage',			'long', 		'cluster'		);
 L3.Family.addAttribute('father', 				'relatedEntity', 	'Person',	 	'Person'		);
 L3.Family.addAttribute('mother', 				'relatedEntity', 	'Person', 		'Person'		);
 L3.Family.addAttribute('guardian', 				'relatedEntity', 	'Person', 		'Person'		);
@@ -118,13 +116,8 @@ L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
 L3.Person.addAttribute('appliedTo', 			'relatedEntity', 	'School', 		'School'		);
 
-L3.Child = model.addClass('Child','Children');
-L3.Child.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
+L3.Child = model.addClass('Child','Children','public','Person');
 L3.Child.addAttribute('belongsTo', 				'relatedEntity', 	'Family', 		'Family'		);
-L3.Child.addAttribute('person', 				'relatedEntity', 	'Person', 		'Person'		);
-L3.Child.addAttribute('firstName', 				'alias', 			'string', 		'person.firstName'	);
-L3.Child.addAttribute('middleName',				'alias', 			'string', 		'person.middleName'	);
-L3.Child.addAttribute('fullName', 				'alias', 			'string', 		'person.fullName'	);
 
 //// class methods
 

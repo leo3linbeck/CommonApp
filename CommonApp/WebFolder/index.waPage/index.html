@@ -7,11 +7,10 @@
 	<meta name="wakanda-version" content="4 build 4.129628"/>
 		<meta name="wakanda-build" content="4.129628"/>
 		<meta name="WAF.config.loadCSS" id="waf-palette" content="/walib/WAF/widget/palette/css/widget-palette-default.css"/>
-		<meta data-type="dataSource" data-lib="WAF" data-source="Person" data-source-type="dataClass" data-dataType="string" data-autoLoad="false" name="WAF.config.datasources" data-id="personChild" content="personChild"/>
-		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Person" data-lib="WAF" data-id="person" data-dataType="string" data-autoLoad="true" content="person"/>
+		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Person" data-lib="WAF" data-id="person" data-dataType="string" data-autoLoad="false" content="person"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="scalar" data-source="familyNumberOfApplicants" data-lib="WAF" data-id="familyNumberOfApplicants" data-dataType="number" data-autoLoad="true" content="familyNumberOfApplicants"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="scalar" data-source="familyNumberOfChildren" data-lib="WAF" data-id="familyNumberOfChildren" data-dataType="number" data-autoLoad="true" content="familyNumberOfChildren"/>
-		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Family" data-lib="WAF" data-id="family" data-dataType="string" data-autoLoad="true" content="family"/>
+		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Family" data-lib="WAF" data-id="family" data-dataType="string" data-autoLoad="false" content="family"/>
 		<meta name="WAF.config.loadCSS" id="waf-interface-css" content="styles/index.css"/>
 		<meta name="WAF.config.loadCSS" id="waf-project-css" content="/application.css"/>
 
@@ -42,13 +41,17 @@
 
 		
 		
-<meta name="WAF.config.loadJS" content="/scripts/utility.js"/>
-		<meta name="WAF.config.loadJS" content="/scripts/localization.js"/>
-		<meta name="WAF.config.loadJS" content="/index.waPage/scripts/index.js"/>
+
+		
+		
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.mother" data-lib="WAF" data-id="mother" data-dataType="string" data-autoLoad="true" content="mother"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.father" data-lib="WAF" data-id="father" data-dataType="string" data-autoLoad="true" content="father"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.guardian" data-lib="WAF" data-id="guardian" data-dataType="string" data-autoLoad="true" content="guardian"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.children" data-lib="WAF" data-id="children" data-dataType="string" data-autoLoad="true" content="children"/>
+
+		<meta name="WAF.config.loadJS" content="/scripts/utility.js"/>
+		<meta name="WAF.config.loadJS" content="/scripts/localization.js"/>
+		<meta name="WAF.config.loadJS" content="/index.waPage/scripts/index.js"/>
 </head>
 
 <body id="waf-body" data-workspace-width="0" data-workspace-orientation="portrait" data-workspace-height="0" data-viewport-width="device-width" data-viewport-minimum-scale="1.0" data-viewport-maximum-scale="1.0" data-viewport-initial-scale="1.0" data-type="document" data-theme="default" data-rpc-validation="false" data-rpc-namespace="rpc" data-rpc-activate="false" data-platform="desktop" data-lib="WAF" data-group="[]" data-apple-meta-tags-status-bar="default" class="default" style="visibility:hidden;">
@@ -70,7 +73,7 @@
 		<div id="componentSchoolMap" data-type="component" data-path="/Components/SchoolMap.waComponent" data-lib="WAF" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-component default inherited  "></div>
 		<div id="componentContactInfoEntry" data-type="component" data-path="/Components/ContactInfoEntry.waComponent" data-lib="WAF" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-component default inherited  "></div>
 		<div id="componentFamilyInfoEntry" data-type="component" data-path="/Components/FamilyInfoEntry.waComponent" data-lib="WAF" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-component default inherited  "></div>
-		<div id="loginMain" data-user-label="User: " data-user-display="Signed in as " data-type="login" data-password-label="Password: " data-no-user-display="Not signed in" data-logout-action="Sign out" data-login-title="Login Dialog" data-login-button="Login" data-login-action="Sign in&amp;nbsp" data-lib="WAF" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-login default inherited  "></div>
+		<div id="loginMain" data-user-label="User: " data-user-display="Signed in as " data-type="login" data-password-label="Password: " data-logout-action="Sign out" data-login-title="Login Dialog" data-login-button="Login" data-login-action="Sign in&amp;nbsp" data-lib="WAF" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-login default inherited  "></div>
 		<div id="richTextHomeTitle" data-type="richText" data-target="_blank" data-plainText="true" data-overflow="Hidden" data-lib="WAF" data-label-position="left" data-label="" data-constraint-top="true" data-constraint-left="true" data-autoWidth="false" class="waf-widget waf-richText default inherited  ">Home</div>
 		<span id="iconSettings" data-type="icon" data-lib="WAF" data-label-position="left" data-label="" data-image-state3="/images/onebit_09.png" data-image-state2="/images/onebit_09.png" data-image-state1="/images/onebit_09.png" data-icon-type="images" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-icon default inherited  "><img src="/images/onebit_09.png" class="waf-icon-state1"/><img src="/images/onebit_09.png" class="waf-icon-state2"/><img src="/images/onebit_09.png" class="waf-icon-state3"/></span>
 		<div id="componentSelectFamily" data-type="component" data-path="/Components/SelectFamily.waComponent" data-lib="WAF" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-component default inherited  "></div>

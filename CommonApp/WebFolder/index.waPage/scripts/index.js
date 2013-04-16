@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var childrenEvent = {};	// @dataSource
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
 	var iconHome = {};	// @icon
@@ -41,19 +42,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				sources.family.save();
 				break;
 			case 'componentFamilyInfoEntry':
-				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfChildren');
-				r = r && validateField('componentFamilyInfoEntry_textFieldNumberOfApplicants');
-				if (r) {
-					sources.family.save();
-					L3.buildStepArray();
-				}
+				sources.family.save();
+				L3.buildStepArray();
 				break;
 			case 'componentMotherEntry':
 				sources.mother.save();
 				sources.family.save();
+				break;
 			case 'componentFatherEntry':
 				sources.father.save();
 				sources.family.save();
+				break;
 		}
 		
 		return r;
@@ -109,25 +108,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				createFamilyRelation('guardian');
 				break;
 			case 'componentChildEntry':
-				sources.person.query('ID in :1',
-					{
-						onSuccess: function(event) {
-							debugger;
-//							if (event.dataSource.length < sources.family.childrenToEnter) {
-//								for (i = sources.family.numberOfChildren; i < sources.family.childrenToEnter; i += 1) {
-//									sources
-//									sources.children.addNewElement();
-//									v = sources.children.getCurrentElement();
-//									v.lastName = sources.family.name;
-//									v.save();
-//								}
-//								sources.children.serverRefresh();
-//							}
-						},
-						params: [sources.family.children.person.ID]
-					}
-
-				);
+				if (sources.family.numberOfChildren === 0) {
+					sources.children.addNewElement(
+						{
+							onSuccess: function(event) {
+								sources.children.getCurrentElement().belongsTo.set(sources.family);
+								sources.children.serverRefresh();
+							}
+						}
+					);
+				}
+				$$('componentChildEntry_richTextChildrenCount').setValue('1 of ' + sources.children.length);
 				$$('componentChildEntry_imageButtonPrevChild').hide();
 				break;
 			case 'componentSchoolMap':
@@ -138,6 +129,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 
 // eventHandlers// @lock
+
+	childrenEvent.onCurrentElementChange = function childrenEvent_onCurrentElementChange (event)// @startlock
+	{// @endlock
+		if (!event.dataSource.getAttribute('lastName').getValue()) {
+			event.dataSource.getAttribute('lastName').setValue(sources.family.name)
+		}
+	};// @lock
 
 	loginMain.login = function loginMain_login (event)// @startlock
 	{// @endlock
@@ -221,6 +219,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
 	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
 	WAF.addListener("iconHome", "click", iconHome.click, "WAF");
