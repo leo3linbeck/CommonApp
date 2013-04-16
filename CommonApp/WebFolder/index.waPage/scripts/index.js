@@ -2,6 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var fatherEvent = {};	// @dataSource
+	var motherEvent = {};	// @dataSource
 	var childrenEvent = {};	// @dataSource
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
@@ -35,23 +37,26 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		switch (current) {
 			case 'componentAddressEntry':
 				r = sources.family.uspsDeliveryPoint;
-				sources.family.save();
+				sources.family.save({onSuccess: function(event) {}});
 				break;
 			case 'componentSchoolMap':
 				r = sources.family.ID
-				sources.family.save();
+				sources.family.save({onSuccess: function(event) {}});
 				break;
 			case 'componentFamilyInfoEntry':
-				sources.family.save();
+				sources.family.save({onSuccess: function(event) {}});
 				L3.buildStepArray();
 				break;
 			case 'componentMotherEntry':
-				sources.mother.save();
-				sources.family.save();
+				sources.mother.save({onSuccess: function(event) {}});
+				sources.family.save({onSuccess: function(event) {}});
 				break;
 			case 'componentFatherEntry':
-				sources.father.save();
-				sources.family.save();
+				sources.father.save({onSuccess: function(event) {}});
+				sources.family.save({onSuccess: function(event) {}});
+				break;
+			case 'componentChildEntry':
+				sources.children.save({onSuccess: function(event) {}});
 				break;
 		}
 		
@@ -109,14 +114,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentChildEntry':
 				if (sources.family.numberOfChildren === 0) {
-					sources.children.addNewElement(
-						{
-							onSuccess: function(event) {
-								sources.children.getCurrentElement().belongsTo.set(sources.family);
-								sources.children.serverRefresh();
-							}
-						}
-					);
+					sources.children.addNewElement({onSuccess: function(event) {}});
 				}
 				$$('componentChildEntry_richTextChildrenCount').setValue('1 of ' + sources.children.length);
 				$$('componentChildEntry_imageButtonPrevChild').hide();
@@ -130,11 +128,29 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	fatherEvent.onCurrentElementChange = function fatherEvent_onCurrentElementChange (event)// @startlock
+	{// @endlock
+		console.log('index.fatherEvent.onCollectionChange');
+		if (!event.dataSource.lastName) {
+			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+		}
+	};// @lock
+
+	motherEvent.onCurrentElementChange = function motherEvent_onCurrentElementChange (event)// @startlock
+	{// @endlock
+		console.log('index.motherEvent.onCollectionChange');
+		if (!event.dataSource.lastName) {
+			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+		}
+	};// @lock
+
 	childrenEvent.onCurrentElementChange = function childrenEvent_onCurrentElementChange (event)// @startlock
 	{// @endlock
-		if (!event.dataSource.getAttribute('lastName').getValue()) {
-			event.dataSource.getAttribute('lastName').setValue(sources.family.name)
+		console.log('index.childrenEvent.onCollectionChange');
+		if (!event.dataSource.lastName) {
+			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
 		}
+		$$('componentChildEntry').setChildrenCount(event.dataSource);
 	};// @lock
 
 	loginMain.login = function loginMain_login (event)// @startlock
@@ -149,6 +165,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	iconHome.click = function iconHome_click (event)// @startlock
 	{// @endlock
+		console.log('iconHome.click');
 		L3.stack.forEach(function(e) {
 			$$(e).hide();
 		});
@@ -219,6 +236,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("father", "onCurrentElementChange", fatherEvent.onCurrentElementChange, "WAF");
+	WAF.addListener("mother", "onCurrentElementChange", motherEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
 	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");

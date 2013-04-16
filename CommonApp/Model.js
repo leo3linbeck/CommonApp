@@ -30,7 +30,7 @@ L3.Family.addAttribute('father', 				'relatedEntity', 	'Person',	 	'Person'		);
 L3.Family.addAttribute('mother', 				'relatedEntity', 	'Person', 		'Person'		);
 L3.Family.addAttribute('guardian', 				'relatedEntity', 	'Person', 		'Person'		);
 L3.Family.addAttribute('guardianRelationship',	'storage',			'string', 		'cluster'		);
-L3.Family.addAttribute('children', 				'relatedEntities',	'Children',		'belongsTo',	{reversePath: true});
+L3.Family.addAttribute('children', 				'relatedEntities',	'Person',		'belongsTo',	{reversePath: true});
 L3.Family.addAttribute('numberOfChildren', 		'calculated',		'long'							);
 	L3.Family.numberOfChildren.onGet = L3.familyNumberOfChildren;
 L3.Family.addAttribute('schoolOptions', 		'relatedEntities',	'SchoolOptions','family', 		{reversePath: true});
@@ -115,9 +115,9 @@ L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 	L3.Person.fullName.onGet = L3.personGetFullName;
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
 L3.Person.addAttribute('appliedTo', 			'relatedEntity', 	'School', 		'School'		);
+L3.Person.addAttribute('belongsTo', 			'relatedEntity', 	'Family', 		'Family'		);
 
 L3.Child = model.addClass('Child','Children','public','Person');
-L3.Child.addAttribute('belongsTo', 				'relatedEntity', 	'Family', 		'Family'		);
 
 //// class methods
 

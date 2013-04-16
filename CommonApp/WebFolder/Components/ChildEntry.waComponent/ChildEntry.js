@@ -10,9 +10,25 @@ function constructor (id) {
 	this.name = 'StudentEntry';
 	// @endregion// @endlock
 
+	this.setChildrenCount = function setChildrenCount(d) {
+		console.log('setChildrenCount()');
+		var p = d.getPosition() + 1;
+		if (p > 0) {
+			var m = d.length;
+			$$(getHtmlId('richTextChildrenCount')).setValue(p + ' of ' + m);
+			if (p === 1) {
+				$$(getHtmlId('imageButtonPrevChild')).hide();
+			}
+			else {
+				$$(getHtmlId('imageButtonPrevChild')).show();
+			}
+		}
+	}
+
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var childrenEvent = {};	// @dataSource
 	var imageButtonPrevChild = {};	// @buttonImage
 	var imageButtonNextChild = {};	// @buttonImage
 	var textFieldStudentBirthdate = {};	// @textField
@@ -21,82 +37,49 @@ function constructor (id) {
 	var textFieldStudentFirstName = {};	// @textField
 	// @endregion// @endlock
 
-	function isSecondChild() {
-		var c = getChildrenCount();
-		return (c.pos === '1');
-	}
-	
-	function isLastChild() {
-		var c = getChildrenCount();
-		return (c.pos === c.max);
-	}
-	
-	function getChildrenCount() {
-		var a = $$(getHtmlId('richTextChildrenCount')).getValue().split(' ');
-		return ( { pos: a[0] - 1, max: a[2] } );
-	}
-
-	function setChildrenCount() {
-		var p = sources.children.getPosition() + 1;
-		var m = sources.children.length;
-		$$(getHtmlId('richTextChildrenCount')).setValue(p + ' of ' + m);
+	function setChildAge(str) {
+		$$(getHtmlId('textFieldStudentAge')).setValue(L3.calcAgeOnSept1(str));
 	}
 
 	// eventHandlers// @lock
 
+	childrenEvent.onCollectionChange = function childrenEvent_onCollectionChange (event)// @startlock
+	{// @endlock
+		console.log('childrenEvent.onCollectionChange');
+		setChildrenCount(event.dataSource);
+		setChildAge(event.dataSource.birthdate.toString());
+	};// @lock
+
+	childrenEvent.onCurrentElementChange = function childrenEvent_onCurrentElementChange (event)// @startlock
+	{// @endlock
+		console.log('childrenEvent.onCurrentElementChange');
+		if (!event.dataSource.lastName) {
+			event.element.getAttribute('lastName').setValue(sources.family.name);
+		}
+		setChildrenCount(event.dataSource);
+		setChildAge(event.dataSource.birthdate.toString());
+	};// @lock
+
 	imageButtonPrevChild.click = function imageButtonPrevChild_click (event)// @startlock
 	{// @endlock
-		sources.children.save();
-		sources.children.selectPrevious(
-			{
-				onSuccess: function(event) {
-					if (isSecondChild()) {
-						$$(getHtmlId('imageButtonPrevChild')).hide();
-						setChildrenCount();
-					}
-				}
-			}
-		);
+		console.log('imageButtonPrevChild.click');
+		sources.children.save({onSuccess: function(event) {}});
+		sources.children.selectPrevious({onSuccess: function(event) {}});
 	};// @lock
 	
 
 	imageButtonNextChild.click = function imageButtonNextChild_click (event)// @startlock
 	{// @endlock
-		var v;
-		sources.children.getCurrentElement().save(
+		console.log('imageButtonNextChild.click');
+		sources.children.save(
 			{
-				onSuccess: function(aaa) {
-					sources.children.serverRefresh(
-						{
-							onSuccess: function (bbb) {
-								if (isLastChild()) {
-									sources.children.addNewElement(
-										{
-											onSuccess: function(ccc) {
-												v = sources.children.getCurrentElement();
-												v.lastName = sources.family.name;
-												v.belongsTo.set(sources.family);
-												setChildrenCount();
-											},
-											onError: function(error) {
-												alert(JSON.stringify(error));
-											}
-										}
-									);
-								}
-								else {
-									sources.children.selectNext();
-								}
-							},
-							onError: function(error) {
-								alert(JSON.stringify(error));
-							}
-						}
-					);
-					$$(getHtmlId('imageButtonPrevChild')).show();
-				},
-				onError: function(error) {
-					alert(JSON.stringify(error));
+				onSuccess: function (event) {
+					if (event.dataSource.getPosition() === event.dataSource.length-1) {
+						sources.children.addNewElement({onSuccess: function(event) {}});
+					}
+					else {
+						sources.children.selectNext({onSuccess: function(event) {}});
+					}
 				}
 			}
 		);
@@ -105,7 +88,7 @@ function constructor (id) {
 
 	textFieldStudentBirthdate.change = function textFieldStudentBirthdate_change (event)// @startlock
 	{// @endlock
-		$$(getHtmlId('textFieldStudentAge')).setValue(L3.calcAgeOnSept1(this.getValue()));
+		setChildAge(this.getValue());
 	};// @lock
 
 	textFieldStudentLastName.change = function textFieldStudentLastName_change (event)// @startlock
@@ -124,6 +107,8 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_children", "onCollectionChange", childrenEvent.onCollectionChange, "WAF");
+	WAF.addListener(this.id + "_children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
 	WAF.addListener(this.id + "_imageButtonPrevChild", "click", imageButtonPrevChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNextChild", "click", imageButtonNextChild.click, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentBirthdate", "change", textFieldStudentBirthdate.change, "WAF");
