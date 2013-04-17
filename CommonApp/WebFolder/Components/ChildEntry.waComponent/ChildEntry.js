@@ -22,51 +22,74 @@ function constructor (id) {
 			else {
 				$$(getHtmlId('imageButtonPrevChild')).show();
 			}
+			if (p === m) {
+				$$(getHtmlId('imageButtonNextChild')).hide();
+				$$(getHtmlId('imageButtonNewChild')).show();
+			}
+			else {
+				$$(getHtmlId('imageButtonNextChild')).show();
+				$$(getHtmlId('imageButtonNewChild')).hide();
+			}
 		}
+	}
+
+	this.setChildAge = function setChildAge(v) {
+		$$(getHtmlId('textFieldStudentAge')).setValue(L3.calcAgeOnSept1(v));
 	}
 
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var imageButtonNewChild = {};	// @buttonImage
+	var imageButtonNextChild = {};	// @buttonImage
 	var childrenEvent = {};	// @dataSource
 	var imageButtonPrevChild = {};	// @buttonImage
-	var imageButtonNextChild = {};	// @buttonImage
 	var textFieldStudentBirthdate = {};	// @textField
 	var textFieldStudentLastName = {};	// @textField
 	var textFieldStudentMiddleName = {};	// @textField
 	var textFieldStudentFirstName = {};	// @textField
 	// @endregion// @endlock
 
-	function setChildAge(str) {
-		$$(getHtmlId('textFieldStudentAge')).setValue(L3.calcAgeOnSept1(str));
-	}
 
 	// eventHandlers// @lock
 
-	childrenEvent.onCollectionChange = function childrenEvent_onCollectionChange (event)// @startlock
+	imageButtonNewChild.mouseover = function imageButtonNewChild_mouseover (event)// @startlock
 	{// @endlock
-		console.log('childrenEvent.onCollectionChange');
-		setChildrenCount(event.dataSource);
-		setChildAge(event.dataSource.birthdate.toString());
+		// Add your code here
 	};// @lock
 
-	childrenEvent.onCurrentElementChange = function childrenEvent_onCurrentElementChange (event)// @startlock
+	imageButtonNewChild.mouseout = function imageButtonNewChild_mouseout (event)// @startlock
 	{// @endlock
-		console.log('childrenEvent.onCurrentElementChange');
-		if (!event.dataSource.lastName) {
-			event.element.getAttribute('lastName').setValue(sources.family.name);
-		}
-		setChildrenCount(event.dataSource);
-		setChildAge(event.dataSource.birthdate.toString());
+		// Add your code here
 	};// @lock
 
-	imageButtonPrevChild.click = function imageButtonPrevChild_click (event)// @startlock
+	imageButtonNewChild.click = function imageButtonNewChild_click (event)// @startlock
 	{// @endlock
-		console.log('imageButtonPrevChild.click');
-		sources.children.save({onSuccess: function(event) {}});
-		sources.children.selectPrevious({onSuccess: function(event) {}});
+		console.log('imageButtonNextChild.click');
+		sources.children.save(
+			{
+				onSuccess: function (event) {
+					if (event.dataSource.getPosition() === event.dataSource.length-1) {
+						sources.children.addNewElement();
+					}
+					else {
+						sources.children.selectNext();
+					}
+				}
+			}
+		);
+
 	};// @lock
-	
+
+	imageButtonNextChild.mouseout = function imageButtonNextChild_mouseout (event)// @startlock
+	{// @endlock
+		// Add your code here
+	};// @lock
+
+	imageButtonNextChild.mouseover = function imageButtonNextChild_mouseover (event)// @startlock
+	{// @endlock
+		// Add your code here
+	};// @lock
 
 	imageButtonNextChild.click = function imageButtonNextChild_click (event)// @startlock
 	{// @endlock
@@ -75,10 +98,10 @@ function constructor (id) {
 			{
 				onSuccess: function (event) {
 					if (event.dataSource.getPosition() === event.dataSource.length-1) {
-						sources.children.addNewElement({onSuccess: function(event) {}});
+						sources.children.addNewElement();
 					}
 					else {
-						sources.children.selectNext({onSuccess: function(event) {}});
+						sources.children.selectNext();
 					}
 				}
 			}
@@ -86,9 +109,37 @@ function constructor (id) {
 
 	};// @lock
 
+	childrenEvent.onCollectionChange = function childrenEvent_onCollectionChange (event)// @startlock
+	{// @endlock
+		console.log('childrenEvent.onCollectionChange');
+		if (!event.dataSource.lastName) {
+			event.element.getAttribute('lastName').setValue(sources.family.name);
+		}
+		setChildrenCount(event.dataSource);
+		$comp.setChildAge(event.dataSource.birthdate);
+	};// @lock
+
+	imageButtonPrevChild.mouseout = function imageButtonPrevChild_mouseout (event)// @startlock
+	{// @endlock
+		// Add your code here
+	};// @lock
+
+	imageButtonPrevChild.mouseover = function imageButtonPrevChild_mouseover (event)// @startlock
+	{// @endlock
+		// Add your code here
+	};// @lock
+
+	imageButtonPrevChild.click = function imageButtonPrevChild_click (event)// @startlock
+	{// @endlock
+		console.log('imageButtonPrevChild.click');
+		sources.children.save({onSuccess: function(event) {}});
+		sources.children.selectPrevious();
+	};// @lock
+	
+
 	textFieldStudentBirthdate.change = function textFieldStudentBirthdate_change (event)// @startlock
 	{// @endlock
-		setChildAge(this.getValue());
+		$comp.setChildAge(new Date(this.getValue()));
 	};// @lock
 
 	textFieldStudentLastName.change = function textFieldStudentLastName_change (event)// @startlock
@@ -107,10 +158,16 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
-	WAF.addListener(this.id + "_children", "onCollectionChange", childrenEvent.onCollectionChange, "WAF");
-	WAF.addListener(this.id + "_children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
-	WAF.addListener(this.id + "_imageButtonPrevChild", "click", imageButtonPrevChild.click, "WAF");
+	WAF.addListener(this.id + "_imageButtonNewChild", "mouseover", imageButtonNewChild.mouseover, "WAF");
+	WAF.addListener(this.id + "_imageButtonNewChild", "mouseout", imageButtonNewChild.mouseout, "WAF");
+	WAF.addListener(this.id + "_imageButtonNewChild", "click", imageButtonNewChild.click, "WAF");
+	WAF.addListener(this.id + "_imageButtonNextChild", "mouseout", imageButtonNextChild.mouseout, "WAF");
+	WAF.addListener(this.id + "_imageButtonPrevChild", "mouseout", imageButtonPrevChild.mouseout, "WAF");
+	WAF.addListener(this.id + "_imageButtonPrevChild", "mouseover", imageButtonPrevChild.mouseover, "WAF");
+	WAF.addListener(this.id + "_imageButtonNextChild", "mouseover", imageButtonNextChild.mouseover, "WAF");
 	WAF.addListener(this.id + "_imageButtonNextChild", "click", imageButtonNextChild.click, "WAF");
+	WAF.addListener(this.id + "_children", "onCollectionChange", childrenEvent.onCollectionChange, "WAF");
+	WAF.addListener(this.id + "_imageButtonPrevChild", "click", imageButtonPrevChild.click, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentBirthdate", "change", textFieldStudentBirthdate.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentLastName", "change", textFieldStudentLastName.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentMiddleName", "change", textFieldStudentMiddleName.change, "WAF");

@@ -116,8 +116,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				if (sources.family.numberOfChildren === 0) {
 					sources.children.addNewElement({onSuccess: function(event) {}});
 				}
-				$$('componentChildEntry_richTextChildrenCount').setValue('1 of ' + sources.children.length);
-				$$('componentChildEntry_imageButtonPrevChild').hide();
 				break;
 			case 'componentSchoolMap':
 				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
@@ -151,6 +149,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
 		}
 		$$('componentChildEntry').setChildrenCount(event.dataSource);
+		$$('componentChildEntry').setChildAge(event.dataSource.birthdate);
 	};// @lock
 
 	loginMain.login = function loginMain_login (event)// @startlock
