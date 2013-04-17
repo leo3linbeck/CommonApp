@@ -40,6 +40,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var imageButtonRemoveChild = {};	// @buttonImage
 	var imageButtonNewChild = {};	// @buttonImage
 	var imageButtonNextChild = {};	// @buttonImage
 	var childrenEvent = {};	// @dataSource
@@ -53,14 +54,23 @@ function constructor (id) {
 
 	// eventHandlers// @lock
 
-	imageButtonNewChild.mouseover = function imageButtonNewChild_mouseover (event)// @startlock
+	imageButtonRemoveChild.click = function imageButtonRemoveChild_click (event)// @startlock
 	{// @endlock
-		// Add your code here
-	};// @lock
+		var v;
+		
+		console.log('imageButtonRemoveChild.click');
+		v = sources.children.getCurrentElement();
+		sources.children.removeCurrentReference(
+			{
+				onSuccess: function (event) {
+					v.remove();
+				},
+				onError: function(error) {
+					console.log(error);
+				}
+			}
+		);
 
-	imageButtonNewChild.mouseout = function imageButtonNewChild_mouseout (event)// @startlock
-	{// @endlock
-		// Add your code here
 	};// @lock
 
 	imageButtonNewChild.click = function imageButtonNewChild_click (event)// @startlock
@@ -79,16 +89,6 @@ function constructor (id) {
 			}
 		);
 
-	};// @lock
-
-	imageButtonNextChild.mouseout = function imageButtonNextChild_mouseout (event)// @startlock
-	{// @endlock
-		// Add your code here
-	};// @lock
-
-	imageButtonNextChild.mouseover = function imageButtonNextChild_mouseover (event)// @startlock
-	{// @endlock
-		// Add your code here
 	};// @lock
 
 	imageButtonNextChild.click = function imageButtonNextChild_click (event)// @startlock
@@ -117,16 +117,6 @@ function constructor (id) {
 		}
 		setChildrenCount(event.dataSource);
 		$comp.setChildAge(event.dataSource.birthdate);
-	};// @lock
-
-	imageButtonPrevChild.mouseout = function imageButtonPrevChild_mouseout (event)// @startlock
-	{// @endlock
-		// Add your code here
-	};// @lock
-
-	imageButtonPrevChild.mouseover = function imageButtonPrevChild_mouseover (event)// @startlock
-	{// @endlock
-		// Add your code here
 	};// @lock
 
 	imageButtonPrevChild.click = function imageButtonPrevChild_click (event)// @startlock
@@ -158,13 +148,8 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
-	WAF.addListener(this.id + "_imageButtonNewChild", "mouseover", imageButtonNewChild.mouseover, "WAF");
-	WAF.addListener(this.id + "_imageButtonNewChild", "mouseout", imageButtonNewChild.mouseout, "WAF");
+	WAF.addListener(this.id + "_imageButtonRemoveChild", "click", imageButtonRemoveChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNewChild", "click", imageButtonNewChild.click, "WAF");
-	WAF.addListener(this.id + "_imageButtonNextChild", "mouseout", imageButtonNextChild.mouseout, "WAF");
-	WAF.addListener(this.id + "_imageButtonPrevChild", "mouseout", imageButtonPrevChild.mouseout, "WAF");
-	WAF.addListener(this.id + "_imageButtonPrevChild", "mouseover", imageButtonPrevChild.mouseover, "WAF");
-	WAF.addListener(this.id + "_imageButtonNextChild", "mouseover", imageButtonNextChild.mouseover, "WAF");
 	WAF.addListener(this.id + "_imageButtonNextChild", "click", imageButtonNextChild.click, "WAF");
 	WAF.addListener(this.id + "_children", "onCollectionChange", childrenEvent.onCollectionChange, "WAF");
 	WAF.addListener(this.id + "_imageButtonPrevChild", "click", imageButtonPrevChild.click, "WAF");

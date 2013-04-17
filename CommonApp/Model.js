@@ -106,6 +106,7 @@ L3.Person.addAttribute('workCity', 				'storage',			'string', 		'cluster'		);
 L3.Person.addAttribute('workState', 			'storage',			'string', 		'cluster'		);
 L3.Person.addAttribute('workZipCode', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('gender', 				'storage',			'string', 		'cluster'		);
+L3.Person.addAttribute('race', 					'storage',			'string', 		'cluster'		);
 L3.Person.addAttribute('birthdate', 			'storage',			'date', 		'btree'			);
 L3.Person.addAttribute('isMultiple', 			'storage',			'bool'							);
 L3.Person.addAttribute('livesWith', 			'storage',			'string', 		'cluster'		);
