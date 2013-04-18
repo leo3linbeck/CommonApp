@@ -171,6 +171,21 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 		}
 	}
+	
+	function loginSetup() {
+		if (WAF.directory.currentUser()) {
+			$$('iconSettings').show();
+			$$('richTextSettingsTitle').show();
+			$$('richTextSignInAndStart').hide();
+			$$('buttonStart').show();
+		}
+		else {
+			$$('iconSettings').hide();
+			$$('richTextSettingsTitle').hide();
+			$$('richTextSignInAndStart').show();
+			$$('buttonStart').hide();
+		}
+	}
 
 // eventHandlers// @lock
 
@@ -200,14 +215,33 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		$$('componentChildEntry').setChildAge(event.dataSource.birthdate);
 	};// @lock
 
+	loginMain.logout = function loginMain_logout (event)// @startlock
+	{// @endlock
+		loginSetup();
+	};// @lock
+
 	loginMain.login = function loginMain_login (event)// @startlock
 	{// @endlock
-		$$('iconSettings').show();
+		loginSetup();
 	};// @lock
 
 	iconLogin.click = function iconLogin_click (event)// @startlock
 	{// @endlock
-		$$('loginMain').showLoginDialog();
+		if (WAF.directory.currentUser()) {
+			WAF.directory.logout(
+				{
+					onSuccess: function(event) {
+						location.reload();
+					},
+					onError: function(error) {
+						console.log('ERROR: logout', error);
+					}
+				}
+			);
+		}
+		else {
+			$$('loginMain').showLoginDialog();
+		}
 	};// @lock
 
 	iconHome.click = function iconHome_click (event)// @startlock
@@ -227,6 +261,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
+		loginSetup();
 		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
 	};// @lock
 
@@ -283,6 +318,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
 	WAF.addListener("father", "onCurrentElementChange", fatherEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("mother", "onCurrentElementChange", motherEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
