@@ -13,6 +13,8 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldSchoolName = {};	// @textField
+	var comboboxCategory = {};	// @combobox
 	var schoolOptionEvent = {};	// @dataSource
 	var checkboxShowSelected = {};	// @checkbox
 	var dataGridSchools = {};	// @dataGrid
@@ -33,7 +35,7 @@ function constructor (id) {
 		return d;
 	}
 	
-	function updateSchoolList() {
+	function updateSchoolList(recalcDistance) {
 		var d = getDistance();
 		
 		L3.clearGoogleMapMarkers();
@@ -41,7 +43,10 @@ function constructor (id) {
 			{
 				familyID: source.family.ID,
 				distance: (d ? d : 5),
+				recalc: (recalcDistance || $comp.sources.schoolOption.length === 0),
 				selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
+				name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
+				category: $$(getHtmlId('comboboxCategory')).getValue(),
 				debug: false 
 			},
 			{
@@ -62,23 +67,37 @@ function constructor (id) {
 		);
 	}
 
-//	function showSelectedSchools() {
-//		var d = getDistance();
+//	function querySchoolOption() {
+//		debugger;
+//		var c = $$(getHtmlId('comboboxCategory')).getValue();
 //		
-//		$comp.sources.schoolOption.query('family.ID === :1 AND distance <= :2 AND selected === true',
+//		$comp.sources.schoolOption.query('school.name == :1 AND school.category == :2',
 //			{
 //				onSuccess: function(response) {
-////					L3.addGoogleMapMarker($comp.sources.schoolMapCoords, 'green');
+//					$comp.sources.schoolOption.setEntityCollection(response.dataSource);
+//					google.maps.event.trigger(L3.googleMap, 'resize');
 //				},
 //				onError: function(error) {
-//					$$(getHtmlId('richTextVerifyAddressError')).setValue(error.message);
+//					console.log('ERROR: querySchoolOption', error);
 //				},
-//				params: [source.family.ID, d]
+//				orderBy: (c === 'All' ? 'schoolName' : 'schoolCategory, schoolName'),
+//				params: [ 	$$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar, 
+//							(c === 'All' ? WAF.wildchar : c) ]
 //			}
 //		);
 //	}
 
 	// eventHandlers// @lock
+
+	textFieldSchoolName.keyup = function textFieldSchoolName_keyup (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
+	comboboxCategory.change = function comboboxCategory_change (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
 	
 	function getInfoWindowText(d) {
 		return ('<h4>' + d.schoolName + '</h4><span>' +
@@ -102,7 +121,17 @@ function constructor (id) {
 
 	checkboxShowSelected.change = function checkboxShowSelected_change (event)// @startlock
 	{// @endlock
-		updateSchoolList();
+		updateSchoolList(false);
+	};// @lock
+
+	dataGridSchools.onRowDblClick = function dataGridSchools_onRowDblClick (event)// @startlock
+	{// @endlock
+		var a;
+		
+		console.log('dataGridSchools.onRowDblClick', event);
+		a = $comp.sources.schoolOption.getAttribute('selected');
+		a.setValue(a.getValue() ? false : true);
+		$comp.sources.schoolOption.save({ onSuccess: function() {} });
 	};// @lock
 
 	dataGridSchools.onRowDraw = function dataGridSchools_onRowDraw (event)// @startlock
@@ -116,11 +145,14 @@ function constructor (id) {
 
 	textFieldDistance.change = function textFieldDistance_change (event)// @startlock
 	{// @endlock
-		updateSchoolList();
+		updateSchoolList(true);
 
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
+	WAF.addListener(this.id + "_comboboxCategory", "change", comboboxCategory.change, "WAF");
+	WAF.addListener(this.id + "_dataGridSchools", "onRowDblClick", dataGridSchools.onRowDblClick, "WAF");
 	WAF.addListener(this.id + "_schoolOption", "onCurrentElementChange", schoolOptionEvent.onCurrentElementChange, "WAF");
 	WAF.addListener(this.id + "_checkboxShowSelected", "change", checkboxShowSelected.change, "WAF");
 	WAF.addListener(this.id + "_dataGridSchools", "onRowDraw", dataGridSchools.onRowDraw, "WAF");

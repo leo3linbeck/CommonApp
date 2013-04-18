@@ -52,17 +52,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				sources.family.save({onSuccess: function(event) {}});
 				break;
 			case 'componentGuardianEntry':
-				sources.father.save({onSuccess: function(event) {}});
+				sources.guardian.save({onSuccess: function(event) {}});
 				sources.family.save({onSuccess: function(event) {}});
 				break;
 			case 'componentChildEntry':
 				sources.children.save({onSuccess: function(event) {}});
 				break;
 			case 'componentContactInfoEntry':
-				sources.mother.save({onSuccess: function(event) {}});
-				sources.father.save({onSuccess: function(event) {}});
-				sources.guardian.save({onSuccess: function(event) {}});
-				sources.children.save({onSuccess: function(event) {}});
 				break;
 			case 'componentSchoolMap':
 				r = sources.family.ID
@@ -168,10 +164,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				);
 				break;
 			case 'componentSchoolMap':
-				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 				break;
 		}
 		$$(next).show();
+		if (next === 'componentSchoolMap') {
+			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
+		}
 	}
 
 // eventHandlers// @lock
