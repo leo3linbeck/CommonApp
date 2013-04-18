@@ -13,10 +13,12 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
-	var checkboxSameAddress = {};	// @checkbox
+	var textFieldEmployer = {};	// @textField
+	var textFieldOccupation = {};	// @textField
 	var textFieldWorkCityEntry = {};	// @textField
 	var textFieldWorkAddress2Entry = {};	// @textField
 	var textFieldWorkAddress1Entry = {};	// @textField
+	var checkboxSameAddress = {};	// @checkbox
 	var textFieldHomeAddress1Entry = {};	// @textField
 	var textFieldHomeCityEntry = {};	// @textField
 	var textFieldHomeAddress2Entry = {};	// @textField
@@ -27,15 +29,14 @@ function constructor (id) {
 
 	// eventHandlers// @lock
 
-	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
+	textFieldEmployer.change = function textFieldEmployer_change (event)// @startlock
 	{// @endlock
-		if(this.getValue()) {
-			sources.mother.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
-			sources.mother.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
-			sources.mother.getAttribute('homeCity').setValue(sources.family.mainCity);
-			sources.mother.getAttribute('homeState').setValue(sources.family.mainState);
-			sources.mother.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
-		}
+		L3.convertAttributeToTitleCase(this);
+	};// @lock
+
+	textFieldOccupation.change = function textFieldOccupation_change (event)// @startlock
+	{// @endlock
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
@@ -51,6 +52,17 @@ function constructor (id) {
 	textFieldWorkAddress1Entry.change = function textFieldWorkAddress1Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
+	};// @lock
+
+	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
+	{// @endlock
+		if(this.getValue()) {
+			sources.father.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
+			sources.father.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
+			sources.father.getAttribute('homeCity').setValue(sources.family.mainCity);
+			sources.father.getAttribute('homeState').setValue(sources.family.mainState);
+			sources.father.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
+		}
 	};// @lock
 
 	textFieldHomeAddress1Entry.change = function textFieldHomeAddress1Entry_change (event)// @startlock
@@ -84,10 +96,12 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
-	WAF.addListener(this.id + "_checkboxSameAddress", "change", checkboxSameAddress.change, "WAF");
+	WAF.addListener(this.id + "_textFieldEmployer", "change", textFieldEmployer.change, "WAF");
+	WAF.addListener(this.id + "_textFieldOccupation", "change", textFieldOccupation.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkCityEntry", "change", textFieldWorkCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress2Entry", "change", textFieldWorkAddress2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress1Entry", "change", textFieldWorkAddress1Entry.change, "WAF");
+	WAF.addListener(this.id + "_checkboxSameAddress", "change", checkboxSameAddress.change, "WAF");
 	WAF.addListener(this.id + "_textFieldHomeAddress1Entry", "change", textFieldHomeAddress1Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldHomeCityEntry", "change", textFieldHomeCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldHomeAddress2Entry", "change", textFieldHomeAddress2Entry.change, "WAF");

@@ -13,6 +13,8 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldEmployer = {};	// @textField
+	var textFieldOccupation = {};	// @textField
 	var checkboxSameAddress = {};	// @checkbox
 	var textFieldWorkCityEntry = {};	// @textField
 	var textFieldWorkAddress2Entry = {};	// @textField
@@ -26,6 +28,16 @@ function constructor (id) {
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
+
+	textFieldEmployer.change = function textFieldEmployer_change (event)// @startlock
+	{// @endlock
+		L3.convertAttributeToTitleCase(this);
+	};// @lock
+
+	textFieldOccupation.change = function textFieldOccupation_change (event)// @startlock
+	{// @endlock
+		L3.convertAttributeToTitleCase(this);
+	};// @lock
 
 	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
 	{// @endlock
@@ -84,6 +96,8 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldEmployer", "change", textFieldEmployer.change, "WAF");
+	WAF.addListener(this.id + "_textFieldOccupation", "change", textFieldOccupation.change, "WAF");
 	WAF.addListener(this.id + "_checkboxSameAddress", "change", checkboxSameAddress.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkCityEntry", "change", textFieldWorkCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress2Entry", "change", textFieldWorkAddress2Entry.change, "WAF");
