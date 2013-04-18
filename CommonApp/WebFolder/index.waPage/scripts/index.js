@@ -59,8 +59,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				sources.children.save({onSuccess: function(event) {}});
 				break;
 			case 'componentContactInfoEntry':
-				sources.mother({onSuccess: function(event) {}});
-				sources.father({onSuccess: function(event) {}});
+				sources.mother.save({onSuccess: function(event) {}});
+				sources.father.save({onSuccess: function(event) {}});
 				sources.guardian.save({onSuccess: function(event) {}});
 				sources.children.save({onSuccess: function(event) {}});
 				break;
@@ -128,8 +128,36 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 				break;
 			case 'componentContactInfoEntry':
-				sources.children.toArray('ID');
-				sources.contactInfo.query(;
+				$$(current).sources.family
+				sources.children.toArray('ID',
+					{
+						onSuccess: function(event) {
+							var a = [];
+							
+							console.log('sources.children.toArray', event);
+							event.result.forEach(function(e) {
+								a.push(e.ID);
+							});
+							if (sources.father.ID) {
+								a.push(sources.father.ID);
+							}
+							if (sources.mother.ID) {
+								a.push(sources.mother.ID);
+							}
+							if (sources.guardian.ID) {
+								a.push(sources.guardian.ID);
+							}
+							$$(current).sources.contactList.query('ID in :1',
+								{
+									onSuccess: function(evt) {
+										console.log('contactInfo query', evt);
+									},
+									params: [a]
+								}
+							);
+						}
+					}
+				);
 				break;
 			case 'componentSchoolMap':
 				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);

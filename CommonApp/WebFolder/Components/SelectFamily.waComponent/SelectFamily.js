@@ -48,7 +48,7 @@ function constructor (id) {
 					alert(error.message);
 				},
 				orderBy: 'name',
-				params: [ $$(getHtmlId('textFieldFamilyName')).getValue() + '*' ]
+				params: [ $$(getHtmlId('textFieldFamilyName')).getValue() + WAF.wildchar ]
 			}
 		);
 	};// @lock
