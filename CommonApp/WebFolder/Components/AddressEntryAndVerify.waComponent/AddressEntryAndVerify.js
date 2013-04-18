@@ -10,8 +10,9 @@ function constructor (id) {
 	this.name = 'AddressEntryAndVerify';
 	// @endregion// @endlock
 
-//	localization.changeLanguage($$('comboboxLanguage').getValue());
-
+	var $sources = $comp.sources;
+	var $sourcesVar = $comp.sourcesVar;
+	
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
@@ -39,36 +40,35 @@ function constructor (id) {
 
 	richTextStepTitle.click = function richTextStepTitle_click (event)// @startlock
 	{// @endlock
-		$$(getHtmlId('textFieldStreet1Entry')).setValue('2132 Rice Blvd');
+		$$(getHtmlId('textFieldStreet1Entry')).setValue('2407 Reba');
 		$$(getHtmlId('textFieldStreet2Entry')).setValue('');
 		$$(getHtmlId('textFieldCityEntry')).setValue('Houston');
-		$$(getHtmlId('textFieldZipCodeEntry')).setValue('77005');
+		$$(getHtmlId('textFieldZipCodeEntry')).setValue('77019');
 	};// @lock
 
 	textFieldCityEntry.change = function textFieldCityEntry_change (event)// @startlock
 	{// @endlock
 		unverifyAddress();
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldStreet2Entry.change = function textFieldStreet2Entry_change (event)// @startlock
 	{// @endlock
 		unverifyAddress();
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldStreet1Entry.change = function textFieldStreet1Entry_change (event)// @startlock
 	{// @endlock
 		unverifyAddress();
-		L3.convertToTitleCase(this);
+		L3.convertAttributeToTitleCase(this);
 	};// @lock
 	
 
 	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock
 	{// @endlock
 		sources.family.addressLookup(
-			{	
-				familyID: sources.family.ID,
+			{
 				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
 				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
@@ -77,13 +77,9 @@ function constructor (id) {
 			},
 			{
 				onSuccess: function(response) {
-					var r = response.result;
-
-					if (response.result) {
-						sources.family.setEntityCollection(response.result);
-						$$(getHtmlId('textFieldZipCodeEntry')).setValue(sources.family.mainZipCode);
-						$$(getHtmlId('richTextUSPSLine1')).setValue(sources.family.uspsLine1);
-						$$(getHtmlId('richTextUSPSLine2')).setValue(sources.family.uspsLine2);
+					console.log('buttonVerifyAddress.click', response);
+					if (response.result && response.result.success) {
+						sources.family.serverRefresh({forceReload: true});
 						$$('buttonNextStep').enable();
 					}
 					else {

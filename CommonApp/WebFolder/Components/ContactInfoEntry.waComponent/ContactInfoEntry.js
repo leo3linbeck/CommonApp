@@ -9,7 +9,6 @@ function constructor (id) {
 	var $comp = this;
 	this.name = 'ContactInfo';
 	// @endregion// @endlock
-	var $sources = $comp.sources;
 	
 	this.load = function (data) {// @lock
 
@@ -21,23 +20,35 @@ function constructor (id) {
 	var textFieldWorkPhone = {};	// @textField
 	var textFieldHomePhone = {};	// @textField
 	// @endregion// @endlock
+
+	var $sources = $comp.sources;
 	
 	// eventHandlers// @lock
 
 	comboboxSecondaryContact.change = function comboboxSecondaryContact_change (event)// @startlock
 	{// @endlock
-		console.log('comboboxSecondaryContact.change');
-		var a = $$(getHtmlId('comboboxSecondaryContact')).getValue().split('_');
-		$sources.family.getAttribute('secondaryPhone').setValue(sources[a[0]][a[1]]);
-		$sources.family.save({ onSuccess: function() {} });
+		var v;
+		
+		console.log('comboboxSecondaryContact.change', event);
+		v = $$(getHtmlId('comboboxSecondaryContact'));
+		if (v.isVisible()) {
+			var a = v.getValue().split('_');
+			$sources.activeFamily.getAttribute('secondaryPhone').setValue(sources[a[0]][a[1]]);
+			$sources.activeFamily.save({ onSuccess: function() {} });
+		}
 	};// @lock
 
 	comboboxPrimaryContact.change = function comboboxPrimaryContact_change (event)// @startlock
 	{// @endlock
-		console.log('comboboxPrimaryContact.change');
-		var a = $$(getHtmlId('comboboxPrimaryContact')).getValue().split('_');
-		$sources.family.getAttribute('primaryPhone').setValue(sources[a[0]][a[1]]);
-		$sources.family.save({ onSuccess: function() {} });
+		var v;
+		
+		console.log('comboboxPrimaryContact.change', event);
+		v = $$(getHtmlId('comboboxPrimaryContact'));
+		if (v.isVisible()) {
+			var a = v.getValue().split('_');
+			$sources.activeFamily.getAttribute('primaryPhone').setValue(sources[a[0]][a[1]]);
+			$sources.activeFamily.save({ onSuccess: function() {} });
+		}
 	};// @lock
 
 	textFieldEmail.change = function textFieldEmail_change (event)// @startlock
@@ -66,7 +77,7 @@ function constructor (id) {
 	textFieldWorkPhone.change = function textFieldWorkPhone_change (event)// @startlock
 	{// @endlock
 		L3.formatPhoneAttribute(this);
-		sources.contactList.save(
+		$sources.contactList.save(
 			{
 				onSuccess: function(event) {
 					console.log('Work phone saved', event);
@@ -78,7 +89,7 @@ function constructor (id) {
 	textFieldHomePhone.change = function textFieldHomePhone_change (event)// @startlock
 	{// @endlock
 		L3.formatPhoneAttribute(this);
-		sources.contactList.save(
+		$sources.contactList.save(
 			{
 				onSuccess: function(event) {
 					console.log('Home phone saved', event);

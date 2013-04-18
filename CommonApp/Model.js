@@ -128,5 +128,5 @@ L3.Child = model.addClass('Child','Children','public','Person');
 
 //// class methods
 
-L3.Family.addMethod('addressLookup', 			'dataClass', 		L3.familyAddressLookup, 	'public'	);
+L3.Family.addMethod('addressLookup', 			'entity',			L3.familyAddressLookup, 	'public'	);
 L3.Family.addMethod('getNearbySchools', 		'dataClass', 		L3.familyGetNearbySchools, 	'public'	);

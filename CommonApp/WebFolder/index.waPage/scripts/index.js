@@ -128,7 +128,15 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 				break;
 			case 'componentContactInfoEntry':
-				$$(current).sources.family
+				$$(next).sources.activeFamily.query('ID === :1',
+					{
+						params: [sources.family.ID],
+						onSuccess: function(event) {
+							console.log('componentContactInfoEntry find activeFamily', event);
+						}
+					}
+				);
+				
 				sources.children.toArray('ID',
 					{
 						onSuccess: function(event) {
@@ -147,7 +155,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 							if (sources.guardian.ID) {
 								a.push(sources.guardian.ID);
 							}
-							$$(current).sources.contactList.query('ID in :1',
+							$$(next).sources.contactList.query('ID in :1',
 								{
 									onSuccess: function(evt) {
 										console.log('contactInfo query', evt);
