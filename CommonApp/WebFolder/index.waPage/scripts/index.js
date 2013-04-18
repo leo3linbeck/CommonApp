@@ -273,7 +273,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
 	{// @endlock
 		var current, next;
-		
+
 		if (L3.stack.length < L3.step.length) {
 			current = L3.step[L3.stack.length-1];
 			if (validateCurrentPage(current)) {
