@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var iconSettings = {};	// @icon
 	var fatherEvent = {};	// @dataSource
 	var motherEvent = {};	// @dataSource
 	var childrenEvent = {};	// @dataSource
@@ -189,6 +190,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	iconSettings.click = function iconSettings_click (event)// @startlock
+	{// @endlock
+		alert('Not yet implemented.');
+	};// @lock
+
 	fatherEvent.onCurrentElementChange = function fatherEvent_onCurrentElementChange (event)// @startlock
 	{// @endlock
 		console.log('index.fatherEvent.onCollectionChange');
@@ -318,6 +324,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
 	WAF.addListener("father", "onCurrentElementChange", fatherEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("mother", "onCurrentElementChange", motherEvent.onCurrentElementChange, "WAF");
