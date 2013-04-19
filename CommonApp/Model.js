@@ -75,6 +75,7 @@ L3.School.addAttribute('mapCoords', 			'storage',			'string', 		'btree'			);
 L3.School.addAttribute('smo',					'relatedEntity', 	'SMO', 			'SMO'			);
 L3.School.addAttribute('enrolledStudents', 		'relatedEntities', 	'People', 				'enrolledAt', 	{reversePath: true});
 L3.School.addAttribute('receivedApplications',	'relatedEntities', 	'SchoolApplications',	'submittedTo', 	{reversePath: true});
+L3.School.addAttribute('considerationSet',		'relatedEntities', 	'SchoolOptions',		'school', 		{reversePath: true});
 
 L3.SchoolOption = model.addClass('SchoolOption','SchoolOptions');
 L3.SchoolOption.addAttribute('ID', 				'storage',			'uuid', 		'key auto'		);
@@ -138,6 +139,7 @@ L3.SchoolApplication.addAttribute('preparedOn', 			'storage',			'date', 		'btree
 L3.SchoolApplication.addAttribute('submittedOn', 			'storage',			'date', 		'btree'			);
 L3.SchoolApplication.addAttribute('forSchoolYear', 			'storage',			'long', 		'cluster'		);
 L3.SchoolApplication.addAttribute('applicantName', 			'alias', 			'string', 		'applicant.fullName'	);
+L3.SchoolApplication.addAttribute('applicantNickname', 		'alias', 			'string', 		'applicant.nickname'	);
 L3.SchoolApplication.addAttribute('schoolName', 			'alias', 			'string', 		'submittedTo.name'		);
 L3.SchoolApplication.addAttribute('schoolCategory',			'alias', 			'string', 		'submittedTo.category'	);
 L3.SchoolApplication.addAttribute('submittedTo',			'relatedEntity', 	'School', 		'School'		);

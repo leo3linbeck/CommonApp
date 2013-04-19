@@ -17,6 +17,9 @@ function constructor (id) {
 	var buttonCreateApplications = {};	// @button
 	// @endregion// @endlock
 
+	$comp.sourcesVar.forSchoolYear = 2013;
+	$comp.sources.forSchoolYear.sync();
+
 	// eventHandlers// @lock
 
 	dataGridChildList.onRowClick = function dataGridChildList_onRowClick (event)// @startlock
@@ -26,6 +29,25 @@ function constructor (id) {
 
 	buttonCreateApplications.click = function buttonCreateApplications_click (event)// @startlock
 	{// @endlock
+		var a = $comp.sources.schoolApplication;
+		var c = $comp.sources.schoolChoice;
+		var sel = $$(getHtmlId('dataGridSelectSchool')).getSelectedRows();
+		sel.forEach(
+			function(e) {
+				c.select(e,
+					{
+						onSuccess: function(event) {
+							a.addNewElement();
+							a.preparedOn = new Date();
+							a.forSchoolYear = $comp.sourcesVar.forSchoolYear;
+							a.applicant.set($comp.sources.applyingChildren);
+							a.submittedTo.set(event.dataSource);
+							a.save({ onSuccess: function(event) {} });
+						}
+					}
+				);
+			}
+		)
 
 	};// @lock
 

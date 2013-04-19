@@ -173,7 +173,27 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			case 'componentSchoolMap':
 				break;
 			case 'componentCreateApplications':
-				L3.loadSchoolOptions();
+				$$('componentCreateApplications').sources.applyingChildren.query('belongsTo.ID === :1 AND isApplying === true',
+					{
+						onSuccess: function(event) {
+							console.log('load applyingChildren', event);
+							L3.loadSchoolOptions();
+							$$('componentCreateApplications').sources.schoolApplication.query('applicant.belongsTo.ID === :1',
+								{
+									onSuccess: function(evt) {
+										console.log('load schoolApplication', evt);
+									},
+									params: [sources.family.ID]
+								}
+							);
+						},
+						onError: function(error) {
+							console.log('ERROR: load applyingChildren', error);
+						},
+						orderBy: 'birthdate',
+						params: [sources.family.ID]
+					}
+				);
 				break;
 		}
 		$$(next).show();
