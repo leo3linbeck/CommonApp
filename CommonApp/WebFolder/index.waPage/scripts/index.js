@@ -62,8 +62,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			case 'componentContactInfoEntry':
 				break;
 			case 'componentSchoolMap':
-				r = sources.family.ID
 				sources.family.save({onSuccess: function(event) {}});
+				break;
+			case 'componentCreateApplications':
 				break;
 		}
 		
@@ -86,29 +87,34 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
+	function loadAddressEntryData() {
+		if (sources.family.uspsDeliveryPoint) {
+			$$('componentAddressEntry_textFieldStreet1Entry').setValue(sources.family.mainStreet1);
+			$$('componentAddressEntry_textFieldStreet2Entry').setValue(sources.family.mainStreet2);
+			$$('componentAddressEntry_textFieldCityEntry').setValue(sources.family.mainCity);
+			$$('componentAddressEntry_textFieldZipCodeEntry').setValue(sources.family.mainZipCode);
+			$$('componentAddressEntry_richTextUSPSLine1').setValue(sources.family.uspsLine1);
+			$$('componentAddressEntry_richTextUSPSLine2').setValue(sources.family.uspsLine2);
+			$$('buttonNextStep').enable();
+		}
+		else {
+			$$('componentAddressEntry_textFieldStreet1Entry').setValue('');
+			$$('componentAddressEntry_textFieldStreet2Entry').setValue('');
+			$$('componentAddressEntry_textFieldCityEntry').setValue('');
+			$$('componentAddressEntry_textFieldZipCodeEntry').setValue('');
+			$$('componentAddressEntry_richTextUSPSLine1').setValue('');
+			$$('componentAddressEntry_richTextUSPSLine2').setValue('');
+			$$('buttonNextStep').disable();
+		}
+	}
+
+	
 	function prepareNextPage(next) {
 		var i, v;
 		
 		switch (next) {
 			case 'componentAddressEntry':
-				if (sources.family.uspsDeliveryPoint) {
-					$$(next + '_textFieldStreet1Entry').setValue(sources.family.mainStreet1);
-					$$(next + '_textFieldStreet2Entry').setValue(sources.family.mainStreet2);
-					$$(next + '_textFieldCityEntry').setValue(sources.family.mainCity);
-					$$(next + '_textFieldZipCodeEntry').setValue(sources.family.mainZipCode);
-					$$(next + '_richTextUSPSLine1').setValue(sources.family.uspsLine1);
-					$$(next + '_richTextUSPSLine2').setValue(sources.family.uspsLine2);
-					$$('buttonNextStep').enable();
-				}
-				else {
-					$$(next + '_textFieldStreet1Entry').setValue('');
-					$$(next + '_textFieldStreet2Entry').setValue('');
-					$$(next + '_textFieldCityEntry').setValue('');
-					$$(next + '_textFieldZipCodeEntry').setValue('');
-					$$(next + '_richTextUSPSLine1').setValue('');
-					$$(next + '_richTextUSPSLine2').setValue('');
-					$$('buttonNextStep').disable();
-				}
+				loadAddressEntryData();
 				break;
 			case 'componentMotherEntry':
 				createFamilyRelation('mother');
@@ -165,6 +171,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				);
 				break;
 			case 'componentSchoolMap':
+				break;
+			case 'componentCreateApplications':
+				L3.loadSchoolOptions();
 				break;
 		}
 		$$(next).show();

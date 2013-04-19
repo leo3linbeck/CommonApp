@@ -40,6 +40,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldNickname = {};	// @textField
 	var imageButtonRemoveChild = {};	// @buttonImage
 	var imageButtonNewChild = {};	// @buttonImage
 	var imageButtonNextChild = {};	// @buttonImage
@@ -53,6 +54,11 @@ function constructor (id) {
 
 
 	// eventHandlers// @lock
+
+	textFieldNickname.change = function textFieldNickname_change (event)// @startlock
+	{// @endlock
+		L3.convertAttributeToTitleCase(this);
+	};// @lock
 
 	imageButtonRemoveChild.click = function imageButtonRemoveChild_click (event)// @startlock
 	{// @endlock
@@ -145,9 +151,13 @@ function constructor (id) {
 	textFieldStudentFirstName.change = function textFieldStudentFirstName_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
+		if (!$$(getHtmlId('textFieldNickname')).getValue()) {
+			$$(getHtmlId('textFieldNickname')).setValue($$(getHtmlId('textFieldStudentFirstName')).getValue());
+		}
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldNickname", "change", textFieldNickname.change, "WAF");
 	WAF.addListener(this.id + "_imageButtonRemoveChild", "click", imageButtonRemoveChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNewChild", "click", imageButtonNewChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNextChild", "click", imageButtonNextChild.click, "WAF");

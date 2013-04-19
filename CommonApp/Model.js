@@ -98,6 +98,7 @@ L3.Person.addAttribute('firstName', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('middleName', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('lastName', 				'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('suffix', 				'storage',			'string'						);
+L3.Person.addAttribute('nickname', 				'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('homeAddressSameAsMain',	'storage',			'bool', 		'cluster'		);
 L3.Person.addAttribute('homeStreet1', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('homeStreet2', 			'storage',			'string', 		'btree'			);
