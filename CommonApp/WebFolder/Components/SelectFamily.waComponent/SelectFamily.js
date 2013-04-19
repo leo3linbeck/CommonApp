@@ -17,13 +17,13 @@ function constructor (id) {
 	var textFieldFamilyName = {};	// @textField
 	// @endregion// @endlock
 	
-	sources.family.all(
+	$comp.sources.selectedFamily.all(
 		{
-			onSuccess: function(response) {
-
+			onSuccess: function(event) {
+				console.log('selectedFamily.all', event);
 			},
 			onError: function(error) {
-				alert(error.message);
+				console.log('ERROR: selectedFamily.all', error);
 			},
 			orderBy: 'name'
 		}
@@ -32,20 +32,29 @@ function constructor (id) {
 
 	buttonCreateFamily.click = function buttonCreateFamily_click (event)// @startlock
 	{// @endlock
-		sources.family.addNewElement();
-		sources.family.getAttribute('name').setValue($$(getHtmlId('textFieldFamilyName')).getValue());
-		sources.family.save();
+		$comp.sources.selectedFamily.addNewElement();
+		$comp.sources.selectedFamily.getAttribute('name').setValue($$(getHtmlId('textFieldFamilyName')).getValue());
+		$comp.sources.selectedFamily.save(
+			{ 
+				onSuccess: function(event) {
+					console.log('selectedFamily.save', event);
+				},
+				onError: function(error) {
+					console.log('ERROR: selectedFamily.save', error);
+				}
+			}
+		);
 	};// @lock
 
 	textFieldFamilyName.keyup = function textFieldFamilyName_keyup (event)// @startlock
 	{// @endlock
-		sources.family.query('name == :1',
+		$comp.sources.selectedFamily.query('name == :1',
 			{
-				onSuccess: function(response) {
-
+				onSuccess: function(event) {
+					console.log('textFieldFamilyName.keyup', event);
 				},
 				onError: function(error) {
-					alert(error.message);
+					console.log('ERROR: textFieldFamilyName.keyup', error);
 				},
 				orderBy: 'name',
 				params: [ $$(getHtmlId('textFieldFamilyName')).getValue() + WAF.wildchar ]

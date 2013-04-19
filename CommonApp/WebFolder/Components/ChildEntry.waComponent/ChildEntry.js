@@ -10,8 +10,23 @@ function constructor (id) {
 	this.name = 'StudentEntry';
 	// @endregion// @endlock
 
-	this.setChildrenCount = function setChildrenCount(d) {
-		console.log('setChildrenCount()');
+	this.load = function (data) {// @lock
+
+	// @region namespaceDeclaration// @startlock
+	var childrenEvent = {};	// @dataSource
+	var textFieldNickname = {};	// @textField
+	var imageButtonRemoveChild = {};	// @buttonImage
+	var imageButtonNewChild = {};	// @buttonImage
+	var imageButtonNextChild = {};	// @buttonImage
+	var imageButtonPrevChild = {};	// @buttonImage
+	var textFieldStudentBirthdate = {};	// @textField
+	var textFieldStudentLastName = {};	// @textField
+	var textFieldStudentMiddleName = {};	// @textField
+	var textFieldStudentFirstName = {};	// @textField
+	// @endregion// @endlock
+
+	function setChildrenCount(d) {
+		console.log('setChildrenCount()', d);
 		var p = d.getPosition() + 1;
 		if (p > 0) {
 			var m = d.length;
@@ -33,27 +48,21 @@ function constructor (id) {
 		}
 	}
 
-	this.setChildAge = function setChildAge(v) {
+	function setChildAge(v) {
 		$$(getHtmlId('textFieldStudentAge')).setValue(L3.calcAgeOnSept1(v));
 	}
 
-	this.load = function (data) {// @lock
-
-	// @region namespaceDeclaration// @startlock
-	var textFieldNickname = {};	// @textField
-	var imageButtonRemoveChild = {};	// @buttonImage
-	var imageButtonNewChild = {};	// @buttonImage
-	var imageButtonNextChild = {};	// @buttonImage
-	var childrenEvent = {};	// @dataSource
-	var imageButtonPrevChild = {};	// @buttonImage
-	var textFieldStudentBirthdate = {};	// @textField
-	var textFieldStudentLastName = {};	// @textField
-	var textFieldStudentMiddleName = {};	// @textField
-	var textFieldStudentFirstName = {};	// @textField
-	// @endregion// @endlock
-
-
 	// eventHandlers// @lock
+
+	childrenEvent.onCurrentElementChange = function childrenEvent_onCurrentElementChange (event)// @startlock
+	{// @endlock
+		console.log('childrenEvent.onCurrentElementChange', event);
+		if (!event.dataSource.lastName) {
+			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+		}
+		setChildrenCount(event.dataSource);
+		setChildAge(event.dataSource.birthdate);
+	};// @lock
 
 	textFieldNickname.change = function textFieldNickname_change (event)// @startlock
 	{// @endlock
@@ -65,11 +74,20 @@ function constructor (id) {
 		var v;
 		
 		console.log('imageButtonRemoveChild.click');
-		v = sources.children.getCurrentElement();
-		sources.children.removeCurrentReference(
+		v = $comp.sources.children.getCurrentElement();
+		$comp.sources.children.removeCurrentReference(
 			{
 				onSuccess: function (event) {
-					v.remove();
+					v.remove(			
+						{
+							onSuccess: function (evt) {
+								console.log('child removed', evt);
+							},
+							onError: function(error) {
+								console.log(error);
+							}
+						}
+					);
 				},
 				onError: function(error) {
 					console.log(error);
@@ -81,61 +99,29 @@ function constructor (id) {
 
 	imageButtonNewChild.click = function imageButtonNewChild_click (event)// @startlock
 	{// @endlock
-		console.log('imageButtonNextChild.click');
-		sources.children.save(
-			{
-				onSuccess: function (event) {
-					if (event.dataSource.getPosition() === event.dataSource.length-1) {
-						sources.children.addNewElement();
-					}
-					else {
-						sources.children.selectNext();
-					}
-				}
-			}
-		);
-
+		console.log('imageButtonNewChild.click');
+		$comp.sources.children.save({onSuccess: function(event) {}});
+		$comp.sources.children.addNewElement({ onSuccess: function(event) {} });
 	};// @lock
 
 	imageButtonNextChild.click = function imageButtonNextChild_click (event)// @startlock
 	{// @endlock
 		console.log('imageButtonNextChild.click');
-		sources.children.save(
-			{
-				onSuccess: function (event) {
-					if (event.dataSource.getPosition() === event.dataSource.length-1) {
-						sources.children.addNewElement();
-					}
-					else {
-						sources.children.selectNext();
-					}
-				}
-			}
-		);
-
-	};// @lock
-
-	childrenEvent.onCollectionChange = function childrenEvent_onCollectionChange (event)// @startlock
-	{// @endlock
-		console.log('childrenEvent.onCollectionChange');
-		if (!event.dataSource.lastName) {
-			event.element.getAttribute('lastName').setValue(sources.family.name);
-		}
-		setChildrenCount(event.dataSource);
-		$comp.setChildAge(event.dataSource.birthdate);
+		$comp.sources.children.save({onSuccess: function(event) {}});
+		$comp.sources.children.selectNext({ onSuccess: function(event) {} });
 	};// @lock
 
 	imageButtonPrevChild.click = function imageButtonPrevChild_click (event)// @startlock
 	{// @endlock
 		console.log('imageButtonPrevChild.click');
-		sources.children.save({onSuccess: function(event) {}});
-		sources.children.selectPrevious();
+		$comp.sources.children.save({onSuccess: function(event) {}});
+		$comp.sources.children.selectPrevious({ onSuccess: function(event) {} });
 	};// @lock
 	
 
 	textFieldStudentBirthdate.change = function textFieldStudentBirthdate_change (event)// @startlock
 	{// @endlock
-		$comp.setChildAge(new Date(this.getValue()));
+		setChildAge(new Date(this.getValue()));
 	};// @lock
 
 	textFieldStudentLastName.change = function textFieldStudentLastName_change (event)// @startlock
@@ -157,11 +143,11 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
 	WAF.addListener(this.id + "_textFieldNickname", "change", textFieldNickname.change, "WAF");
 	WAF.addListener(this.id + "_imageButtonRemoveChild", "click", imageButtonRemoveChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNewChild", "click", imageButtonNewChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNextChild", "click", imageButtonNextChild.click, "WAF");
-	WAF.addListener(this.id + "_children", "onCollectionChange", childrenEvent.onCollectionChange, "WAF");
 	WAF.addListener(this.id + "_imageButtonPrevChild", "click", imageButtonPrevChild.click, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentBirthdate", "change", textFieldStudentBirthdate.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStudentLastName", "change", textFieldStudentLastName.change, "WAF");

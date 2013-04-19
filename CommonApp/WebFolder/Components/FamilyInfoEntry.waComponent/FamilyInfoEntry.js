@@ -27,6 +27,7 @@ function constructor (id) {
 			$$(getHtmlId('comboboxChildCustody')).hide()
 		}
 	}
+		
 	// eventHandlers// @lock
 
 	comboboxFatherStatus.change = function comboboxFatherStatus_change (event)// @startlock

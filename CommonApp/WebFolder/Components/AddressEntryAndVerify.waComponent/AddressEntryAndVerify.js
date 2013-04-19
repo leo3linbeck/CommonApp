@@ -26,6 +26,8 @@ function constructor (id) {
 
 	function unverifyAddress() {
 		$$('buttonNextStep').disable();
+		$$(getHtmlId('buttonVerifyAddress')).enable();
+		
 		$$(getHtmlId('richTextUSPSLine1')).setValue('');
 		$$(getHtmlId('richTextUSPSLine2')).setValue('');
 		$$(getHtmlId('richTextVerifyAddressError')).setValue('');
@@ -67,7 +69,7 @@ function constructor (id) {
 
 	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock
 	{// @endlock
-		sources.family.addressLookup(
+		$comp.sources.selectedFamily.addressLookup(
 			{
 				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
@@ -76,11 +78,12 @@ function constructor (id) {
 				debug: false 
 			},
 			{
-				onSuccess: function(response) {
-					console.log('buttonVerifyAddress.click', response);
-					if (response.result && response.result.success) {
-						sources.family.serverRefresh({forceReload: true});
+				onSuccess: function(event) {
+					console.log('buttonVerifyAddress.click', event);
+					if (event.result && event.result.success) {
+						$comp.sources.selectedFamily.serverRefresh({forceReload: true});
 						$$('buttonNextStep').enable();
+						$$(getHtmlId('buttonVerifyAddress')).disable();
 					}
 					else {
 						unverifyAddress();
@@ -88,8 +91,8 @@ function constructor (id) {
 					}
 				},
 				onError: function(error) {
+					console.log('ERROR: buttonVerifyAddress.click', error);
 					unverifyAddress();
-					$$(getHtmlId('richTextVerifyAddressError')).setValue(JSON.stringify(error));
 				}
 			}
 		);

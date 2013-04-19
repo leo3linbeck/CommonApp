@@ -2,10 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var familyEvent = {};	// @dataSource
 	var iconSettings = {};	// @icon
-	var fatherEvent = {};	// @dataSource
-	var motherEvent = {};	// @dataSource
-	var childrenEvent = {};	// @dataSource
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
 	var iconHome = {};	// @icon
@@ -32,29 +30,48 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		return test;
 	}
 	
-	function validateCurrentPage(current) {
-		var r = true, v;
-		
+	function transitionPages(current, next) {
+		$$(current).hide();
+		$$(next).show();
+	}
+	
+	function saveCurrentPage(current) {
 		switch (current) {
+			case 'componentSelectFamily':
+				currentFamilyID = $$(current).sources.selectedFamily.ID;
+				sources.family.query('ID === :1', 
+					{
+						onSuccess: function(event) { console.log('saveCurrentPage query',event) },
+						autoExpand: 'mother, father, guardian',
+						params: [currentFamilyID]
+					}
+				);
+				break;
 			case 'componentAddressEntry':
-				r = sources.family.uspsDeliveryPoint;
-				sources.family.save({onSuccess: function(event) {}});
+				$$(current).sources.selectedFamily.save({
+						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
+					});
 				break;
 			case 'componentFamilyInfoEntry':
-				sources.family.save({onSuccess: function(event) {}});
-				L3.buildStepArray();
+				sources.infoFamily.save({
+						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
+					});
+				L3.buildStepArray(sources.infoFamily);
 				break;
 			case 'componentMotherEntry':
-				sources.mother.save({onSuccess: function(event) {}});
-				sources.family.save({onSuccess: function(event) {}});
+				$$(current).sources.mother.save({
+						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
+					});
 				break;
 			case 'componentFatherEntry':
-				sources.father.save({onSuccess: function(event) {}});
-				sources.family.save({onSuccess: function(event) {}});
+				$$(current).sources.father.save({
+						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
+					});
 				break;
 			case 'componentGuardianEntry':
-				sources.guardian.save({onSuccess: function(event) {}});
-				sources.family.save({onSuccess: function(event) {}});
+				$$(current).sources.guardian.save({
+						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
+					});
 				break;
 			case 'componentChildEntry':
 				sources.children.save({onSuccess: function(event) {}});
@@ -67,84 +84,126 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			case 'componentCreateApplications':
 				break;
 		}
-		
-		return r;
 	}
 	
-	function createFamilyRelation(role, comp) {
-		if (!sources[role].ID) {
-			sources.person.addNewElement();
-			sources.person.getAttribute('lastName').setValue(sources.family.name);
-			sources.person.save(
-				{
-					onSuccess: function(event) {
-						sources.family[role].set(sources.person);
-						sources.family.save();
-						sources[role].serverRefresh();
-						$$(comp).show();
+	function createFamilyRelation(role, current, next) {
+		$$(next).sources[role].query(role + 'Families.ID === :1',
+			{
+				onSuccess: function(event) {
+					console.log('createFamilyRelation selectedFamily query', event);
+					if (event.dataSource.length === 0) {
+						$$(next).sources[role].addNewElement();
+						$$(next).sources[role].getAttribute('lastName').setValue(sources.family.name);
+						$$(next).sources[role].save({
+							onSuccess: function(e) { console.log('save ' + role, e); }
+						});
+						
+						sources.family[role].set($$(next).sources[role]);
+						sources.family.save({
+							onSuccess: function(e) { console.log('save family', e); }
+						});
+						$$(next).sources[role].serverRefresh();
 					}
-				}
-			);
-		}
-		else {
-			$$(comp).show();
-		}
+					transitionPages(current, next);
+				},
+				onError: function(error) {
+					console.log('ERROR: createFamilyRelation selectedFamily query', error);
+				},
+				params: [currentFamilyID]
+			}
+		);
 	}
 	
-	function loadAddressEntryData() {
-		if (sources.family.uspsDeliveryPoint) {
-			$$('componentAddressEntry_textFieldStreet1Entry').setValue(sources.family.mainStreet1);
-			$$('componentAddressEntry_textFieldStreet2Entry').setValue(sources.family.mainStreet2);
-			$$('componentAddressEntry_textFieldCityEntry').setValue(sources.family.mainCity);
-			$$('componentAddressEntry_textFieldZipCodeEntry').setValue(sources.family.mainZipCode);
-			$$('componentAddressEntry_richTextUSPSLine1').setValue(sources.family.uspsLine1);
-			$$('componentAddressEntry_richTextUSPSLine2').setValue(sources.family.uspsLine2);
+	function setupAddressEntry(usps, current, next) {
+		if (usps) {
 			$$('buttonNextStep').enable();
+			$$(next + '_buttonVerifyAddress').disable();
 		}
 		else {
-			$$('componentAddressEntry_textFieldStreet1Entry').setValue('');
-			$$('componentAddressEntry_textFieldStreet2Entry').setValue('');
-			$$('componentAddressEntry_textFieldCityEntry').setValue('');
-			$$('componentAddressEntry_textFieldZipCodeEntry').setValue('');
-			$$('componentAddressEntry_richTextUSPSLine1').setValue('');
-			$$('componentAddressEntry_richTextUSPSLine2').setValue('');
 			$$('buttonNextStep').disable();
+			$$(next + '_buttonVerifyAddress').enable();
 		}
+		transitionPages(current, next);
 	}
-
 	
-	function prepareNextPage(next) {
-		var i, v;
-		
+	function switchPages(current, next) {
+		console.log('switchPages(current, next)', current, next);
 		switch (next) {
+			case 'componentSelectFamily':
+				transitionPages(current, next);
+				break;
 			case 'componentAddressEntry':
-				loadAddressEntryData();
-				$$(next).show();
-				break;
-			case 'componentFamilyInfoEntry':
-				$$(next).show();
-				break;
-			case 'componentMotherEntry':
-				createFamilyRelation('mother', next);
-				break;
-			case 'componentFatherEntry':
-				createFamilyRelation('father', next);
-				break;
-			case 'componentGuardianEntry':
-				createFamilyRelation('guardian', next);
-				break;
-			case 'componentChildEntry':
-				if (sources.family.numberOfChildren === 0) {
-					sources.children.addNewElement(
+				if ($$(next).sources.selectedFamily.ID !== currentFamilyID) {
+					$$(next).sources.selectedFamily.query('ID === :1',
 						{
 							onSuccess: function(event) {
-								$$(next).show();
+								console.log('componentAddressEntry selectedFamily query', event);
+								setupAddressEntry(event.dataSource.uspsDeliveryPoint, current, next);
+							},
+							onError: function(error) {
+								console.log('ERROR: componentAddressEntry selectedFamily query', error);
+							},
+							params: [currentFamilyID]
+						}
+					);
+				}
+				else {
+					setupAddressEntry($$(next).sources.selectedFamily.uspsDeliveryPoint, current, next);
+				}
+				break;
+			case 'componentFamilyInfoEntry':
+				if (sources.infoFamily.ID !== currentFamilyID) {
+					sources.infoFamily.setEntityCollection(sources.family.getEntityCollection(),
+						{
+							onSuccess: function(event) {
+								console.log('componentFamilyInfoEntry infoFamily.setEntityCollection', event);
+								transitionPages(current, next);
+							},
+							onError: function(error) {
+								console.log('ERROR: componentFamilyInfoEntry infoFamily.setEntityCollection', error);
 							}
 						}
 					);
 				}
 				else {
-					$$(next).show();
+					transitionPages(current, next);
+				}
+				break;
+			case 'componentMotherEntry':
+				createFamilyRelation('mother', current, next);
+				break;
+			case 'componentFatherEntry':
+				createFamilyRelation('father', current, next);
+				break;
+			case 'componentGuardianEntry':
+				createFamilyRelation('guardian', current, next);
+				break;
+			case 'componentChildEntry':
+				if ($$(next).sources.children.ID) {
+					$$(next).sources.children.query('belongsTo.ID === :1',
+						{
+							onSuccess: function(event) {
+								console.log('componentChildEntry query', event);
+								if (event.dataSource.length === 0) {
+									$$(next).sources.children.addNewElement();
+									$$(next).sources.children.getAttribute('lastName').setValue(sources.family.name);
+									$$(next).sources.children.belongsTo.set(sources.family);
+									$$(next).sources.children.save({
+										onSuccess: function(e) { console.log('save ' + role, e); }
+									});
+									$$(next).sources.children.serverRefresh();
+								}
+								transitionPages(current, next);
+							},
+							onError: function(error) {
+								console.log('ERROR: componentChildEntry query', error);
+							},
+							params: [currentFamilyID]
+						}
+					);
+				}
+				else {
+					transitionPages(current, next);
 				}
 				break;
 			case 'componentContactInfoEntry':
@@ -154,7 +213,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 							console.log('componentContactInfoEntry find activeFamily', event);
 						},
 						onError: function(error) {
-							console.log('ERROR: load activeFamily', next, event);
+							console.log('ERROR: load activeFamily', next, error);
 						},
 						params: [sources.family.ID]
 					}
@@ -166,15 +225,16 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 							console.log('load contactList', next, event);
 						},
 						onError: function(error) {
-							console.log('ERROR: load contactList', next, event);
+							console.log('ERROR: load contactList', next, error);
 						},
 						orderBy: 'firstName',
 						params: [sources.family.ID]
 					}
 				);
-				$$(next).show();
+				transitionPages(current, next);
 				break;
 			case 'componentSchoolMap':
+				$$(current).hide();
 				$$(next).show();
 				if (next === 'componentSchoolMap') {
 					L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
@@ -202,7 +262,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						params: [sources.family.ID]
 					}
 				);
-				$$(next).show();
+				transitionPages(current, next);
 				break;
 		}
 	}
@@ -224,35 +284,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	familyEvent.onCurrentElementChange = function familyEvent_onCurrentElementChange (event)// @startlock
+	{// @endlock
+		$$('componentFatherEntry').father.setEntityCollection(ds.Person.newCollection());
+	};// @lock
+
 	iconSettings.click = function iconSettings_click (event)// @startlock
 	{// @endlock
 		alert('Not yet implemented.');
-	};// @lock
-
-	fatherEvent.onCurrentElementChange = function fatherEvent_onCurrentElementChange (event)// @startlock
-	{// @endlock
-		console.log('index.fatherEvent.onCollectionChange');
-		if (!event.dataSource.lastName) {
-			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
-		}
-	};// @lock
-
-	motherEvent.onCurrentElementChange = function motherEvent_onCurrentElementChange (event)// @startlock
-	{// @endlock
-		console.log('index.motherEvent.onCollectionChange');
-		if (!event.dataSource.lastName) {
-			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
-		}
-	};// @lock
-
-	childrenEvent.onCurrentElementChange = function childrenEvent_onCurrentElementChange (event)// @startlock
-	{// @endlock
-		console.log('index.childrenEvent.onCollectionChange');
-		if (!event.dataSource.lastName) {
-			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
-		}
-		$$('componentChildEntry').setChildrenCount(event.dataSource);
-		$$('componentChildEntry').setChildAge(event.dataSource.birthdate);
 	};// @lock
 
 	loginMain.logout = function loginMain_logout (event)// @startlock
@@ -314,23 +353,21 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	{// @endlock
 		var current, next;
 
+		current = L3.step[L3.stack.length-1];
+		saveCurrentPage(current);
 		if (L3.stack.length < L3.step.length) {
-			current = L3.step[L3.stack.length-1];
-			if (validateCurrentPage(current)) {
-				next = L3.step[L3.stack.length];
-				$$(current).hide();
-				L3.stack.push(next);
-				prepareNextPage(next);
-			}
+			next = L3.step[L3.stack.length];
+			L3.stack.push(next);
+			switchPages(current, next);
 		}
 	};// @lock
 
 	buttonGoBack.click = function buttonGoBack_click (event)// @startlock
 	{// @endlock
 		var old = L3.stack.pop();
-		$$(old).hide();
 		
 		if (L3.stack.length === 0) {
+			$$(old).hide();
 			$$('buttonGoBack').hide();
 			$$('buttonNextStep').hide();
 			
@@ -338,6 +375,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			$$('richTextSplashDescription').show();
 		}
 		else {
+			$$(old).hide();
 			$$(L3.stack[L3.stack.length-1]).show();
 			$$('buttonNextStep').enable();
 		}
@@ -358,11 +396,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("family", "onCurrentElementChange", familyEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
-	WAF.addListener("father", "onCurrentElementChange", fatherEvent.onCurrentElementChange, "WAF");
-	WAF.addListener("mother", "onCurrentElementChange", motherEvent.onCurrentElementChange, "WAF");
-	WAF.addListener("children", "onCurrentElementChange", childrenEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
 	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
 	WAF.addListener("iconHome", "click", iconHome.click, "WAF");

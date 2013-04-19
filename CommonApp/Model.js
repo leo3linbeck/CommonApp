@@ -26,6 +26,8 @@ L3.Family.addAttribute('searchDistance',		'storage',			'number'						);
 L3.Family.addAttribute('applier',	 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('motherStatus', 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('fatherStatus', 			'storage',			'string', 		'cluster'		);
+L3.Family.addAttribute('motherRace', 			'storage',			'string', 		'cluster'		);
+L3.Family.addAttribute('fatherRace', 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('childCustody', 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('nativeLanguage',		'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('languageSpokenAtHome',	'storage',			'string', 		'cluster'		);
@@ -73,7 +75,8 @@ L3.School.addAttribute('zipCode', 				'storage',			'string', 		'btree'			);
 L3.School.addAttribute('mainPhone', 			'storage',			'string',	 	'btree'			);
 L3.School.addAttribute('uspsDeliveryPoint',		'storage',			'string', 		'btree'			);
 L3.School.addAttribute('mapCoords', 			'storage',			'string', 		'btree'			);
-L3.School.addAttribute('smo',					'relatedEntity', 	'SMO', 			'SMO'			);
+L3.School.addAttribute('smo',					'relatedEntity', 	'SMO', 					'SMO'				);
+L3.School.addAttribute('applicationForm',		'relatedEntity', 	'ApplicationForm', 		'ApplicationForm'	);
 L3.School.addAttribute('enrolledStudents', 		'relatedEntities', 	'People', 				'enrolledAt', 	{reversePath: true});
 L3.School.addAttribute('receivedApplications',	'relatedEntities', 	'SchoolApplications',	'submittedTo', 	{reversePath: true});
 L3.School.addAttribute('considerationSet',		'relatedEntities', 	'SchoolOptions',		'school', 		{reversePath: true});
@@ -132,7 +135,7 @@ L3.Person.addAttribute('belongsTo', 			'relatedEntity', 	'Family', 		'Family'		)
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
 L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 			'father', 		{reversePath: true});
 L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 			'mother', 		{reversePath: true});
-L3.Person.addAttribute('guardianships',			'relatedEntities', 	'Families', 			'guardian', 	{reversePath: true});
+L3.Person.addAttribute('guardianFamiliess',		'relatedEntities', 	'Families', 			'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 	'applicant', 	{reversePath: true});
 
 L3.Child = model.addClass('Child','Children','public','Person');
@@ -148,3 +151,32 @@ L3.SchoolApplication.addAttribute('schoolName', 			'alias', 			'string', 		'subm
 L3.SchoolApplication.addAttribute('schoolCategory',			'alias', 			'string', 		'submittedTo.category'	);
 L3.SchoolApplication.addAttribute('submittedTo',			'relatedEntity', 	'School', 		'School'		);
 L3.SchoolApplication.addAttribute('applicant',				'relatedEntity', 	'Person', 		'Person'		);
+
+L3.ApplicationForm = model.addClass('ApplicationForm','ApplicationForms');
+L3.ApplicationForm.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
+L3.ApplicationForm.addAttribute('name',		 			'storage',			'string', 		'btree'			);
+L3.ApplicationForm.addAttribute('forYear',		 		'storage',			'long', 		'btree'			);
+L3.ApplicationForm.addAttribute('imageURL',		 		'storage',			'string', 		'btree'			);
+L3.ApplicationForm.addAttribute('usedBy',		 		'relatedEntities',	'Schools', 		'applicationForm', 	{reversePath: true});
+L3.ApplicationForm.addAttribute('elements',		 		'relatedEntities',	'FormElements', 'form', 			{reversePath: true});
+
+L3.FormElement = model.addClass('FormElement','FormElements');
+L3.FormElement.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
+L3.FormElement.addAttribute('name',		 			'storage',			'string', 		'btree'			);
+L3.FormElement.addAttribute('reference',		 	'storage',			'string', 		'btree'			);
+L3.FormElement.addAttribute('cssStyle',		 		'storage',			'string', 		'btree'			);
+L3.FormElement.addAttribute('form',		 			'relatedEntity',	'ApplicationForm', 		'ApplicationForm'		);
+
+L3.SubmittedForm = model.addClass('SubmittedForm','SubmittedForms');
+L3.SubmittedForm.addAttribute('ID', 					'storage',			'uuid', 				'key auto'			);
+L3.SubmittedForm.addAttribute('name',		 			'storage',			'string', 				'btree'				);
+L3.SubmittedForm.addAttribute('imageURL',		 		'storage',			'string', 				'btree'				);
+L3.SubmittedForm.addAttribute('schoolApplication',		'relatedEntity',	'SchoolApplication',	'SchoolApplication'	);
+L3.SubmittedForm.addAttribute('submittedElements',		'relatedEntities',	'SubmittedElements',	'submittedForm', 	{reversePath: true});
+
+L3.SubmittedElement = model.addClass('SubmittedElement','SubmittedElements');
+L3.SubmittedElement.addAttribute('ID', 					'storage',			'uuid', 				'key auto'			);
+L3.SubmittedElement.addAttribute('value',			 	'storage',			'string', 				'btree'				);
+L3.SubmittedElement.addAttribute('cssStyle',		 	'storage',			'string', 				'btree'				);
+L3.SubmittedElement.addAttribute('submittedForm',		'relatedEntity',	'SubmittedForm', 		'SubmittedForm'		);
+

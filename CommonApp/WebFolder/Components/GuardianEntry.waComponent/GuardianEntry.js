@@ -51,11 +51,11 @@ function constructor (id) {
 	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
 	{// @endlock
 		if(this.getValue()) {
-			sources.father.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
-			sources.father.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
-			sources.father.getAttribute('homeCity').setValue(sources.family.mainCity);
-			sources.father.getAttribute('homeState').setValue(sources.family.mainState);
-			sources.father.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
+			$comp.sources.guardian.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
+			$comp.sources.guardian.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
+			$comp.sources.guardian.getAttribute('homeCity').setValue(sources.family.mainCity);
+			$comp.sources.guardian.getAttribute('homeState').setValue(sources.family.mainState);
+			$comp.sources.guardian.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
 		}
 	};// @lock
 
