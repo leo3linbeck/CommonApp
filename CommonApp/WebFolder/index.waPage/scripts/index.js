@@ -71,7 +71,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		return r;
 	}
 	
-	function createFamilyRelation(role) {
+	function createFamilyRelation(role, comp) {
 		if (!sources[role].ID) {
 			sources.person.addNewElement();
 			sources.person.getAttribute('lastName').setValue(sources.family.name);
@@ -81,9 +81,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						sources.family[role].set(sources.person);
 						sources.family.save();
 						sources[role].serverRefresh();
+						$$(comp).show();
 					}
 				}
 			);
+		}
+		else {
+			$$(comp).show();
 		}
 	}
 	
@@ -115,62 +119,66 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		switch (next) {
 			case 'componentAddressEntry':
 				loadAddressEntryData();
+				$$(next).show();
+				break;
+			case 'componentFamilyInfoEntry':
+				$$(next).show();
 				break;
 			case 'componentMotherEntry':
-				createFamilyRelation('mother');
+				createFamilyRelation('mother', next);
 				break;
 			case 'componentFatherEntry':
-				createFamilyRelation('father');
+				createFamilyRelation('father', next);
 				break;
 			case 'componentGuardianEntry':
-				createFamilyRelation('guardian');
+				createFamilyRelation('guardian', next);
 				break;
 			case 'componentChildEntry':
 				if (sources.family.numberOfChildren === 0) {
-					sources.children.addNewElement({onSuccess: function(event) {}});
+					sources.children.addNewElement(
+						{
+							onSuccess: function(event) {
+								$$(next).show();
+							}
+						}
+					);
+				}
+				else {
+					$$(next).show();
 				}
 				break;
 			case 'componentContactInfoEntry':
 				$$(next).sources.activeFamily.query('ID === :1',
 					{
-						params: [sources.family.ID],
 						onSuccess: function(event) {
 							console.log('componentContactInfoEntry find activeFamily', event);
-						}
+						},
+						onError: function(error) {
+							console.log('ERROR: load activeFamily', next, event);
+						},
+						params: [sources.family.ID]
 					}
 				);
 				
-				sources.children.toArray('ID',
+				$$(next).sources.contactList.query('belongsTo.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianships.ID === :1',
 					{
 						onSuccess: function(event) {
-							var a = [];
-							
-							console.log('sources.children.toArray', event);
-							event.result.forEach(function(e) {
-								a.push(e.ID);
-							});
-							if (sources.father.ID) {
-								a.push(sources.father.ID);
-							}
-							if (sources.mother.ID) {
-								a.push(sources.mother.ID);
-							}
-							if (sources.guardian.ID) {
-								a.push(sources.guardian.ID);
-							}
-							$$(next).sources.contactList.query('ID in :1',
-								{
-									onSuccess: function(evt) {
-										console.log('contactInfo query', evt);
-									},
-									params: [a]
-								}
-							);
-						}
+							console.log('load contactList', next, event);
+						},
+						onError: function(error) {
+							console.log('ERROR: load contactList', next, event);
+						},
+						orderBy: 'firstName',
+						params: [sources.family.ID]
 					}
 				);
+				$$(next).show();
 				break;
 			case 'componentSchoolMap':
+				$$(next).show();
+				if (next === 'componentSchoolMap') {
+					L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
+				}
 				break;
 			case 'componentCreateApplications':
 				$$('componentCreateApplications').sources.applyingChildren.query('belongsTo.ID === :1 AND isApplying === true',
@@ -194,11 +202,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						params: [sources.family.ID]
 					}
 				);
+				$$(next).show();
 				break;
-		}
-		$$(next).show();
-		if (next === 'componentSchoolMap') {
-			L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 		}
 	}
 	

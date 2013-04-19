@@ -42,7 +42,6 @@ function constructor (id) {
 		source.family.getNearbySchools(
 			{
 				familyID: source.family.ID,
-				distance: (d ? d : 5),
 				recalc: (recalcDistance || $comp.sources.schoolOption.length === 0),
 				selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
 				name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,

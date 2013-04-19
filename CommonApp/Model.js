@@ -22,6 +22,7 @@ L3.Family.addAttribute('uspsLine2', 			'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('uspsDeliveryPoint',		'storage',			'string',	 	'btree'			);
 L3.Family.addAttribute('fplStatus', 			'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('mapCoords', 			'storage',			'string', 		'btree'			);
+L3.Family.addAttribute('searchDistance',		'storage',			'number'						);
 L3.Family.addAttribute('applier',	 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('motherStatus', 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('fatherStatus', 			'storage',			'string', 		'cluster'		);
@@ -129,6 +130,9 @@ L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 	L3.Person.fullName.onGet = L3.personGetFullName;
 L3.Person.addAttribute('belongsTo', 			'relatedEntity', 	'Family', 		'Family'		);
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
+L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 			'father', 		{reversePath: true});
+L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 			'mother', 		{reversePath: true});
+L3.Person.addAttribute('guardianships',			'relatedEntities', 	'Families', 			'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 	'applicant', 	{reversePath: true});
 
 L3.Child = model.addClass('Child','Children','public','Person');
