@@ -52,7 +52,8 @@ function constructor (id) {
 	{// @endlock
 		if (confirm('Are you sure you want to delete the ' + sources.family.name + ' family? This operation cannot be undone.')) {
 			sources.family.removeCurrent();
-			searchFamilyName();
+			sources.family.all();
+			$$(getHtmlId('textFieldFamilyName')).setValue('');
 		}
 	};// @lock
 

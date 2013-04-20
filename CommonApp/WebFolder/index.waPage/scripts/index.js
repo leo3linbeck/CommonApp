@@ -13,12 +13,27 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	var buttonStart = {};	// @button
 // @endregion// @endlock
 
-	function transitionPages(current, next) {
-		if (current) {
-			$$(current).hide();
+	function transitionPages(hideThis, showThis, dir) {
+		var effect = 'slide', easing = 'easeOutQuad', speed = 500;
+		dir = dir || 'forward';
+
+		if (hideThis) {
+			$('#' + hideThis).hide({
+				effect: effect,
+				direction: (dir === 'forward' ? 'left' : 'right'),
+				easing: easing,
+				duration: speed
+			});
 		}
-		$$(next).show();
-		$('#' + next + '_' + L3.focusField[next]).select();
+		if (showThis) {
+			$('#' + showThis).show({
+				effect: effect,
+				direction: (dir === 'forward' ? 'right' : 'left'),
+				easing: easing,
+				duration: speed
+			});
+			$('#' + showThis + '_' + L3.focusField[showThis]).select();
+		}
 	}
 	
 	function saveCurrentPage(current) {
@@ -301,7 +316,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		saveCurrentPage(old);
 		
 		if (L3.stack.length === 0) {
-			$$(old).hide();
+			transitionPages(old, null, 'backward');
 			$$('buttonGoBack').hide();
 			$$('buttonNextStep').hide();
 			
@@ -309,8 +324,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			$$('richTextSplashDescription').show();
 		}
 		else {
-			$$(old).hide();
-			$$(L3.stack[L3.stack.length-1]).show();
+			transitionPages(old, L3.stack[L3.stack.length-1], 'backward');
 			$$('buttonNextStep').enable();
 		}
 	};// @lock
@@ -326,7 +340,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		$$('buttonNextStep').show();
 
 		L3.stack.push(next);
-		$$(next).show();
+		transitionPages(null, next);
 	};// @lock
 
 // @region eventManager// @startlock
