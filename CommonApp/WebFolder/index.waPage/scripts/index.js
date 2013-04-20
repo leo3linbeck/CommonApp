@@ -165,25 +165,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				loadContactList(current, next);
 				break;
 			case 'componentSchoolMap':
-				if ($$(next).sources.selectedFamily.ID !== currentFamilyID) {
-					$$(next).sources.selectedFamily.query('ID === :1',
-						{
-							onSuccess: function(event) {
-								console.log('componentSchoolMap selectedFamily query', event);
-								transitionPages(current, next);
-								L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
-							},
-							onError: function(error) {
-								console.log('ERROR: componentSchoolMap selectedFamily query', error);
-							},
-							params: [currentFamilyID]
-						}
-					);
-				}
-				else {
-					transitionPages(current, next);
-					L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
-				}
+				transitionPages(current, next);
+				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 				break;
 			case 'componentCreateApplications':
 				$$(next).sources.applyingChildren.query('childOf.ID === :1 AND isApplying === true',

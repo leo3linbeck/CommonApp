@@ -1,1 +1,1 @@
-﻿var p = ds.Person.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianFamilies.ID === :1','76A43298A5274ED39FFD6B0775609B80');//var p = ds.Person.query('guardianFamilies.ID === :1','76A43298A5274ED39FFD6B0775609B80');(p);
+﻿ds.SchoolOption.all().remove();

@@ -28,9 +28,9 @@ function constructor (id) {
 		var v;
 		
 		console.log('comboboxSecondaryContact.change', event);
-		v = $$(getHtmlId('comboboxSecondaryContact'));
-		if (v.isVisible()) {
-			var a = v.getValue().split('_');
+		v = $$(getHtmlId('comboboxSecondaryContact')).getValue();
+		if (v !== sources.family.secondaryPhoneType) {
+			var a = v.split('_');
 			sources.family.getAttribute('secondaryPhone').setValue(sources[a[0]][a[1]]);
 			sources.family.save({ onSuccess: function(e) { console.log('Save secondary contact', e) } });
 		}
@@ -41,9 +41,9 @@ function constructor (id) {
 		var v;
 		
 		console.log('comboboxPrimaryContact.change', event);
-		v = $$(getHtmlId('comboboxPrimaryContact'));
-		if (v.isVisible()) {
-			var a = v.getValue().split('_');
+		v = $$(getHtmlId('comboboxPrimaryContact')).getValue();
+		if (v !== sources.family.primaryPhoneType) {
+			var a = v.split('_');
 			sources.family.getAttribute('primaryPhone').setValue(sources[a[0]][a[1]]);
 			sources.family.save({ onSuccess: function(e) { console.log('Save primary contact', e) } });
 		}

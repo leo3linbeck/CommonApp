@@ -41,8 +41,8 @@ function constructor (id) {
 		L3.clearGoogleMapMarkers();
 		source.family.getNearbySchools(
 			{
-				familyID: $comp.sources.selectedFamily.ID,
-				recalc: (recalcDistance || $comp.sources.schoolOption.length === 0),
+				familyID: sources.family.ID,
+				recalc: (recalcDistance || sources.schoolOption.length === 0),
 				selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
 				name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
 				category: $$(getHtmlId('comboboxCategory')).getValue(),
@@ -52,7 +52,7 @@ function constructor (id) {
 				onSuccess: function(event) {
 					console.log('family.getNearbySchools', event);
 					if (event.result) {
-						$comp.sources.schoolOption.setEntityCollection(event.result);
+						sources.schoolOption.setEntityCollection(event.result);
 						L3.googleMap.setZoom(parseInt(12 - 0.15 * d));
 						google.maps.event.trigger(L3.googleMap, 'resize');
 					}
@@ -66,26 +66,6 @@ function constructor (id) {
 			}
 		);
 	}
-
-//	function querySchoolOption() {
-//		debugger;
-//		var c = $$(getHtmlId('comboboxCategory')).getValue();
-//		
-//		$comp.sources.schoolOption.query('school.name == :1 AND school.category == :2',
-//			{
-//				onSuccess: function(response) {
-//					$comp.sources.schoolOption.setEntityCollection(response.dataSource);
-//					google.maps.event.trigger(L3.googleMap, 'resize');
-//				},
-//				onError: function(error) {
-//					console.log('ERROR: querySchoolOption', error);
-//				},
-//				orderBy: (c === 'All' ? 'schoolName' : 'schoolCategory, schoolName'),
-//				params: [ 	$$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar, 
-//							(c === 'All' ? WAF.wildchar : c) ]
-//			}
-//		);
-//	}
 
 	// eventHandlers// @lock
 
@@ -129,9 +109,9 @@ function constructor (id) {
 		var a;
 		
 		console.log('dataGridSchools.onRowDblClick', event);
-		a = $comp.sources.schoolOption.getAttribute('selected');
+		a = sources.schoolOption.getAttribute('selected');
 		a.setValue(a.getValue() ? false : true);
-		$comp.sources.schoolOption.save({ onSuccess: function() {} });
+		sources.schoolOption.save({ onSuccess: function() {} });
 	};// @lock
 
 	dataGridSchools.onRowDraw = function dataGridSchools_onRowDraw (event)// @startlock
@@ -145,7 +125,7 @@ function constructor (id) {
 
 	textFieldDistance.change = function textFieldDistance_change (event)// @startlock
 	{// @endlock
-		$comp.sources.selectedFamily.save({onSuccess: function(event) {}});
+		sources.family.save({onSuccess: function(event) {}});
 		updateSchoolList(true);
 
 	};// @lock
