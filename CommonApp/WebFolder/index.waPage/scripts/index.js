@@ -2,7 +2,6 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
-	var familyEvent = {};	// @dataSource
 	var iconSettings = {};	// @icon
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
@@ -47,29 +46,21 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				L3.buildStepArray(sources.family);
 				break;
 			case 'componentMotherEntry':
-				$$(current).sources.mother.save({
-						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
-					});
+				sources.mother.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentFatherEntry':
-				$$(current).sources.father.save({
-						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
-					});
+				sources.father.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentGuardianEntry':
-				$$(current).sources.guardian.save({
-						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
-					});
+				sources.guardian.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentChildEntry':
-				$$(current).sources.children.save({
-						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
-					});
+				sources.children.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentContactInfoEntry':
 				break;
 			case 'componentSchoolMap':
-				sources.family.save({onSuccess: function(event) {}});
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentCreateApplications':
 				break;
@@ -78,10 +69,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 	function createFamilyRelation(role, current, next) {
 		if (!sources[role].ID) {
-			sources[role].addNewElement();
-			sources[role].getAttribute('lastName').setValue(sources.family.name);
-			sources[role].save({ onSuccess: function(event) { console.log('Save ' + role, event); } });						
-			sources.family.save({ onSuccess: function(event) { console.log('Save family after adding ' + role, event); } });							
+			sources.tempPerson.addNewElement();
+			sources.tempPerson.getAttribute('lastName').setValue(sources.family.name);
+			sources.tempPerson.save(
+				{
+					onSuccess: function(event) {
+						sources.family[role].set(sources.tempPerson);
+						sources.family.save();
+						sources[role].serverRefresh();
+					}
+				}
+			);
 		}
 	}
 	
@@ -241,15 +239,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
-	familyEvent.onCurrentElementChange = function familyEvent_onCurrentElementChange (event)// @startlock
-	{// @endlock
-		console.log('familyEvent.onCurrentElementChange', event);
-		$$('componentFatherEntry').sources.father.setEntityCollection(ds.Person.newCollection());
-		$$('componentMotherEntry').sources.mother.setEntityCollection(ds.Person.newCollection());
-		$$('componentGuardianEntry').sources.guardian.setEntityCollection(ds.Person.newCollection());
-		$$('componentChildEntry').sources.children.setEntityCollection(ds.Person.newCollection());
-	};// @lock
-
 	iconSettings.click = function iconSettings_click (event)// @startlock
 	{// @endlock
 		alert('Not yet implemented.');
@@ -365,7 +354,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
-	WAF.addListener("family", "onCurrentElementChange", familyEvent.onCurrentElementChange, "WAF");
 	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
