@@ -36,6 +36,39 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
+	function transitionButtons(mode) {
+		var effect = 'slide', easing = 'easeOutQuad', speed = 500;
+
+		if (mode === 'start') {
+			$('#buttonStart').hide({
+				effect: effect,
+				direction: 'down',
+				easing: easing,
+				duration: speed
+			});
+			$('#containerButtons').show({
+				effect: effect,
+				direction: 'up',
+				easing: easing,
+				duration: speed
+			});
+		}
+		else {
+			$('#containerButtons').hide({
+				effect: effect,
+				direction: 'up',
+				easing: easing,
+				duration: speed
+			});
+			$('#buttonStart').show({
+				effect: effect,
+				direction: 'down',
+				easing: easing,
+				duration: speed
+			});
+		}
+	}
+	
 	function saveCurrentPage(current) {
 		switch (current) {
 			case 'componentSelectFamily':
@@ -317,11 +350,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		
 		if (L3.stack.length === 0) {
 			transitionPages(old, null, 'backward');
-			$$('buttonGoBack').hide();
-			$$('buttonNextStep').hide();
-			
-			$$('buttonStart').show();
-			$$('richTextSplashDescription').show();
+			transitionButtons('return');
 		}
 		else {
 			transitionPages(old, L3.stack[L3.stack.length-1], 'backward');
@@ -333,13 +362,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	{// @endlock
 		var next = L3.step[0];
 		
-		$$('buttonStart').hide();
-		$$('richTextSplashDescription').hide();
-		
-		$$('buttonGoBack').show();
-		$$('buttonNextStep').show();
-
 		L3.stack.push(next);
+		transitionButtons('start');
 		transitionPages(null, next);
 	};// @lock
 
