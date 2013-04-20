@@ -13,22 +13,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	var buttonStart = {};	// @button
 // @endregion// @endlock
 
-	function validateField(w, test) {
-		var v = $$(w);
-		if (!test) {
-			test = v.getValue();
-		}
-		if (test) {
-			v.setBackgroundColor('white');
-		}
-		else {
-			v.focus();
-			v.setBackgroundColor('red');
-		}
-		
-		return test;
-	}
-	
 	function transitionPages(current, next) {
 		$$(current).hide();
 		$$(next).show();
@@ -73,16 +57,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			sources.tempPerson.serverRefresh(
 				{
 					onSuccess: function(event) {
-						debugger;
 						console.log('tempPerson.serverRefresh', event);
 						event.dataSource.getAttribute('lastName').setValue(sources.family.name);
-//						event.dataSource.save({ onSuccess: function(e) {console.log('Save tempPerson',e);} });
 						sources.family[role].set(event.dataSource);
-						sources.family.save({ onSuccess: function(event) {console.log('Save family.' + role,event);} });
-//						sources[role].serverRefresh({ forceReload: true });
+						sources.family.save({ onSuccess: function(evt) {console.log('Save family.' + role, evt);} });
 					},
 					onError: function(error) {
-						
+						console.log('ERROR: tempPerson.serverRefresh', error);
 					}
 				}
 			);
@@ -98,6 +79,25 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			$$('buttonNextStep').disable();
 			$$(next + '_buttonVerifyAddress').enable();
 		}
+	}
+	
+	function addNewChild(current, next) {
+		sources.children.addNewElement();
+		sources.children.serverRefresh(
+			{
+				onSuccess: function(event) {
+					console.log('children.serverRefresh', event);
+					event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+					sources.family.save({ onSuccess: function(event) {console.log('Save children',event);} });
+					$$(next).setChildrenCount(event.dataSource);
+					$$(next).setChildAge(event.dataSource.birthdate);
+					transitionPages(current, next);
+				},
+				onError: function(error) {
+					console.log('ERROR: children.serverRefresh', error);
+				}
+			}
+		);
 	}
 	
 	function switchPages(current, next) {
@@ -126,30 +126,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				transitionPages(current, next);
 				break;
 			case 'componentChildEntry':
-				if (!$$(next).sources.children.ID) {
-					$$(next).sources.children.query('belongsTo.ID === :1',
-						{
-							onSuccess: function(event) {
-								console.log('componentChildEntry query', event);
-								if (event.dataSource.length === 0) {
-									$$(next).sources.children.addNewElement();
-									$$(next).sources.children.getAttribute('lastName').setValue(sources.family.name);
-									$$(next).sources.children.belongsTo.set(sources.family);
-									$$(next).sources.children.save({
-										onSuccess: function(e) { console.log('save ' + role, e); }
-									});
-									$$(next).sources.children.serverRefresh();
-								}
-								transitionPages(current, next);
-							},
-							onError: function(error) {
-								console.log('ERROR: componentChildEntry query', error);
-							},
-							params: [currentFamilyID]
-						}
-					);
+				if (sources.family.numberOfChildren === 0) {
+					addNewChild(current, next);
 				}
 				else {
+					$$(next).setChildrenCount(sources.children);
+					$$(next).setChildAge(sources.children.birthdate);
 					transitionPages(current, next);
 				}
 				break;
@@ -166,7 +148,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					}
 				);
 				
-				$$(next).sources.contactList.query('belongsTo.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianships.ID === :1',
+				$$(next).sources.contactList.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianships.ID === :1',
 					{
 						onSuccess: function(event) {
 							console.log('load contactList', next, event);
@@ -202,12 +184,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 				break;
 			case 'componentCreateApplications':
-				$$(next).sources.applyingChildren.query('belongsTo.ID === :1 AND isApplying === true',
+				$$(next).sources.applyingChildren.query('childOf.ID === :1 AND isApplying === true',
 					{
 						onSuccess: function(event) {
 							console.log('load applyingChildren', event);
 							L3.loadSchoolOptions();
-							$$(next).sources.schoolApplication.query('applicant.belongsTo.ID === :1',
+							$$(next).sources.schoolApplication.query('applicant.childOf.ID === :1',
 								{
 									onSuccess: function(evt) {
 										console.log('load schoolApplication', evt);
