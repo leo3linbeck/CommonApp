@@ -1,1 +1,1 @@
-﻿ds.Person.query('belongsTo.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianships.ID === :1','77CBF4DA47A644109B9F8B88079A11F5');
+﻿var p = ds.Person.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianFamilies.ID === :1','76A43298A5274ED39FFD6B0775609B80');//var p = ds.Person.query('guardianFamilies.ID === :1','76A43298A5274ED39FFD6B0775609B80');(p);

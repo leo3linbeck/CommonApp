@@ -102,6 +102,7 @@ function constructor (id) {
 				} 
 			}
 		);
+		contactListID = null;
 	};// @lock
 
 	imageButtonNextChild.click = function imageButtonNextChild_click (event)// @startlock

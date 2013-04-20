@@ -28,6 +28,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			case 'componentFamilyInfoEntry':
 				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				L3.buildStepArray(sources.family);
+				contactListID = null;
 				break;
 			case 'componentMotherEntry':
 				sources.mother.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
@@ -42,6 +43,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				sources.children.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentContactInfoEntry':
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentSchoolMap':
 				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
@@ -61,6 +63,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						event.dataSource.getAttribute('lastName').setValue(sources.family.name);
 						sources.family[role].set(event.dataSource);
 						sources.family.save({ onSuccess: function(evt) {console.log('Save family.' + role, evt);} });
+						contactListID = null;
 					},
 					onError: function(error) {
 						console.log('ERROR: tempPerson.serverRefresh', error);
@@ -92,12 +95,35 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					$$(next).setChildrenCount(event.dataSource);
 					$$(next).setChildAge(event.dataSource.birthdate);
 					transitionPages(current, next);
+					contactListID = null;
 				},
 				onError: function(error) {
 					console.log('ERROR: children.serverRefresh', error);
 				}
 			}
 		);
+	}
+	
+	function loadContactList(current, next) {
+		if (sources.family.ID !== contactListID) {
+			sources.contactList.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianFamilies.ID === :1',
+				{
+					onSuccess: function(event) {
+						console.log('load contactList', event);
+						transitionPages(current, next);
+						contactListID = sources.family.ID;
+					},
+					onError: function(error) {
+						console.log('ERROR: load contactList', error);
+					},
+					orderBy: 'firstName',
+					params: [sources.family.ID]
+				}
+			);
+		}
+		else {
+			transitionPages(current, next);
+		}
 	}
 	
 	function switchPages(current, next) {
@@ -136,31 +162,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 				break;
 			case 'componentContactInfoEntry':
-				$$(next).sources.activeFamily.query('ID === :1',
-					{
-						onSuccess: function(event) {
-							console.log('componentContactInfoEntry find activeFamily', event);
-						},
-						onError: function(error) {
-							console.log('ERROR: load activeFamily', next, error);
-						},
-						params: [sources.family.ID]
-					}
-				);
-				
-				$$(next).sources.contactList.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianships.ID === :1',
-					{
-						onSuccess: function(event) {
-							console.log('load contactList', next, event);
-						},
-						onError: function(error) {
-							console.log('ERROR: load contactList', next, error);
-						},
-						orderBy: 'firstName',
-						params: [sources.family.ID]
-					}
-				);
-				transitionPages(current, next);
+				loadContactList(current, next);
 				break;
 			case 'componentSchoolMap':
 				if ($$(next).sources.selectedFamily.ID !== currentFamilyID) {
