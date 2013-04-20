@@ -97,13 +97,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						$$(next).sources[role].addNewElement();
 						$$(next).sources[role].getAttribute('lastName').setValue(sources.family.name);
 						$$(next).sources[role].save({
-							onSuccess: function(e) { console.log('save ' + role, e); }
-						});
-						
-						sources.family[role].set($$(next).sources[role]);
-						sources.family.save({
-							onSuccess: function(e) { console.log('save family', e); }
-						});
+							onSuccess: function(evt) {
+								console.log('save ' + role, evt);
+								sources.family[role].set(evt.dataSource.getCurrentElement());
+								sources.family.save({
+									onSuccess: function(e) { console.log('save family', e); }
+								});
+							}
+						});						
 						$$(next).sources[role].serverRefresh();
 					}
 					transitionPages(current, next);

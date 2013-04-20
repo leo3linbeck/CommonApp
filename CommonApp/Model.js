@@ -133,10 +133,13 @@ L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 	L3.Person.fullName.onGet = L3.personGetFullName;
 L3.Person.addAttribute('childOf', 				'relatedEntity', 	'Family', 		'Family'		);
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
-L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 			'father', 		{reversePath: true});
-L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 			'mother', 		{reversePath: true});
-L3.Person.addAttribute('guardianFamiliess',		'relatedEntities', 	'Families', 			'guardian', 	{reversePath: true});
-L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 	'applicant', 	{reversePath: true});
+L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 				'father', 		{reversePath: true});
+L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 				'mother', 		{reversePath: true});
+L3.Person.addAttribute('guardianFamiliess',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
+L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 		'applicant', 	{reversePath: true});
+L3.Person.addMethod('conjureFather', 			'dataClass', 		L3.personConjureFather, 	'public'	);
+L3.Person.addMethod('conjureMother', 			'dataClass', 		L3.personConjureMother, 	'public'	);
+L3.Person.addMethod('conjureGuardian', 			'dataClass', 		L3.personConjureGuardian, 	'public'	);
 
 L3.Child = model.addClass('Child','Children','public','Person');
 
