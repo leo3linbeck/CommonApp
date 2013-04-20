@@ -70,12 +70,19 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	function createFamilyRelation(role, current, next) {
 		if (!sources[role].ID) {
 			sources.tempPerson.addNewElement();
-			sources.tempPerson.getAttribute('lastName').setValue(sources.family.name);
-			sources.tempPerson.save(
+			sources.tempPerson.serverRefresh(
 				{
 					onSuccess: function(event) {
+						debugger;
+						console.log('tempPerson.serverRefresh', event);
+						event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+//						event.dataSource.save({ onSuccess: function(e) {console.log('Save tempPerson',e);} });
 						sources.family[role].set(event.dataSource);
-						sources.family.save({ onSuccess: function(e) { console.log('save family after ' + role, e); } });
+						sources.family.save({ onSuccess: function(event) {console.log('Save family.' + role,event);} });
+//						sources[role].serverRefresh({ forceReload: true });
+					},
+					onError: function(error) {
+						
 					}
 				}
 			);

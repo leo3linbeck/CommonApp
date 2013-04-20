@@ -22,10 +22,10 @@ function constructor (id) {
 	sources.family.all(
 		{
 			onSuccess: function(event) {
-				console.log('selectedFamily.all', event);
+				console.log('family.all', event);
 			},
 			onError: function(error) {
-				console.log('ERROR: selectedFamily.all', error);
+				console.log('ERROR: family.all', error);
 			},
 			orderBy: 'name'
 		}
@@ -66,14 +66,14 @@ function constructor (id) {
 	buttonCreateFamily.click = function buttonCreateFamily_click (event)// @startlock
 	{// @endlock
 		sources.family.addNewElement();
-		sources.family.getAttribute('name').setValue($$(getHtmlId('textFieldFamilyName')).getValue());
+		sources.family.getAttribute('name').setValue( L3.toTitleCase( $$(getHtmlId('textFieldFamilyName')).getValue() ) );
 		sources.family.save(
 			{ 
 				onSuccess: function(event) {
-					console.log('selectedFamily.save', event);
+					console.log('family.save', event);
 				},
 				onError: function(error) {
-					console.log('ERROR: selectedFamily.save', error);
+					console.log('ERROR: family.save', error);
 				}
 			}
 		);

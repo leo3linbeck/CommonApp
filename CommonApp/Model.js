@@ -135,7 +135,7 @@ L3.Person.addAttribute('childOf', 				'relatedEntity', 	'Family', 		'Family'		);
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
 L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 				'father', 		{reversePath: true});
 L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 				'mother', 		{reversePath: true});
-L3.Person.addAttribute('guardianFamiliess',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
+L3.Person.addAttribute('guardianFamilies',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 		'applicant', 	{reversePath: true});
 L3.Person.addMethod('conjureFather', 			'dataClass', 		L3.personConjureFather, 	'public'	);
 L3.Person.addMethod('conjureMother', 			'dataClass', 		L3.personConjureMother, 	'public'	);
