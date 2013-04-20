@@ -14,8 +14,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 // @endregion// @endlock
 
 	function transitionPages(current, next) {
-		$$(current).hide();
+		if (current) {
+			$$(current).hide();
+		}
 		$$(next).show();
+		$('#' + next + '_' + L3.focusField[next]).select();
 	}
 	
 	function saveCurrentPage(current) {

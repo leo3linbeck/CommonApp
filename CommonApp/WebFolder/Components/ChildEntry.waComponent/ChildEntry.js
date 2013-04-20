@@ -7,7 +7,7 @@ function constructor (id) {
 
 	// @region beginComponentDeclaration// @startlock
 	var $comp = this;
-	this.name = 'StudentEntry';
+	this.name = 'ChildEntry';
 	// @endregion// @endlock
 
 	this.setChildrenCount = function setChildrenCount(ds) {
@@ -34,7 +34,7 @@ function constructor (id) {
 	}
 
 	this.setChildAge = function setChildAge(v) {
-		$$(getHtmlId('textFieldStudentAge')).setValue(L3.calcAgeOnSept1(v));
+		$$(getHtmlId('textFieldAge')).setValue(L3.calcAgeOnSept1(v));
 	}
 
 	this.load = function (data) {// @lock
@@ -45,10 +45,10 @@ function constructor (id) {
 	var imageButtonNewChild = {};	// @buttonImage
 	var imageButtonNextChild = {};	// @buttonImage
 	var imageButtonPrevChild = {};	// @buttonImage
-	var textFieldStudentBirthdate = {};	// @textField
-	var textFieldStudentLastName = {};	// @textField
-	var textFieldStudentMiddleName = {};	// @textField
-	var textFieldStudentFirstName = {};	// @textField
+	var textFieldBirthdate = {};	// @textField
+	var textFieldLastName = {};	// @textField
+	var textFieldMiddleName = {};	// @textField
+	var textFieldFirstName = {};	// @textField
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
@@ -80,6 +80,7 @@ function constructor (id) {
 					);
 					$comp.setChildrenCount(event.dataSource);
 					$comp.setChildAge(event.dataSource.birthdate);
+					getHtmlObj('textFieldFirstName').select();
 				},
 				onError: function(error) {
 					console.log('ERROR: children.removeCurrentReference', error);
@@ -99,6 +100,7 @@ function constructor (id) {
 				onSuccess: function(event) {
 					$comp.setChildrenCount(event.dataSource);
 					$comp.setChildAge(event.dataSource.birthdate);
+					getHtmlObj('textFieldFirstName').select();
 				} 
 			}
 		);
@@ -114,6 +116,7 @@ function constructor (id) {
 				onSuccess: function(event) {
 					$comp.setChildrenCount(event.dataSource);
 					$comp.setChildAge(event.dataSource.birthdate);
+					getHtmlObj('textFieldFirstName').select();
 				} 
 			}
 		);
@@ -128,32 +131,33 @@ function constructor (id) {
 				onSuccess: function(event) {
 					$comp.setChildrenCount(event.dataSource);
 					$comp.setChildAge(event.dataSource.birthdate);
+					getHtmlObj('textFieldFirstName').select();
 				} 
 			}
 		);
 
 	};// @lock
 
-	textFieldStudentBirthdate.change = function textFieldStudentBirthdate_change (event)// @startlock
+	textFieldBirthdate.change = function textFieldBirthdate_change (event)// @startlock
 	{// @endlock
 		$comp.setChildAge(new Date(this.getValue()));
 	};// @lock
 
-	textFieldStudentLastName.change = function textFieldStudentLastName_change (event)// @startlock
+	textFieldLastName.change = function textFieldLastName_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
-	textFieldStudentMiddleName.change = function textFieldStudentMiddleName_change (event)// @startlock
+	textFieldMiddleName.change = function textFieldMiddleName_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
-	textFieldStudentFirstName.change = function textFieldStudentFirstName_change (event)// @startlock
+	textFieldFirstName.change = function textFieldFirstName_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
 		if (!$$(getHtmlId('textFieldNickname')).getValue()) {
-			$$(getHtmlId('textFieldNickname')).setValue($$(getHtmlId('textFieldStudentFirstName')).getValue());
+			$$(getHtmlId('textFieldNickname')).setValue($$(getHtmlId('textFieldFirstName')).getValue());
 		}
 	};// @lock
 
@@ -163,10 +167,10 @@ function constructor (id) {
 	WAF.addListener(this.id + "_imageButtonNewChild", "click", imageButtonNewChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonNextChild", "click", imageButtonNextChild.click, "WAF");
 	WAF.addListener(this.id + "_imageButtonPrevChild", "click", imageButtonPrevChild.click, "WAF");
-	WAF.addListener(this.id + "_textFieldStudentBirthdate", "change", textFieldStudentBirthdate.change, "WAF");
-	WAF.addListener(this.id + "_textFieldStudentLastName", "change", textFieldStudentLastName.change, "WAF");
-	WAF.addListener(this.id + "_textFieldStudentMiddleName", "change", textFieldStudentMiddleName.change, "WAF");
-	WAF.addListener(this.id + "_textFieldStudentFirstName", "change", textFieldStudentFirstName.change, "WAF");
+	WAF.addListener(this.id + "_textFieldBirthdate", "change", textFieldBirthdate.change, "WAF");
+	WAF.addListener(this.id + "_textFieldLastName", "change", textFieldLastName.change, "WAF");
+	WAF.addListener(this.id + "_textFieldMiddleName", "change", textFieldMiddleName.change, "WAF");
+	WAF.addListener(this.id + "_textFieldFirstName", "change", textFieldFirstName.change, "WAF");
 	// @endregion// @endlock
 
 	};// @lock
