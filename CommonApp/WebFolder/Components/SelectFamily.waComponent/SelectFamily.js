@@ -13,6 +13,8 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var iconTrashCan = {};	// @icon
+	var iconClearLine = {};	// @icon
 	var buttonCreateFamily = {};	// @button
 	var textFieldFamilyName = {};	// @textField
 	// @endregion// @endlock
@@ -28,7 +30,38 @@ function constructor (id) {
 			orderBy: 'name'
 		}
 	)
+	
+	function searchFamilyName() {
+		sources.family.query('name == :1',
+			{
+				onSuccess: function(event) {
+					console.log('textFieldFamilyName.keyup', event);
+				},
+				onError: function(error) {
+					console.log('ERROR: textFieldFamilyName.keyup', error);
+				},
+				orderBy: 'name',
+				params: [ $$(getHtmlId('textFieldFamilyName')).getValue() + WAF.wildchar ]
+			}
+		);
+	}
+	
 	// eventHandlers// @lock
+
+	iconTrashCan.click = function iconTrashCan_click (event)// @startlock
+	{// @endlock
+		if (confirm('Are you sure you want to delete the ' + sources.family.name + ' family? This operation cannot be undone.')) {
+			sources.family.removeCurrent();
+			searchFamilyName();
+		}
+	};// @lock
+
+	iconClearLine.click = function iconClearLine_click (event)// @startlock
+	{// @endlock
+		$$(getHtmlId('textFieldFamilyName')).setValue('');
+		searchFamilyName();
+		$$(getHtmlId('textFieldFamilyName')).focus();
+	};// @lock
 
 	buttonCreateFamily.click = function buttonCreateFamily_click (event)// @startlock
 	{// @endlock
@@ -48,21 +81,12 @@ function constructor (id) {
 
 	textFieldFamilyName.keyup = function textFieldFamilyName_keyup (event)// @startlock
 	{// @endlock
-		sources.family.query('name == :1',
-			{
-				onSuccess: function(event) {
-					console.log('textFieldFamilyName.keyup', event);
-				},
-				onError: function(error) {
-					console.log('ERROR: textFieldFamilyName.keyup', error);
-				},
-				orderBy: 'name',
-				params: [ $$(getHtmlId('textFieldFamilyName')).getValue() + WAF.wildchar ]
-			}
-		);
+		searchFamilyName();
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_iconTrashCan", "click", iconTrashCan.click, "WAF");
+	WAF.addListener(this.id + "_iconClearLine", "click", iconClearLine.click, "WAF");
 	WAF.addListener(this.id + "_buttonCreateFamily", "click", buttonCreateFamily.click, "WAF");
 	WAF.addListener(this.id + "_textFieldFamilyName", "keyup", textFieldFamilyName.keyup, "WAF");
 	// @endregion// @endlock

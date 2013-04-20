@@ -10,9 +10,6 @@ function constructor (id) {
 	this.name = 'AddressEntryAndVerify';
 	// @endregion// @endlock
 
-	var $sources = $comp.sources;
-	var $sourcesVar = $comp.sourcesVar;
-	
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
@@ -69,7 +66,7 @@ function constructor (id) {
 
 	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock
 	{// @endlock
-		$comp.sources.selectedFamily.addressLookup(
+		sources.family.addressLookup(
 			{
 				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
 				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
@@ -81,7 +78,7 @@ function constructor (id) {
 				onSuccess: function(event) {
 					console.log('buttonVerifyAddress.click', event);
 					if (event.result && event.result.success) {
-						$comp.sources.selectedFamily.serverRefresh({forceReload: true});
+						sources.family.serverRefresh({forceReload: true});
 						$$('buttonNextStep').enable();
 						$$(getHtmlId('buttonVerifyAddress')).disable();
 					}

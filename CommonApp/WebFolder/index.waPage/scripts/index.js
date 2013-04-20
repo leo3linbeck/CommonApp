@@ -38,24 +38,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	function saveCurrentPage(current) {
 		switch (current) {
 			case 'componentSelectFamily':
-				currentFamilyID = $$(current).sources.selectedFamily.ID;
-				sources.family.query('ID === :1', 
-					{
-						onSuccess: function(event) { console.log('saveCurrentPage query',event) },
-						autoExpand: 'mother, father, guardian',
-						params: [currentFamilyID]
-					}
-				);
 				break;
 			case 'componentAddressEntry':
-				$$(current).sources.selectedFamily.save({
-						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
-					});
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				break;
 			case 'componentFamilyInfoEntry':
-				sources.infoFamily.save({
-						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
-					});
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
 				L3.buildStepArray(sources.infoFamily);
 				break;
 			case 'componentMotherEntry':
@@ -117,7 +105,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		);
 	}
 	
-	function setupAddressEntry(usps, current, next) {
+	function setupAddressEntry(usps, next) {
 		if (usps) {
 			$$('buttonNextStep').enable();
 			$$(next + '_buttonVerifyAddress').disable();
@@ -126,7 +114,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			$$('buttonNextStep').disable();
 			$$(next + '_buttonVerifyAddress').enable();
 		}
-		transitionPages(current, next);
 	}
 	
 	function switchPages(current, next) {
@@ -136,41 +123,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				transitionPages(current, next);
 				break;
 			case 'componentAddressEntry':
-				if ($$(next).sources.selectedFamily.ID !== currentFamilyID) {
-					$$(next).sources.selectedFamily.query('ID === :1',
-						{
-							onSuccess: function(event) {
-								console.log('componentAddressEntry selectedFamily query', event);
-								setupAddressEntry(event.dataSource.uspsDeliveryPoint, current, next);
-							},
-							onError: function(error) {
-								console.log('ERROR: componentAddressEntry selectedFamily query', error);
-							},
-							params: [currentFamilyID]
-						}
-					);
-				}
-				else {
-					setupAddressEntry($$(next).sources.selectedFamily.uspsDeliveryPoint, current, next);
-				}
+				setupAddressEntry(sources.family.uspsDeliveryPoint, next);
+				transitionPages(current, next);
 				break;
 			case 'componentFamilyInfoEntry':
-				if (sources.infoFamily.ID !== currentFamilyID) {
-					sources.infoFamily.setEntityCollection(sources.family.getEntityCollection(),
-						{
-							onSuccess: function(event) {
-								console.log('componentFamilyInfoEntry infoFamily.setEntityCollection', event);
-								transitionPages(current, next);
-							},
-							onError: function(error) {
-								console.log('ERROR: componentFamilyInfoEntry infoFamily.setEntityCollection', error);
-							}
-						}
-					);
-				}
-				else {
-					transitionPages(current, next);
-				}
+				transitionPages(current, next);
 				break;
 			case 'componentMotherEntry':
 				createFamilyRelation('mother', current, next);
