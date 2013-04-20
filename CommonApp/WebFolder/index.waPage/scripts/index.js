@@ -74,9 +74,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			sources.tempPerson.save(
 				{
 					onSuccess: function(event) {
-						sources.family[role].set(sources.tempPerson);
-						sources.family.save();
-						sources[role].serverRefresh();
+						sources.family[role].set(event.dataSource);
+						sources.family.save({ onSuccess: function(e) { console.log('save family after ' + role, e); } });
 					}
 				}
 			);
