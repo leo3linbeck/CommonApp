@@ -41,7 +41,7 @@ function constructor (id) {
 		L3.clearGoogleMapMarkers();
 		source.family.getNearbySchools(
 			{
-				familyID: source.family.ID,
+				familyID: $comp.sources.selectedFamily.ID,
 				recalc: (recalcDistance || $comp.sources.schoolOption.length === 0),
 				selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
 				name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
@@ -49,14 +49,15 @@ function constructor (id) {
 				debug: false 
 			},
 			{
-				onSuccess: function(response) {
-					if (response.result) {
-						$comp.sources.schoolOption.setEntityCollection(response.result);
+				onSuccess: function(event) {
+					console.log('family.getNearbySchools', event);
+					if (event.result) {
+						$comp.sources.schoolOption.setEntityCollection(event.result);
 						L3.googleMap.setZoom(parseInt(12 - 0.15 * d));
 						google.maps.event.trigger(L3.googleMap, 'resize');
 					}
 					else {
-						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
+						$$(getHtmlId('richTextVerifyAddressError')).setValue('Loading failed!');
 					}
 				},
 				onError: function(error) {
@@ -144,6 +145,7 @@ function constructor (id) {
 
 	textFieldDistance.change = function textFieldDistance_change (event)// @startlock
 	{// @endlock
+		$comp.sources.selectedFamily.save({onSuccess: function(event) {}});
 		updateSchoolList(true);
 
 	};// @lock

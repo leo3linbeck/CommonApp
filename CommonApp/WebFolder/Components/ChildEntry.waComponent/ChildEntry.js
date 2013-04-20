@@ -58,7 +58,6 @@ function constructor (id) {
 	{// @endlock
 		console.log('childrenEvent.onCurrentElementChange', event);
 		if (!event.dataSource.lastName) {
-			event.dataSource.getAttribute('lastName').setValue(sources.family.name);
 		}
 		setChildrenCount(event.dataSource);
 		setChildAge(event.dataSource.birthdate);
@@ -81,7 +80,7 @@ function constructor (id) {
 					v.remove(			
 						{
 							onSuccess: function (evt) {
-								console.log('child removed', evt);
+								console.log('Child removed', evt);
 							},
 							onError: function(error) {
 								console.log(error);
@@ -100,8 +99,11 @@ function constructor (id) {
 	imageButtonNewChild.click = function imageButtonNewChild_click (event)// @startlock
 	{// @endlock
 		console.log('imageButtonNewChild.click');
-		$comp.sources.children.save({onSuccess: function(event) {}});
-		$comp.sources.children.addNewElement({ onSuccess: function(event) {} });
+		$comp.sources.children.save({ onSuccess: function(event) {} });
+		$comp.sources.children.addNewElement();
+		$comp.sources.children.getAttribute('lastName').setValue(sources.family.name);
+		$comp.sources.children.belongsTo.set(sources.family);
+		$comp.sources.children.save({ onSuccess: function(event) {} });
 	};// @lock
 
 	imageButtonNextChild.click = function imageButtonNextChild_click (event)// @startlock

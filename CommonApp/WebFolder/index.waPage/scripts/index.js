@@ -74,7 +74,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					});
 				break;
 			case 'componentChildEntry':
-				sources.children.save({onSuccess: function(event) {}});
+				$$(current).sources.children.save({
+						onSuccess: function(e) { console.log('saveCurrentPage', current, e); }
+					});
 				break;
 			case 'componentContactInfoEntry':
 				break;
@@ -179,7 +181,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				createFamilyRelation('guardian', current, next);
 				break;
 			case 'componentChildEntry':
-				if ($$(next).sources.children.ID) {
+				if (!$$(next).sources.children.ID) {
 					$$(next).sources.children.query('belongsTo.ID === :1',
 						{
 							onSuccess: function(event) {
@@ -234,19 +236,33 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				transitionPages(current, next);
 				break;
 			case 'componentSchoolMap':
-				$$(current).hide();
-				$$(next).show();
-				if (next === 'componentSchoolMap') {
+				if ($$(next).sources.selectedFamily.ID !== currentFamilyID) {
+					$$(next).sources.selectedFamily.query('ID === :1',
+						{
+							onSuccess: function(event) {
+								console.log('componentSchoolMap selectedFamily query', event);
+								transitionPages(current, next);
+								L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
+							},
+							onError: function(error) {
+								console.log('ERROR: componentSchoolMap selectedFamily query', error);
+							},
+							params: [currentFamilyID]
+						}
+					);
+				}
+				else {
+					transitionPages(current, next);
 					L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 				}
 				break;
 			case 'componentCreateApplications':
-				$$('componentCreateApplications').sources.applyingChildren.query('belongsTo.ID === :1 AND isApplying === true',
+				$$(next).sources.applyingChildren.query('belongsTo.ID === :1 AND isApplying === true',
 					{
 						onSuccess: function(event) {
 							console.log('load applyingChildren', event);
 							L3.loadSchoolOptions();
-							$$('componentCreateApplications').sources.schoolApplication.query('applicant.belongsTo.ID === :1',
+							$$(next).sources.schoolApplication.query('applicant.belongsTo.ID === :1',
 								{
 									onSuccess: function(evt) {
 										console.log('load schoolApplication', evt);
@@ -286,7 +302,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	familyEvent.onCurrentElementChange = function familyEvent_onCurrentElementChange (event)// @startlock
 	{// @endlock
-		$$('componentFatherEntry').father.setEntityCollection(ds.Person.newCollection());
+		console.log('familyEvent.onCurrentElementChange', event);
+		$$('componentFatherEntry').sources.father.setEntityCollection(ds.Person.newCollection());
+		$$('componentMotherEntry').sources.mother.setEntityCollection(ds.Person.newCollection());
+		$$('componentGuardianEntry').sources.guardian.setEntityCollection(ds.Person.newCollection());
+		$$('componentChildEntry').sources.children.setEntityCollection(ds.Person.newCollection());
 	};// @lock
 
 	iconSettings.click = function iconSettings_click (event)// @startlock
@@ -351,10 +371,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
 	{// @endlock
-		var current, next;
-
-		current = L3.step[L3.stack.length-1];
+		var next;
+		var current = L3.step[L3.stack.length-1];
+		
 		saveCurrentPage(current);
+		
 		if (L3.stack.length < L3.step.length) {
 			next = L3.step[L3.stack.length];
 			L3.stack.push(next);
@@ -365,6 +386,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	buttonGoBack.click = function buttonGoBack_click (event)// @startlock
 	{// @endlock
 		var old = L3.stack.pop();
+		
+		saveCurrentPage(old);
 		
 		if (L3.stack.length === 0) {
 			$$(old).hide();
