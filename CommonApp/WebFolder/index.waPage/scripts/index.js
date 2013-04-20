@@ -177,6 +177,30 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
+	function selectApplyingChildren(current, next) {
+		$$(next).sources.applyingChildren.query('childOf.ID === :1 AND isApplying === true',
+			{
+				onSuccess: function(event) {
+					console.log('load applyingChildren', event);
+					L3.loadSchoolOptions();
+					$$(next).sources.schoolApplication.query('applicant.childOf.ID === :1',
+						{
+							onSuccess: function(evt) {
+								console.log('load schoolApplication', evt);
+							},
+							params: [sources.family.ID]
+						}
+					);
+				},
+				onError: function(error) {
+					console.log('ERROR: load applyingChildren', error);
+				},
+				orderBy: 'birthdate',
+				params: [sources.family.ID]
+			}
+		);
+	}
+	
 	function switchPages(current, next) {
 		console.log('switchPages(current, next)', current, next);
 		switch (next) {
@@ -220,27 +244,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
 				break;
 			case 'componentCreateApplications':
-				$$(next).sources.applyingChildren.query('childOf.ID === :1 AND isApplying === true',
-					{
-						onSuccess: function(event) {
-							console.log('load applyingChildren', event);
-							L3.loadSchoolOptions();
-							$$(next).sources.schoolApplication.query('applicant.childOf.ID === :1',
-								{
-									onSuccess: function(evt) {
-										console.log('load schoolApplication', evt);
-									},
-									params: [sources.family.ID]
-								}
-							);
-						},
-						onError: function(error) {
-							console.log('ERROR: load applyingChildren', error);
-						},
-						orderBy: 'birthdate',
-						params: [sources.family.ID]
-					}
-				);
+				selectApplyingChildren(current, next);
 				transitionPages(current, next);
 				break;
 		}

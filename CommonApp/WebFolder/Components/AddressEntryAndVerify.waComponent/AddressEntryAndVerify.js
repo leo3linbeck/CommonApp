@@ -14,7 +14,6 @@ function constructor (id) {
 
 	// @region namespaceDeclaration// @startlock
 	var textFieldZipCodeEntry = {};	// @textField
-	var richTextStepTitle = {};	// @richText
 	var textFieldCityEntry = {};	// @textField
 	var textFieldStreet2Entry = {};	// @textField
 	var textFieldStreet1Entry = {};	// @textField
@@ -35,14 +34,6 @@ function constructor (id) {
 	textFieldZipCodeEntry.change = function textFieldZipCodeEntry_change (event)// @startlock
 	{// @endlock
 		unverifyAddress();
-	};// @lock
-
-	richTextStepTitle.click = function richTextStepTitle_click (event)// @startlock
-	{// @endlock
-		$$(getHtmlId('textFieldStreet1Entry')).setValue('2407 Reba');
-		$$(getHtmlId('textFieldStreet2Entry')).setValue('');
-		$$(getHtmlId('textFieldCityEntry')).setValue('Houston');
-		$$(getHtmlId('textFieldZipCodeEntry')).setValue('77019');
 	};// @lock
 
 	textFieldCityEntry.change = function textFieldCityEntry_change (event)// @startlock
@@ -97,7 +88,6 @@ function constructor (id) {
 
 	// @region eventManager// @startlock
 	WAF.addListener(this.id + "_textFieldZipCodeEntry", "change", textFieldZipCodeEntry.change, "WAF");
-	WAF.addListener(this.id + "_richTextStepTitle", "click", richTextStepTitle.click, "WAF");
 	WAF.addListener(this.id + "_textFieldCityEntry", "change", textFieldCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet2Entry", "change", textFieldStreet2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldStreet1Entry", "change", textFieldStreet1Entry.change, "WAF");
