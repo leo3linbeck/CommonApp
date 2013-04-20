@@ -7,7 +7,7 @@ function constructor (id) {
 
 	// @region beginComponentDeclaration// @startlock
 	var $comp = this;
-	this.name = 'FamilyTreeEntry';
+	this.name = 'FamilyInfoEntry';
 	// @endregion// @endlock
 
 	this.load = function (data) {// @lock

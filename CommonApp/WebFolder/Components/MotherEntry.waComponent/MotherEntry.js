@@ -7,7 +7,7 @@ function constructor (id) {
 
 	// @region beginComponentDeclaration// @startlock
 	var $comp = this;
-	this.name = 'FatherEntry';
+	this.name = 'MotherEntry';
 	// @endregion// @endlock
 
 	this.load = function (data) {// @lock
