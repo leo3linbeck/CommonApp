@@ -44,7 +44,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentFamilyInfoEntry':
 				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				L3.buildStepArray(sources.infoFamily);
+				L3.buildStepArray(sources.family);
 				break;
 			case 'componentMotherEntry':
 				$$(current).sources.mother.save({
@@ -77,32 +77,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 	
 	function createFamilyRelation(role, current, next) {
-		$$(next).sources[role].query(role + 'Families.ID === :1',
-			{
-				onSuccess: function(event) {
-					console.log('createFamilyRelation selectedFamily query', event);
-					if (event.dataSource.length === 0) {
-						$$(next).sources[role].addNewElement();
-						$$(next).sources[role].getAttribute('lastName').setValue(sources.family.name);
-						$$(next).sources[role].save({
-							onSuccess: function(evt) {
-								console.log('save ' + role, evt);
-								sources.family[role].set(evt.dataSource.getCurrentElement());
-								sources.family.save({
-									onSuccess: function(e) { console.log('save family', e); }
-								});
-							}
-						});						
-						$$(next).sources[role].serverRefresh();
-					}
-					transitionPages(current, next);
-				},
-				onError: function(error) {
-					console.log('ERROR: createFamilyRelation selectedFamily query', error);
-				},
-				params: [currentFamilyID]
-			}
-		);
+		if (!sources[role].ID) {
+			sources[role].addNewElement();
+			sources[role].getAttribute('lastName').setValue(sources.family.name);
+			sources[role].save({ onSuccess: function(event) { console.log('Save ' + role, event); } });						
+			sources.family.save({ onSuccess: function(event) { console.log('Save family after adding ' + role, event); } });							
+		}
 	}
 	
 	function setupAddressEntry(usps, next) {
@@ -131,12 +111,15 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentMotherEntry':
 				createFamilyRelation('mother', current, next);
+				transitionPages(current, next);
 				break;
 			case 'componentFatherEntry':
 				createFamilyRelation('father', current, next);
+				transitionPages(current, next);
 				break;
 			case 'componentGuardianEntry':
 				createFamilyRelation('guardian', current, next);
+				transitionPages(current, next);
 				break;
 			case 'componentChildEntry':
 				if (!$$(next).sources.children.ID) {
@@ -320,6 +303,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	{// @endlock
 		loginSetup();
 		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
+		sources.family.declareDependencies('father');
+		sources.family.declareDependencies('mother');
+		sources.family.declareDependencies('guardian');
+		sources.family.declareDependencies('children');
+
 	};// @lock
 
 	comboboxLanguage.change = function comboboxLanguage_change (event)// @startlock
