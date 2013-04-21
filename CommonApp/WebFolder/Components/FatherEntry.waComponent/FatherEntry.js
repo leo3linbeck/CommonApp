@@ -3,35 +3,6 @@
 
 // Add the code that needs to be shared between components here
 
-	function verifyAddress(role, location) {
-		sources[role].addressLookup(
-			{
-				location: location.toLowerCase(),
-				street1: $$(getHtmlId('textField' + location + 'Street1Entry')).getValue(),
-				street2: $$(getHtmlId('textField' + location + 'Street2Entry')).getValue(),
-				city: $$(getHtmlId('textField' + location + 'CityEntry')).getValue(),
-				zipCode: $$(getHtmlId('textField' + location + 'ZipCodeEntry')).getValue(),
-				debug: false 
-			},
-			{
-				onSuccess: function(event) {
-					console.log('buttonVerify' + location + 'Address.click', event);
-					if (event.result && event.result.success) {
-						sources[role].serverRefresh({forceReload: true});
-						$$(getHtmlId('buttonVerify' + location + 'Address')).disable();
-					}
-					else {
-						$$(getHtmlId('buttonVerify' + location + 'Address')).enable();
-					}
-				},
-				onError: function(error) {
-					console.log('ERROR: buttonVerify' + location + 'Address.click', error);
-					$$(getHtmlId('buttonVerify' + location + 'Address')).enable();
-				}
-			}
-		);
-	}
-
 function constructor (id) {
 
 	// @region beginComponentDeclaration// @startlock
@@ -60,6 +31,9 @@ function constructor (id) {
 	var textFieldFirstName = {};	// @textField
 	// @endregion// @endlock
 
+	function enableVerifyButton(id) {
+		$$(getHtmlId('buttonVerifyWorkAddress')).enable();
+	}
 	// eventHandlers// @lock
 
 	textFieldWorkZipEntry.change = function textFieldWorkZipEntry_change (event)// @startlock
@@ -74,12 +48,12 @@ function constructor (id) {
 
 	buttonVerifyWorkAddress.click = function buttonVerifyWorkAddress_click (event)// @startlock
 	{// @endlock
-		verifyAddress('father', 'Work');
+		L3.verifyAddress(this);
 	};// @lock
 
 	buttonVerifyHomeAddress.click = function buttonVerifyHomeAddress_click (event)// @startlock
 	{// @endlock
-		verifyAddress('father', 'Home');
+		L3.verifyAddress(this);
 	};// @lock
 
 	textFieldEmployer.change = function textFieldEmployer_change (event)// @startlock
@@ -95,15 +69,7 @@ function constructor (id) {
 	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
 	{// @endlock
 		if(this.getValue()) {
-			sources.father.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
-			sources.father.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
-			sources.father.getAttribute('homeCity').setValue(sources.family.mainCity);
-			sources.father.getAttribute('homeState').setValue(sources.family.mainState);
-			sources.father.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
-			sources.father.getAttribute('homeUSPSLine1').setValue(sources.family.uspsLine1);
-			sources.father.getAttribute('homeUSPSLine2').setValue(sources.family.uspsLine2);
-			sources.father.getAttribute('homeUSPSDeliveryPoint').setValue(sources.family.uspsDeliveryPoint);
-			sources.father.getAttribute('homeMapCoords').setValue(sources.family.mapCoords);
+			L3.addressesSameAddress('father', 'Home');
 		}
 	};// @lock
 

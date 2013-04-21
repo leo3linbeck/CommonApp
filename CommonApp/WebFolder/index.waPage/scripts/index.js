@@ -128,11 +128,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	function setupAddressEntry(usps, next) {
 		if (usps) {
 			$$('buttonNextStep').enable();
-			$$(next + '_buttonVerifyAddress').disable();
+			$$(next + '_richTextVerifyAddressStatus').setValue('Validated Address');
+			$$(next + '_richTextVerifyAddressStatus').setBackgroundColor('green');
 		}
 		else {
 			$$('buttonNextStep').disable();
-			$$(next + '_buttonVerifyAddress').enable();
+			$$(next + '_richTextVerifyAddressStatus').setValue('Unvalidated Address');
+			$$(next + '_richTextVerifyAddressStatus').setBackgroundColor('red');
 		}
 	}
 	

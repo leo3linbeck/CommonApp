@@ -13,10 +13,11 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
-	var textFieldZipCodeEntry = {};	// @textField
-	var textFieldCityEntry = {};	// @textField
-	var textFieldStreet2Entry = {};	// @textField
-	var textFieldStreet1Entry = {};	// @textField
+	var textFieldMainStateEntry = {};	// @textField
+	var textFieldMainZipCodeEntry = {};	// @textField
+	var textFieldMainCityEntry = {};	// @textField
+	var textFieldMainStreet2Entry = {};	// @textField
+	var textFieldMainStreet1Entry = {};	// @textField
 	var buttonVerifyAddress = {};	// @button
 	// @endregion// @endlock
 
@@ -26,32 +27,37 @@ function constructor (id) {
 		
 		$$(getHtmlId('richTextUSPSLine1')).setValue('');
 		$$(getHtmlId('richTextUSPSLine2')).setValue('');
-		$$(getHtmlId('richTextVerifyAddressError')).setValue('');
+		$$(getHtmlId('richTextVerifyAddressAlert')).setValue('');
 	}
 
 	// eventHandlers// @lock
 
-	textFieldZipCodeEntry.change = function textFieldZipCodeEntry_change (event)// @startlock
+	textFieldMainStateEntry.change = function textFieldMainStateEntry_change (event)// @startlock
 	{// @endlock
-		unverifyAddress();
+		L3.verifyAddress(this);
 	};// @lock
 
-	textFieldCityEntry.change = function textFieldCityEntry_change (event)// @startlock
+	textFieldMainZipCodeEntry.change = function textFieldMainZipCodeEntry_change (event)// @startlock
 	{// @endlock
-		unverifyAddress();
-		L3.convertAttributeToTitleCase(this);
+		L3.verifyAddress(this);
 	};// @lock
 
-	textFieldStreet2Entry.change = function textFieldStreet2Entry_change (event)// @startlock
+	textFieldMainCityEntry.change = function textFieldMainCityEntry_change (event)// @startlock
 	{// @endlock
-		unverifyAddress();
 		L3.convertAttributeToTitleCase(this);
+		L3.verifyAddress(this);
 	};// @lock
 
-	textFieldStreet1Entry.change = function textFieldStreet1Entry_change (event)// @startlock
+	textFieldMainStreet2Entry.change = function textFieldMainStreet2Entry_change (event)// @startlock
 	{// @endlock
-		unverifyAddress();
 		L3.convertAttributeToTitleCase(this);
+		L3.verifyAddress(this);
+	};// @lock
+
+	textFieldMainStreet1Entry.change = function textFieldMainStreet1Entry_change (event)// @startlock
+	{// @endlock
+		L3.convertAttributeToTitleCase(this);
+		L3.verifyAddress(this);
 	};// @lock
 	
 
@@ -87,10 +93,11 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
-	WAF.addListener(this.id + "_textFieldZipCodeEntry", "change", textFieldZipCodeEntry.change, "WAF");
-	WAF.addListener(this.id + "_textFieldCityEntry", "change", textFieldCityEntry.change, "WAF");
-	WAF.addListener(this.id + "_textFieldStreet2Entry", "change", textFieldStreet2Entry.change, "WAF");
-	WAF.addListener(this.id + "_textFieldStreet1Entry", "change", textFieldStreet1Entry.change, "WAF");
+	WAF.addListener(this.id + "_textFieldMainStateEntry", "change", textFieldMainStateEntry.change, "WAF");
+	WAF.addListener(this.id + "_textFieldMainZipCodeEntry", "change", textFieldMainZipCodeEntry.change, "WAF");
+	WAF.addListener(this.id + "_textFieldMainCityEntry", "change", textFieldMainCityEntry.change, "WAF");
+	WAF.addListener(this.id + "_textFieldMainStreet2Entry", "change", textFieldMainStreet2Entry.change, "WAF");
+	WAF.addListener(this.id + "_textFieldMainStreet1Entry", "change", textFieldMainStreet1Entry.change, "WAF");
 	WAF.addListener(this.id + "_buttonVerifyAddress", "click", buttonVerifyAddress.click, "WAF");
 	// @endregion// @endlock
 

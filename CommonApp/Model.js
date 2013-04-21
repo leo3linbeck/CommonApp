@@ -147,6 +147,7 @@ L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 				'f
 L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 				'mother', 		{reversePath: true});
 L3.Person.addAttribute('guardianFamilies',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 		'applicant', 	{reversePath: true});
+L3.Person.addMethod('addressLookup', 			'entity',			L3.personAddressLookup, 	'public'	);
 //L3.Person.addMethod('conjureFather', 			'dataClass', 		L3.personConjureFather, 	'public'	);
 //L3.Person.addMethod('conjureMother', 			'dataClass', 		L3.personConjureMother, 	'public'	);
 //L3.Person.addMethod('conjureGuardian', 			'dataClass', 		L3.personConjureGuardian, 	'public'	);
