@@ -17,11 +17,11 @@ L3.Family.addAttribute('primaryPhoneType', 		'storage',			'string', 		'btree'			
 L3.Family.addAttribute('primaryPhone', 			'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('secondaryPhone', 		'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('secondaryPhoneType', 	'storage',			'string', 		'btree'			);
-L3.Family.addAttribute('uspsLine1', 			'storage',			'string', 		'btree'			);
-L3.Family.addAttribute('uspsLine2', 			'storage',			'string', 		'btree'			);
-L3.Family.addAttribute('uspsDeliveryPoint',		'storage',			'string',	 	'btree'			);
+L3.Family.addAttribute('mainUSPSLine1', 		'storage',			'string', 		'btree'			);
+L3.Family.addAttribute('mainUSPSLine2', 		'storage',			'string', 		'btree'			);
+L3.Family.addAttribute('mainUSPSDeliveryPoint',	'storage',			'string',	 	'btree'			);
+L3.Family.addAttribute('mainMapCoords', 		'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('fplStatus', 			'storage',			'string', 		'btree'			);
-L3.Family.addAttribute('mapCoords', 			'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('searchDistance',		'storage',			'number'						);
 L3.Family.addAttribute('applier',	 			'storage',			'string', 		'cluster'		);
 L3.Family.addAttribute('motherStatus', 			'storage',			'string', 		'cluster'		);
