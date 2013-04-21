@@ -112,6 +112,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					onSuccess: function(event) {
 						console.log('tempPerson.serverRefresh', event);
 						event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+						event.dataSource.getAttribute('relationship').setValue(role);
 						sources.family[role].set(event.dataSource);
 						sources.family.save({ onSuccess: function(evt) {console.log('Save family.' + role, evt);} });
 						contactListID = null;
