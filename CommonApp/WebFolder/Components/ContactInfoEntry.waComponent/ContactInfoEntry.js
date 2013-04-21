@@ -74,7 +74,7 @@ function constructor (id) {
 					}
 				}
 			);			
-		}
+		}c
 	};// @lock
 
 	textFieldEmail.change = function textFieldEmail_change (event)// @startlock
