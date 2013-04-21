@@ -13,6 +13,8 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var buttonVerifyWorkAddress = {};	// @button
+	var buttonVerifyHomeAddress = {};	// @button
 	var textFieldRelationship = {};	// @textField
 	var textFieldWorkCityEntry = {};	// @textField
 	var textFieldWorkAddress2Entry = {};	// @textField
@@ -27,6 +29,68 @@ function constructor (id) {
 	// @endregion// @endlock
 
 	// eventHandlers// @lock
+
+	buttonVerifyWorkAddress.click = function buttonVerifyWorkAddress_click (event)// @startlock
+	{// @endlock
+		sources.family.addressLookup(
+			{
+				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
+				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
+				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
+				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
+				debug: false 
+			},
+			{
+				onSuccess: function(event) {
+					console.log('buttonVerifyAddress.click', event);
+					if (event.result && event.result.success) {
+						sources.family.serverRefresh({forceReload: true});
+						$$('buttonNextStep').enable();
+						$$(getHtmlId('buttonVerifyAddress')).disable();
+					}
+					else {
+						unverifyAddress();
+						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
+					}
+				},
+				onError: function(error) {
+					console.log('ERROR: buttonVerifyAddress.click', error);
+					unverifyAddress();
+				}
+			}
+		);
+	};// @lock
+
+	buttonVerifyHomeAddress.click = function buttonVerifyHomeAddress_click (event)// @startlock
+	{// @endlock
+		sources.family.addressLookup(
+			{
+				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
+				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
+				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
+				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
+				debug: false 
+			},
+			{
+				onSuccess: function(event) {
+					console.log('buttonVerifyAddress.click', event);
+					if (event.result && event.result.success) {
+						sources.family.serverRefresh({forceReload: true});
+						$$('buttonNextStep').enable();
+						$$(getHtmlId('buttonVerifyAddress')).disable();
+					}
+					else {
+						unverifyAddress();
+						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
+					}
+				},
+				onError: function(error) {
+					console.log('ERROR: buttonVerifyAddress.click', error);
+					unverifyAddress();
+				}
+			}
+		);
+	};// @lock
 
 	textFieldRelationship.change = function textFieldRelationship_change (event)// @startlock
 	{// @endlock
@@ -90,6 +154,8 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_buttonVerifyWorkAddress", "click", buttonVerifyWorkAddress.click, "WAF");
+	WAF.addListener(this.id + "_buttonVerifyHomeAddress", "click", buttonVerifyHomeAddress.click, "WAF");
 	WAF.addListener(this.id + "_textFieldRelationship", "change", textFieldRelationship.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkCityEntry", "change", textFieldWorkCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldWorkAddress2Entry", "change", textFieldWorkAddress2Entry.change, "WAF");
