@@ -3,6 +3,35 @@
 
 // Add the code that needs to be shared between components here
 
+	function verifyAddress(role, location) {
+		sources[role].addressLookup(
+			{
+				location: location.toLowerCase(),
+				street1: $$(getHtmlId('textField' + location + 'Street1Entry')).getValue(),
+				street2: $$(getHtmlId('textField' + location + 'Street2Entry')).getValue(),
+				city: $$(getHtmlId('textField' + location + 'CityEntry')).getValue(),
+				zipCode: $$(getHtmlId('textField' + location + 'ZipCodeEntry')).getValue(),
+				debug: false 
+			},
+			{
+				onSuccess: function(event) {
+					console.log('buttonVerify' + location + 'Address.click', event);
+					if (event.result && event.result.success) {
+						sources[role].serverRefresh({forceReload: true});
+						$$(getHtmlId('buttonVerify' + location + 'Address')).disable();
+					}
+					else {
+						$$(getHtmlId('buttonVerify' + location + 'Address')).enable();
+					}
+				},
+				onError: function(error) {
+					console.log('ERROR: buttonVerify' + location + 'Address.click', error);
+					$$(getHtmlId('buttonVerify' + location + 'Address')).enable();
+				}
+			}
+		);
+	}
+
 function constructor (id) {
 
 	// @region beginComponentDeclaration// @startlock
@@ -13,6 +42,8 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var textFieldWorkZipEntry = {};	// @textField
+	var textFieldHomeZipEntry = {};	// @textField
 	var buttonVerifyWorkAddress = {};	// @button
 	var buttonVerifyHomeAddress = {};	// @button
 	var textFieldEmployer = {};	// @textField
@@ -31,66 +62,24 @@ function constructor (id) {
 
 	// eventHandlers// @lock
 
+	textFieldWorkZipEntry.change = function textFieldWorkZipEntry_change (event)// @startlock
+	{// @endlock
+		$$(getHtmlId('buttonVerifyWorkAddress')).enable();
+	};// @lock
+
+	textFieldHomeZipEntry.change = function textFieldHomeZipEntry_change (event)// @startlock
+	{// @endlock
+		$$(getHtmlId('buttonVerifyHomeAddress')).enable();
+	};// @lock
+
 	buttonVerifyWorkAddress.click = function buttonVerifyWorkAddress_click (event)// @startlock
 	{// @endlock
-		sources.family.addressLookup(
-			{
-				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
-				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
-				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
-				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
-				debug: false 
-			},
-			{
-				onSuccess: function(event) {
-					console.log('buttonVerifyAddress.click', event);
-					if (event.result && event.result.success) {
-						sources.family.serverRefresh({forceReload: true});
-						$$('buttonNextStep').enable();
-						$$(getHtmlId('buttonVerifyAddress')).disable();
-					}
-					else {
-						unverifyAddress();
-						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
-					}
-				},
-				onError: function(error) {
-					console.log('ERROR: buttonVerifyAddress.click', error);
-					unverifyAddress();
-				}
-			}
-		);
+		verifyAddress('father', 'Work');
 	};// @lock
 
 	buttonVerifyHomeAddress.click = function buttonVerifyHomeAddress_click (event)// @startlock
 	{// @endlock
-		sources.family.addressLookup(
-			{
-				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
-				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
-				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
-				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
-				debug: false 
-			},
-			{
-				onSuccess: function(event) {
-					console.log('buttonVerifyAddress.click', event);
-					if (event.result && event.result.success) {
-						sources.family.serverRefresh({forceReload: true});
-						$$('buttonNextStep').enable();
-						$$(getHtmlId('buttonVerifyAddress')).disable();
-					}
-					else {
-						unverifyAddress();
-						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
-					}
-				},
-				onError: function(error) {
-					console.log('ERROR: buttonVerifyAddress.click', error);
-					unverifyAddress();
-				}
-			}
-		);
+		verifyAddress('father', 'Home');
 	};// @lock
 
 	textFieldEmployer.change = function textFieldEmployer_change (event)// @startlock
@@ -111,36 +100,46 @@ function constructor (id) {
 			sources.father.getAttribute('homeCity').setValue(sources.family.mainCity);
 			sources.father.getAttribute('homeState').setValue(sources.family.mainState);
 			sources.father.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
+			sources.father.getAttribute('homeUSPSLine1').setValue(sources.family.uspsLine1);
+			sources.father.getAttribute('homeUSPSLine2').setValue(sources.family.uspsLine2);
+			sources.father.getAttribute('homeUSPSDeliveryPoint').setValue(sources.family.uspsDeliveryPoint);
+			sources.father.getAttribute('homeMapCoords').setValue(sources.family.mapCoords);
 		}
 	};// @lock
 
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
 	{// @endlock
+		$$(getHtmlId('buttonVerifyWorkAddress')).enable();
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldWorkAddress2Entry.change = function textFieldWorkAddress2Entry_change (event)// @startlock
 	{// @endlock
+		$$(getHtmlId('buttonVerifyWorkAddress')).enable();
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldWorkAddress1Entry.change = function textFieldWorkAddress1Entry_change (event)// @startlock
 	{// @endlock
+		$$(getHtmlId('buttonVerifyWorkAddress')).enable();
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldHomeAddress1Entry.change = function textFieldHomeAddress1Entry_change (event)// @startlock
 	{// @endlock
+		$$(getHtmlId('buttonVerifyHomeAddress')).enable();
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldHomeCityEntry.change = function textFieldHomeCityEntry_change (event)// @startlock
 	{// @endlock
+		$$(getHtmlId('buttonVerifyHomeAddress')).enable();
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
 	textFieldHomeAddress2Entry.change = function textFieldHomeAddress2Entry_change (event)// @startlock
 	{// @endlock
+		$$(getHtmlId('buttonVerifyHomeAddress')).enable();
 		L3.convertAttributeToTitleCase(this);
 	};// @lock
 
@@ -160,6 +159,8 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_textFieldWorkZipEntry", "change", textFieldWorkZipEntry.change, "WAF");
+	WAF.addListener(this.id + "_textFieldHomeZipEntry", "change", textFieldHomeZipEntry.change, "WAF");
 	WAF.addListener(this.id + "_buttonVerifyWorkAddress", "click", buttonVerifyWorkAddress.click, "WAF");
 	WAF.addListener(this.id + "_buttonVerifyHomeAddress", "click", buttonVerifyHomeAddress.click, "WAF");
 	WAF.addListener(this.id + "_textFieldEmployer", "change", textFieldEmployer.change, "WAF");
