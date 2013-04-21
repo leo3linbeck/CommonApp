@@ -30,22 +30,50 @@ function constructor (id) {
 		console.log('comboboxSecondaryContact.change', event);
 		v = $$(getHtmlId('comboboxSecondaryContact')).getValue();
 		if (v !== sources.family.secondaryPhoneType) {
-			var a = v.split('_');
-			sources.family.getAttribute('secondaryPhone').setValue(sources[a[0]][a[1]]);
-			sources.family.save({ onSuccess: function(e) { console.log('Save secondary contact', e) } });
+			sources.family.getPhoneByType(
+				{
+					phoneType: v,
+					debug: false
+				},
+				{
+					onSuccess: function(event) {
+						console.log('family.getPhoneByType secondary', event);
+						sources.family.getAttribute('secondaryPhoneType').setValue(v);
+						sources.family.getAttribute('secondaryPhone').setValue(event.result);
+						sources.family.save({ onSuccess: function(e) { console.log('Save secondary contact', e) } });
+					},
+					onError: function(error) {
+						console.log('ERROR: family.getPhoneByType secondary', error);
+					}
+				}
+			);			
 		}
 	};// @lock
 
 	comboboxPrimaryContact.change = function comboboxPrimaryContact_change (event)// @startlock
 	{// @endlock
 		var v;
-		
+
 		console.log('comboboxPrimaryContact.change', event);
 		v = $$(getHtmlId('comboboxPrimaryContact')).getValue();
 		if (v !== sources.family.primaryPhoneType) {
-			var a = v.split('_');
-			sources.family.getAttribute('primaryPhone').setValue(sources[a[0]][a[1]]);
-			sources.family.save({ onSuccess: function(e) { console.log('Save primary contact', e) } });
+			sources.family.getPhoneByType(
+				{
+					phoneType: v,
+					debug: false
+				},
+				{
+					onSuccess: function(event) {
+						console.log('family.getPhoneByType primary', event);
+						sources.family.getAttribute('primaryPhoneType').setValue(v);
+						sources.family.getAttribute('primaryPhone').setValue(event.result);
+						sources.family.save({ onSuccess: function(e) { console.log('Save primary contact', e) } });
+					},
+					onError: function(error) {
+						console.log('ERROR: family.getPhoneByType primary', error);
+					}
+				}
+			);			
 		}
 	};// @lock
 

@@ -41,6 +41,7 @@ L3.Family.addAttribute('children', 				'relatedEntities',	'People',		'childOf',	
 L3.Family.addAttribute('schoolOptions', 		'relatedEntities',	'SchoolOptions','family', 		{reversePath: true});
 L3.Family.addMethod('addressLookup', 			'entity',			L3.familyAddressLookup, 	'public'	);
 L3.Family.addMethod('getNearbySchools', 		'dataClass', 		L3.familyGetNearbySchools, 	'public'	);
+L3.Family.addMethod('getPhoneByType', 			'entity', 			L3.familyGetPhoneType,	 	'public'	);
 
 L3.SMO = model.addClass('SMO','SMOs');
 L3.SMO.addAttribute('ID', 						'storage',			'uuid', 		'key auto'		);
