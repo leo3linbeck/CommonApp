@@ -2,12 +2,11 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
-	var iconSettings = {};	// @icon
-	var loginMain = {};	// @login
-	var iconLogin = {};	// @icon
-	var iconHome = {};	// @icon
 	var documentEvent = {};	// @document
-	var comboboxLanguage = {};	// @combobox
+	var loginMain = {};	// @login
+	var iconHome = {};	// @icon
+	var iconLogin = {};	// @icon
+	var iconSettings = {};	// @icon
 	var buttonNextStep = {};	// @button
 	var buttonGoBack = {};	// @button
 	var buttonStart = {};	// @button
@@ -267,9 +266,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
-	iconSettings.click = function iconSettings_click (event)// @startlock
+	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
-		alert('Not yet implemented.');
+		loginSetup();
+		L3.localization.changeLanguage('en');
+		sources.family.declareDependencies('father');
+		sources.family.declareDependencies('mother');
+		sources.family.declareDependencies('guardian');
+		sources.family.declareDependencies('children');
 	};// @lock
 
 	loginMain.logout = function loginMain_logout (event)// @startlock
@@ -280,6 +284,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	loginMain.login = function loginMain_login (event)// @startlock
 	{// @endlock
 		loginSetup();
+	};// @lock
+
+	iconHome.click = function iconHome_click (event)// @startlock
+	{// @endlock
+		console.log('iconHome.click');
+		var old = L3.stack.pop();
+		
+		saveCurrentPage(old);
+		transitionPages(old, null, 'backward');
+		transitionButtons('return');
+		L3.stack.length = 0;
 	};// @lock
 
 	iconLogin.click = function iconLogin_click (event)// @startlock
@@ -301,30 +316,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	};// @lock
 
-	iconHome.click = function iconHome_click (event)// @startlock
+	iconSettings.click = function iconSettings_click (event)// @startlock
 	{// @endlock
-		console.log('iconHome.click');
-		var old = L3.stack.pop();
-		
-		saveCurrentPage(old);
-		transitionPages(old, null, 'backward');
-		transitionButtons('return');
-		L3.stack.length = 0;
-	};// @lock
-
-	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
-	{// @endlock
-		loginSetup();
-		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
-		sources.family.declareDependencies('father');
-		sources.family.declareDependencies('mother');
-		sources.family.declareDependencies('guardian');
-		sources.family.declareDependencies('children');
-	};// @lock
-
-	comboboxLanguage.change = function comboboxLanguage_change (event)// @startlock
-	{// @endlock
-		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
+		alert('Not yet implemented.');
 	};// @lock
 
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
@@ -367,13 +361,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
-	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
-	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
-	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
-	WAF.addListener("iconHome", "click", iconHome.click, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");
-	WAF.addListener("comboboxLanguage", "change", comboboxLanguage.change, "WAF");
+	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
+	WAF.addListener("iconHome", "click", iconHome.click, "WAF");
+	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
+	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
 	WAF.addListener("buttonGoBack", "click", buttonGoBack.click, "WAF");
 	WAF.addListener("buttonStart", "click", buttonStart.click, "WAF");

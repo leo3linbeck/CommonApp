@@ -1,1 +1,1 @@
-﻿ds.SchoolOption.all().remove();
+﻿var f = ds.Family.all();(f);
