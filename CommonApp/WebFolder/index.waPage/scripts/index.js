@@ -104,6 +104,16 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
+	function setupFamilyWidgets(next,dataSource) {
+		L3.addressValidation(next, 'Home', dataSource, next + '_richTextVerifyHomeAddressStatus', false, false);
+		L3.addressValidation(next, 'Work', dataSource, next + '_richTextVerifyWorkAddressStatus', false, false);
+		$$(next + '_textFieldHomeStreet1Entry').setReadOnly(dataSource.homeAddressSameAsMain);
+		$$(next + '_textFieldHomeStreet2Entry').setReadOnly(dataSource.homeAddressSameAsMain);
+		$$(next + '_textFieldHomeCityEntry').setReadOnly(dataSource.homeAddressSameAsMain);
+		$$(next + '_textFieldHomeStateEntry').setReadOnly(dataSource.homeAddressSameAsMain);
+		$$(next + '_textFieldHomeZipCodeEntry').setReadOnly(dataSource.homeAddressSameAsMain);
+	}
+	
 	function createFamilyRelation(role, current, next) {
 		if (!sources[role].ID) {
 			sources.tempPerson.addNewElement();
@@ -116,8 +126,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						sources.family[role].set(event.dataSource);
 						sources.family.save({ onSuccess: function(evt) {console.log('Save family.' + role, evt);} });
 						contactListID = null;
-						L3.addressValidation(next, 'Home', sources[role], next + '_richTextVerifyHomeAddressStatus', false, false);
-						L3.addressValidation(next, 'Work', sources[role], next + '_richTextVerifyWorkAddressStatus', false, false);
+						setupFamilyWidgets(next, event.dataSource);
 					},
 					onError: function(error) {
 						console.log('ERROR: tempPerson.serverRefresh', error);
@@ -126,9 +135,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			);
 		}
 		else {
-			debugger;
-			L3.addressValidation(next, 'Home', sources[role], next + '_richTextVerifyHomeAddressStatus', false, false);
-			L3.addressValidation(next, 'Work', sources[role], next + '_richTextVerifyWorkAddressStatus', false, false);
+			setupFamilyWidgets(next, sources[role]);
 		}
 	}
 	

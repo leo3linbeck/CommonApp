@@ -68,9 +68,7 @@ function constructor (id) {
 
 	checkboxSameAddress.change = function checkboxSameAddress_change (event)// @startlock
 	{// @endlock
-		if(this.getValue()) {
-			L3.addressesSameAddress('father', 'Home');
-		}
+		L3.addressesSameAddress(this.getValue(), 'father', 'Home');
 	};// @lock
 
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
