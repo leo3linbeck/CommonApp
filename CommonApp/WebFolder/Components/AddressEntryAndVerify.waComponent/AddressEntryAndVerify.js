@@ -18,17 +18,7 @@ function constructor (id) {
 	var textFieldMainCityEntry = {};	// @textField
 	var textFieldMainStreet2Entry = {};	// @textField
 	var textFieldMainStreet1Entry = {};	// @textField
-	var buttonVerifyAddress = {};	// @button
 	// @endregion// @endlock
-
-	function unverifyAddress() {
-		$$('buttonNextStep').disable();
-		$$(getHtmlId('buttonVerifyAddress')).enable();
-		
-		$$(getHtmlId('richTextUSPSLine1')).setValue('');
-		$$(getHtmlId('richTextUSPSLine2')).setValue('');
-		$$(getHtmlId('richTextVerifyAddressAlert')).setValue('');
-	}
 
 	// eventHandlers// @lock
 
@@ -61,44 +51,12 @@ function constructor (id) {
 	};// @lock
 	
 
-	buttonVerifyAddress.click = function buttonVerifyAddress_click (event)// @startlock
-	{// @endlock
-		sources.family.addressLookup(
-			{
-				street1: $$(getHtmlId('textFieldStreet1Entry')).getValue(),
-				street2: $$(getHtmlId('textFieldStreet2Entry')).getValue(),
-				city: $$(getHtmlId('textFieldCityEntry')).getValue(),
-				zipCode: $$(getHtmlId('textFieldZipCodeEntry')).getValue(),
-				debug: false 
-			},
-			{
-				onSuccess: function(event) {
-					console.log('buttonVerifyAddress.click', event);
-					if (event.result && event.result.success) {
-						sources.family.serverRefresh({forceReload: true});
-						$$('buttonNextStep').enable();
-						$$(getHtmlId('buttonVerifyAddress')).disable();
-					}
-					else {
-						unverifyAddress();
-						$$(getHtmlId('richTextVerifyAddressError')).setValue('Validation failed!');
-					}
-				},
-				onError: function(error) {
-					console.log('ERROR: buttonVerifyAddress.click', error);
-					unverifyAddress();
-				}
-			}
-		);
-	};// @lock
-
 	// @region eventManager// @startlock
 	WAF.addListener(this.id + "_textFieldMainStateEntry", "change", textFieldMainStateEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldMainZipCodeEntry", "change", textFieldMainZipCodeEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldMainCityEntry", "change", textFieldMainCityEntry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldMainStreet2Entry", "change", textFieldMainStreet2Entry.change, "WAF");
 	WAF.addListener(this.id + "_textFieldMainStreet1Entry", "change", textFieldMainStreet1Entry.change, "WAF");
-	WAF.addListener(this.id + "_buttonVerifyAddress", "click", buttonVerifyAddress.click, "WAF");
 	// @endregion// @endlock
 
 	};// @lock

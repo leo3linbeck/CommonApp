@@ -116,6 +116,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						sources.family[role].set(event.dataSource);
 						sources.family.save({ onSuccess: function(evt) {console.log('Save family.' + role, evt);} });
 						contactListID = null;
+						L3.addressValidation(next, 'Home', sources[role], next + '_richTextVerifyHomeAddressStatus', false, false);
+						L3.addressValidation(next, 'Work', sources[role], next + '_richTextVerifyWorkAddressStatus', false, false);
 					},
 					onError: function(error) {
 						console.log('ERROR: tempPerson.serverRefresh', error);
@@ -123,18 +125,10 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 			);
 		}
-	}
-	
-	function setupAddressEntry(usps, next) {
-		if (usps) {
-			$$('buttonNextStep').enable();
-			$$(next + '_richTextVerifyAddressStatus').setValue('Validated Address');
-			$$(next + '_richTextVerifyAddressStatus').setBackgroundColor('green');
-		}
 		else {
-			$$('buttonNextStep').disable();
-			$$(next + '_richTextVerifyAddressStatus').setValue('Unvalidated Address');
-			$$(next + '_richTextVerifyAddressStatus').setBackgroundColor('red');
+			debugger;
+			L3.addressValidation(next, 'Home', sources[role], next + '_richTextVerifyHomeAddressStatus', false, false);
+			L3.addressValidation(next, 'Work', sources[role], next + '_richTextVerifyWorkAddressStatus', false, false);
 		}
 	}
 	
@@ -213,7 +207,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				transitionPages(current, next);
 				break;
 			case 'componentAddressEntry':
-				setupAddressEntry(sources.family.mainUSPSDeliveryPoint, next);
+				L3.addressValidation(next, 'Main', sources.family, next + '_richTextVerifyMainAddressStatus', true, false);
 				transitionPages(current, next);
 				break;
 			case 'componentFamilyInfoEntry':
