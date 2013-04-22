@@ -32,7 +32,24 @@ function constructor (id) {
 
 	buttonReviewForm.click = function buttonReviewForm_click (event)// @startlock
 	{// @endlock
-		
+		if (sources.schoolApplication.url) {
+			window.open('schoolApplications/' + sources.schoolApplication.url)
+		}
+		else {
+			sources.schoolApplication.generateApplication(
+				{
+					onSuccess: function(event) {
+						console.log('reviewApplicationForm', event);
+							if (event.success) {
+								window.open('schoolApplications/' + event.result.url)
+							}
+					},
+					onError: function(error) {
+						console.log('ERROR: reviewApplicationForm', error);
+					}
+				}
+			);
+		}
 	};// @lock
 
 	// @region eventManager// @startlock

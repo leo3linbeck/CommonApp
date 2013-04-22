@@ -2,6 +2,7 @@
 
 include('Javascript/Family.js');
 include('Javascript/Person.js');
+include('Javascript/SchoolApplication.js');
 
 model = new DataStoreCatalog();
 
@@ -156,6 +157,7 @@ L3.Child = model.addClass('Child','Children','public','Person');
 
 L3.SchoolApplication = model.addClass('SchoolApplication','SchoolApplications');
 L3.SchoolApplication.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
+L3.SchoolApplication.addAttribute('url',		 			'storage',			'string', 		'btree'			);
 L3.SchoolApplication.addAttribute('preparedOn', 			'storage',			'date', 		'btree'			);
 L3.SchoolApplication.addAttribute('submittedOn', 			'storage',			'date', 		'btree'			);
 L3.SchoolApplication.addAttribute('forSchoolYear', 			'storage',			'long', 		'cluster'		);
@@ -165,6 +167,7 @@ L3.SchoolApplication.addAttribute('schoolName', 			'alias', 			'string', 		'subm
 L3.SchoolApplication.addAttribute('schoolCategory',			'alias', 			'string', 		'submittedTo.category'	);
 L3.SchoolApplication.addAttribute('submittedTo',			'relatedEntity', 	'School', 		'School'		);
 L3.SchoolApplication.addAttribute('applicant',				'relatedEntity', 	'Person', 		'Person'		);
+L3.SchoolApplication.addMethod('generateApplication',		'entity',			L3.schoolApplicationGenerate,	 	'public'	);
 
 L3.ApplicationForm = model.addClass('ApplicationForm','ApplicationForms');
 L3.ApplicationForm.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);

@@ -1,0 +1,1 @@
+﻿//include('Javascript/d3.js')L3.schoolApplicationGenerate = function schoolApplicationGenerate() {	}
