@@ -32,24 +32,37 @@ function constructor (id) {
 
 	buttonReviewForm.click = function buttonReviewForm_click (event)// @startlock
 	{// @endlock
-		if (sources.schoolApplication.url) {
-			window.open('schoolApplications/' + sources.schoolApplication.url)
-		}
-		else {
-			sources.schoolApplication.generateApplication(
-				{
-					onSuccess: function(event) {
-						console.log('reviewApplicationForm', event);
-							if (event.success) {
-								window.open('schoolApplications/' + event.result.url)
-							}
-					},
-					onError: function(error) {
-						console.log('ERROR: reviewApplicationForm', error);
-					}
-				}
-			);
-		}
+		sources.applicant.query('ID === :1',
+			{
+				onSuccess: function(event) {
+					var w = window.open('http://127.0.0.1:8081/forms.waPage/index.html', 'appFormWindow')
+					console.log('Loading student', event, w);
+				},
+				onError: function(error) {
+					console.log('ERROR: Loading student', error);
+				},
+				params: ['D5C5534E9CA84A0986ED5CEF6E6053C4']
+			}
+		);
+
+//		if (sources.schoolApplication.url) {
+//			window.open('/forms.waPage/index.html')
+//		}
+//		else {
+//			sources.schoolApplication.generateApplication(
+//				{
+//					onSuccess: function(event) {
+//						console.log('reviewApplicationForm', event);
+//							if (event.success) {
+//								window.open('schoolApplications/' + event.result.url)
+//							}
+//					},
+//					onError: function(error) {
+//						console.log('ERROR: reviewApplicationForm', error);
+//					}
+//				}
+//			);
+//		}
 	};// @lock
 
 	// @region eventManager// @startlock

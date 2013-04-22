@@ -148,6 +148,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				onSuccess: function(event) {
 					console.log('children.serverRefresh', event);
 					event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+//					event.dataSource.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
+//					event.dataSource.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
+//					event.dataSource.getAttribute('homeCity').setValue(sources.family.mainCity);
+//					event.dataSource.getAttribute('homeState').setValue(sources.family.mainState);
+//					event.dataSource.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
 					sources.family.save({ onSuccess: function(event) {console.log('Save children',event);} });
 					$$(next).setChildrenCount(event.dataSource);
 					$$(next).setChildAge(event.dataSource.birthdate);

@@ -142,6 +142,8 @@ L3.Person.addAttribute('nextGradeLevel', 		'storage',			'long', 		'cluster'		);
 L3.Person.addAttribute('isApplying', 			'storage',			'bool', 		'cluster'		);
 L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 	L3.Person.fullName.onGet = L3.personGetFullName;
+L3.Person.addAttribute('ageToday', 				'calculated',		'long'							);
+	L3.Person.ageToday.onGet = L3.personGetAgeToday;
 L3.Person.addAttribute('childOf', 				'relatedEntity', 	'Family', 		'Family'		);
 L3.Person.addAttribute('enrolledAt',			'relatedEntity', 	'School', 		'School'		);
 L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 				'father', 		{reversePath: true});
