@@ -35,7 +35,7 @@ function constructor (id) {
 		sources.applicant.query('submittedApplications.ID === :1',
 			{
 				onSuccess: function(event) {
-					var w = window.open('http://127.0.0.1:8081/forms.waPage/index.html?applicant=' + encodeURIComponent(event.dataSource.ID), 'appFormWindow')
+					var w = window.open('/forms.waPage/index.html?applicant=' + encodeURIComponent(event.dataSource.ID), 'appFormWindow')
 					console.log('Loading student', event, w);
 				},
 				onError: function(error) {
