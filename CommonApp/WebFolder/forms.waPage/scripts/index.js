@@ -9,19 +9,22 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
+		var uri = URI(window.location.toString());
+		var query = URI.parseQuery(uri.query());
+		
 		sources.applicant.query('ID === :1',
 			{
-				onSuccess: function(event) {
-					console.log('Loading student', event);
-					var next = event.dataSource.nextGradeLevel;
+				onSuccess: function(evnt) {
+					console.log('Loading applicant', evnt);
+					var next = evnt.dataSource.nextGradeLevel;
 					
 					if (next === -2 || next === 13 || next === 999) {
 						applicantCurrentGradeLevel = '';
 						applicantNextGradeLevel = '';
 					}
 					else {
-						applicantCurrentGradeLevel = L3.gradeMap[event.dataSource.nextGradeLevel - 1];
-						applicantNextGradeLevel = L3.gradeMap[event.dataSource.nextGradeLevel];
+						applicantCurrentGradeLevel = L3.gradeMap[evnt.dataSource.nextGradeLevel - 1];
+						applicantNextGradeLevel = L3.gradeMap[evnt.dataSource.nextGradeLevel];
 					}
 					sources.applicantCurrentGradeLevel.sync();
 					sources.applicantNextGradeLevel.sync();
@@ -57,14 +60,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 							onError: function(err) {
 								console.log('ERROR: Loading family', err);
 							},
-							params: [ event.dataSource.ID ]
+							params: [ evnt.dataSource.ID ]
 						}
 					);
 				},
 				onError: function(error) {
 					console.log('ERROR: Loading student', error);
 				},
-				params: [ 'D5C5534E9CA84A0986ED5CEF6E6053C4' ]
+				params: [ query.applicant ]
 			}
 		);
 

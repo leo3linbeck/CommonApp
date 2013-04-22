@@ -32,16 +32,16 @@ function constructor (id) {
 
 	buttonReviewForm.click = function buttonReviewForm_click (event)// @startlock
 	{// @endlock
-		sources.applicant.query('ID === :1',
+		sources.applicant.query('submittedApplications.ID === :1',
 			{
 				onSuccess: function(event) {
-					var w = window.open('http://127.0.0.1:8081/forms.waPage/index.html', 'appFormWindow')
+					var w = window.open('http://127.0.0.1:8081/forms.waPage/index.html?applicant=' + encodeURIComponent(event.dataSource.ID), 'appFormWindow')
 					console.log('Loading student', event, w);
 				},
 				onError: function(error) {
 					console.log('ERROR: Loading student', error);
 				},
-				params: ['D5C5534E9CA84A0986ED5CEF6E6053C4']
+				params: [sources.schoolApplication.ID]
 			}
 		);
 

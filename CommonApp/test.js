@@ -1,1 +1,1 @@
-﻿include ('Javascript/Family.js');var f = ds.Family.all().first();var v = f.callMethod(getPhoneByType('father_workPhone');(f);
+﻿ds.Person.query('submittedApplications.ID === :1', 'D9E865EF1D6843FE8DA0959EE4155BE9');
