@@ -1,11 +1,17 @@
 ﻿<!DOCTYPE html><section data-group="[]" class="default">
     <meta name="generator" content="Wakanda GUIDesigner"/>
-    <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="SchoolApplication" data-scope="local" data-lib="WAF" data-id="{id}schoolApplication" data-dataType="string" data-autoLoad="false" content="schoolApplication"/>
+    <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="SchoolApplication" data-scope="global" data-lib="WAF" data-id="schoolApplication" data-dataType="string" data-autoLoad="false" content="schoolApplication"/>
     <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Family" data-scope="global" data-lib="WAF" data-id="family" data-dataType="string" data-autoLoad="false" content="family"/>
     <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.children" data-scope="global" data-lib="WAF" data-id="children" data-dataType="string" data-autoLoad="true" content="children"/>
     <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Person" data-scope="local" data-lib="WAF" data-id="{id}applyingChildren" data-dataType="string" data-autoLoad="false" content="applyingChildren"/>
     <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="School" data-scope="local" data-lib="WAF" data-id="{id}schoolChoice" data-dataType="string" data-autoLoad="false" content="schoolChoice"/>
     <meta name="WAF.config.datasources" data-type="dataSource" data-source-type="scalar" data-source="{id}forSchoolYear" data-scope="local" data-lib="WAF" data-id="{id}forSchoolYear" data-dataType="number" data-autoLoad="true" content="forSchoolYear"/>
+    
+    
+    
+    
+    
+    
     
     
     
@@ -38,7 +44,7 @@
 		<label id="{id}label2" for="{id}dataGridSelectSchool" data-valign="middle" data-type="label" data-margin="5" data-lib="WAF" class="waf-widget waf-label default inherited  waf-label-dataGrid ">2. Select school(s) for that child</label>
 		<div id="{id}dataGridSelectSchool" data-type="dataGrid" data-selection-mode="multiple" data-readOnly="true" data-lib="WAF" data-label-position="bottom" data-label="2. Select school(s) for that child" data-footer-text="school(s)" data-footer-hide="false" data-display-error="true" data-constraint-top="true" data-constraint-left="true" data-column="[{'sourceAttID':'name','colID':'name','width':'210','title':'School'},{'sourceAttID':'category','colID':'category','width':'100','title':'Category'}]" data-binding="{id}schoolChoice" class="waf-widget waf-dataGrid default inherited  "></div>
 		<label id="{id}label3" for="{id}dataGridSchoolApplications" data-valign="middle" data-type="label" data-margin="5" data-lib="WAF" class="waf-widget waf-label default inherited  waf-label-dataGrid ">3. Click Create Applications button</label>
-		<div id="{id}dataGridSchoolApplications" data-type="dataGrid" data-selection-mode="single" data-readOnly="false" data-lib="WAF" data-label-position="bottom" data-label="3. Click Create Applications button" data-footer-text="application(s)" data-footer-hide="false" data-display-error="true" data-constraint-top="true" data-constraint-left="true" data-column="[{'sourceAttID':'applicantNickname','colID':'applicantNickname','width':'105','title':'Child'},{'sourceAttID':'schoolName','colID':'schoolName','width':'225','title':'Applying%20To'}]" data-binding="{id}schoolApplication" class="waf-widget waf-dataGrid default inherited  "></div>
+		<div id="{id}dataGridSchoolApplications" data-type="dataGrid" data-selection-mode="single" data-readOnly="false" data-lib="WAF" data-label-position="bottom" data-label="3. Click Create Applications button" data-footer-text="application(s)" data-footer-hide="false" data-display-error="true" data-constraint-top="true" data-constraint-left="true" data-column="[{'sourceAttID':'applicantNickname','colID':'applicantNickname','width':'105','title':'Child'},{'sourceAttID':'schoolName','colID':'schoolName','width':'225','title':'Applying%20To'}]" data-binding="schoolApplication" class="waf-widget waf-dataGrid default inherited  "></div>
 		<button id="{id}buttonCreateApplications" data-type="button" data-text="Create Applications" data-target="_blank" data-lib="WAF" data-constraint-top="true" data-constraint-left="true" data-action="simple" class="waf-widget waf-button default inherited  waf-project-OrangeButtonSkin "></button>
 		<span id="{id}iconPlusSign" data-type="icon" data-lib="WAF" data-label-position="left" data-label="" data-image-state1="/images/onebit_27.png" data-icon-type="images" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-icon default inherited  "><img src="/images/onebit_27.png" class="waf-icon-state1"/></span>
 		<span id="{id}iconRightArrow" data-type="icon" data-lib="WAF" data-label-position="left" data-label="" data-image-state1="/images/onebit_27.png" data-icon-type="images" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-icon default inherited  "><img src="/images/onebit_27.png" class="waf-icon-state1"/></span>

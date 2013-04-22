@@ -101,6 +101,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentCreateApplications':
 				break;
+			case 'componentReviewAndPrintForms':
+				break;
 		}
 	}
 	
@@ -189,7 +191,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				onSuccess: function(event) {
 					console.log('load applyingChildren', event);
 					L3.loadSchoolOptions();
-					$$(next).sources.schoolApplication.query('applicant.childOf.ID === :1',
+					sources.schoolApplication.query('applicant.childOf.ID === :1',
 						{
 							onSuccess: function(evt) {
 								console.log('load schoolApplication', evt);
@@ -251,6 +253,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentCreateApplications':
 				selectApplyingChildren(current, next);
+				transitionPages(current, next);
+				break;
+			case 'componentReviewAndPrintForms':
 				transitionPages(current, next);
 				break;
 		}
