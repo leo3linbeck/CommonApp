@@ -207,7 +207,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				transitionPages(current, next);
 				break;
 			case 'componentAddressEntry':
-				setupAddressEntry(sources.family.uspsDeliveryPoint, next);
+				setupAddressEntry(sources.family.mainUSPSDeliveryPoint, next);
 				transitionPages(current, next);
 				break;
 			case 'componentFamilyInfoEntry':
@@ -240,7 +240,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentSchoolMap':
 				transitionPages(current, next);
-				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mapCoords, sources.family.uspsLine1 + '\n' + sources.family.uspsLine2);
+				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mainMapCoords, sources.family.mainUSPSLine1 + '\n' + sources.family.mainUSPSLine2);
 				break;
 			case 'componentCreateApplications':
 				selectApplyingChildren(current, next);
