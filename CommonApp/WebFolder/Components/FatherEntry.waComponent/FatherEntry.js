@@ -31,9 +31,6 @@ function constructor (id) {
 	var textFieldFirstName = {};	// @textField
 	// @endregion// @endlock
 
-	function enableVerifyButton(id) {
-		$$(getHtmlId('buttonVerifyWorkAddress')).enable();
-	}
 	// eventHandlers// @lock
 
 	textFieldWorkStateEntry.change = function textFieldWorkStateEntry_change (event)// @startlock
