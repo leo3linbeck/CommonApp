@@ -7,7 +7,7 @@
 	<meta name="wakanda-version" content="4 build 4.131311"/>
 		<meta name="wakanda-build" content="4.131311"/>
 		<meta name="WAF.config.loadCSS" id="waf-palette" content="/walib/WAF/widget/palette/css/widget-palette-default.css"/>
-		<meta data-type="dataSource" data-lib="WAF" data-source="Person" data-source-type="dataClass" data-dataType="string" data-autoLoad="false" name="WAF.config.datasources" data-id="applicant" content="applicant"/>
+		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Person" data-lib="WAF" data-id="applicant" data-dataType="string" data-autoLoad="false" content="applicant"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="SchoolOption" data-lib="WAF" data-id="schoolOption" data-dataType="string" data-autoLoad="false" content="schoolOption"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="scalar" data-source="contactListID" data-lib="WAF" data-id="contactListID" data-dataType="string" data-autoLoad="true" content="contactListID"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="Person" data-lib="WAF" data-id="tempPerson" data-dataType="string" data-autoLoad="false" content="tempPerson"/>
@@ -46,28 +46,23 @@
 
 		
 		
-		<meta name="WAF.config.rpc.file" content="/rpc-proxy/Localization?namespace=Localization"/>
-		
-		
-		
-
-		
-		
-		
-
-		
-		
-		
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.father" data-lib="WAF" data-id="father" data-dataType="string" data-autoLoad="true" content="father"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.mother" data-lib="WAF" data-id="mother" data-dataType="string" data-autoLoad="true" content="mother"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.guardian" data-lib="WAF" data-id="guardian" data-dataType="string" data-autoLoad="true" content="guardian"/>
 		<meta name="WAF.config.datasources" data-type="dataSource" data-source-type="dataClass" data-source="family.children" data-lib="WAF" data-id="children" data-dataType="string" data-autoLoad="true" content="children"/>
-				<meta name="WAF.config.loadJS" content="/scripts/L3.js"/>
+				
+		
+		
+
+		<meta name="WAF.config.loadJS" content="/scripts/L3.js"/>
 		<meta name="WAF.config.loadJS" content="/scripts/localization.js"/>
 		<meta name="WAF.config.loadJS" content="/index.waPage/scripts/index.js"/>
+<meta name="WAF.config.loadJS" id="waf-script" content="scripts/index.js"/>
+<meta name="WAF.config.rpc.file" content="/rpc-proxy/Localization?namespace=Localization"/>
+<meta name="WAF.config.rpc.file" content="/rpc-proxy/Salesforce?namespace=Salesforce"/>
 </head>
 
-<body id="waf-body" data-workspace-width="0" data-workspace-orientation="portrait" data-workspace-height="0" data-viewport-width="device-width" data-viewport-minimum-scale="1.0" data-viewport-maximum-scale="1.0" data-viewport-initial-scale="1.0" data-type="document" data-theme="default" data-rpc-validation="false" data-rpc-namespace="rpc" data-rpc-activate="false" data-platform="desktop" data-lib="WAF" data-group="[]" data-apple-meta-tags-status-bar="default" class="default" style="visibility:hidden;">
+<body id="waf-body" data-workspace-width="0" data-workspace-orientation="portrait" data-workspace-height="0" data-viewport-width="device-width" data-viewport-minimum-scale="1.0" data-viewport-maximum-scale="1.0" data-viewport-initial-scale="1.0" data-type="document" data-theme="default" data-rpc-validation="false" data-rpc-namespace="rpc" data-rpc-activate="false" data-platform="desktop" data-lib="WAF" data-group="[['dialogSettings','containerDialogHeader','richTextDialogTitle','buttonDialogClose','containerDialogBody']]" data-apple-meta-tags-status-bar="default" class="default" style="visibility:hidden;">
 			<div id="imageFELogo" data-type="image" data-target="_self" data-src="/images/FE Logo.png" data-link="http://www.familiesempowered.org" data-lib="WAF" data-label-position="left" data-label="" data-fit="0" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-image default inherited  "></div>
 	<div id="richTextUniversalApp" data-type="richText" data-target="_blank" data-plainText="true" data-overflow="Hidden" data-lib="WAF" data-label-position="left" data-label="" data-constraint-top="true" data-constraint-left="true" data-autoWidth="false" class="waf-widget waf-richText default inherited  ">UniversalApp</div>
 		<div id="richTextSplashDescription" data-type="richText" data-target="_blank" data-plainText="false" data-overflow="Hidden" data-lib="WAF" data-label-position="left" data-label="" data-constraint-top="true" data-constraint-left="true" data-autoWidth="false" class="waf-widget waf-richText default inherited  ">Use this system to apply to public and private schools&lt;/br&gt;serving grades from Pre-Kindergarten to 12th Grade.&lt;/br&gt;&lt;/br&gt;Fill out one form,&lt;/br&gt;and apply to multiple schools!</div>
@@ -94,8 +89,18 @@
 		<div id="containerButtons" data-type="container" data-lib="WAF" data-label-position="top" data-label="" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-container default inherited   waf-container-level-0 waf-level-0">
 	 	<button id="buttonGoBack" data-type="button" data-text="Go Back" data-target="_blank" data-lib="WAF" data-hideonload="false" data-constraint-top="true" data-constraint-right="false" data-constraint-left="true" data-constraint-bottom="false" data-action="simple" class="waf-widget waf-button default inherited  waf-project-OrangeButtonSkin "></button>
  		<button id="buttonNextStep" data-type="button" data-text="Next Step" data-target="_blank" data-lib="WAF" data-hideonload="false" data-constraint-top="true" data-constraint-right="false" data-constraint-left="true" data-constraint-bottom="false" data-action="simple" class="waf-widget waf-button default inherited  "></button>
- 	</div>
+ 	
+	</div>
 		<div id="componentReviewAndPrintForms" data-type="component" data-path="/Components/ReviewAndPrintForms.waComponent" data-lib="WAF" data-hideonload="true" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-component default inherited  "></div>
+		<div id="dialogSettings" data-type="dialog" data-modal="true" data-linked-tag="containerDialogHeader,richTextDialogTitle,buttonDialogClose,container2" data-lib="WAF" data-hideonload="true" data-hideOnOutsideClick="false" data-front="false" data-constraint-top="true" data-constraint-left="true" class="waf-widget waf-dialog default inherited  waf-container ">
+	 	<div id="containerDialogHeader" data-type="container" data-lib="WAF" data-label-position="top" data-label="" data-constraint-top="true" data-constraint-right="true" data-constraint-left="true" data-constraint-bottom="false" class="waf-widget waf-container default inherited  waf-container-level-1 waf-level-1 waf-widget-header waf-dialog-header ">
+	 	 	<div id="richTextDialogTitle" data-type="richText" data-target="_blank" data-plainText="true" data-overflow="Hidden" data-lib="WAF" data-label-position="left" data-label="" data-constraint-top="true" data-constraint-right="true" data-constraint-left="true" data-constraint-bottom="false" data-autoWidth="false" class="waf-widget waf-richText default inherited  waf-dialog-header-title ">Settings</div>
+ 	 					<button id="buttonDialogClose" data-type="button" data-text="x" data-target="_blank" data-lib="WAF" data-constraint-top="true" data-constraint-right="true" data-constraint-left="false" data-constraint-bottom="false" data-action="simple" class="waf-widget waf-button default inherited  waf-dialog-header-buttons waf-dialog-header-close "></button>
+ 	 	</div>
+ 		<div id="containerDialogBody" data-type="container" data-lib="WAF" data-label-position="top" data-label="" data-constraint-top="true" data-constraint-right="true" data-constraint-left="true" data-constraint-bottom="true" class="waf-widget waf-container default inherited  waf-container-level-1 waf-level-1 waf-widget-body waf-dialog-body ">
+	 	 	<button id="buttonLoadSalesforceData" data-type="button" data-text="Load Salesforce Data" data-target="_blank" data-lib="WAF" data-hideonload="false" data-constraint-top="true" data-constraint-right="false" data-constraint-left="true" data-constraint-bottom="false" data-action="simple" class="waf-widget waf-button default inherited  waf-project-OrangeButtonSkin "></button>
+ 	 	</div>
+ 		</div>
 		<script type="text/javascript" src="/waLib/WAF/Loader.js"></script>
 	</body>
 </html>

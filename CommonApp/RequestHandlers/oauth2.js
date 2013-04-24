@@ -1,0 +1,1 @@
+﻿function callback(request, response) {	return JSON.stringify(request.headers);	}

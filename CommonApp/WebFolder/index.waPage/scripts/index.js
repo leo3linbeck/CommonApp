@@ -2,6 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var buttonLoadSalesforceData = {};	// @button
+	var buttonDialogClose = {};	// @button
 	var iconSettings = {};	// @icon
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
@@ -283,9 +285,19 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	buttonLoadSalesforceData.click = function buttonLoadSalesforceData_click (event)// @startlock
+	{// @endlock
+		
+	};// @lock
+
+	buttonDialogClose.click = function buttonDialogClose_click (event)// @startlock
+	{// @endlock
+		$$('dialogSettings').closeDialog();
+	};// @lock
+
 	iconSettings.click = function iconSettings_click (event)// @startlock
 	{// @endlock
-		alert('Not yet implemented.');
+		$$('dialogSettings').displayDialog();
 	};// @lock
 
 	loginMain.logout = function loginMain_logout (event)// @startlock
@@ -383,6 +395,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("buttonLoadSalesforceData", "click", buttonLoadSalesforceData.click, "WAF");
+	WAF.addListener("buttonDialogClose", "click", buttonDialogClose.click, "WAF");
 	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
