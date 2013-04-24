@@ -1,1 +1,1 @@
-﻿function callback(request, response) {	return JSON.stringify(request.headers);	}
+﻿function callback(request, response) {	debugger;		console.log('oauth2 callback: request', request, 'response', response);		return ;	}

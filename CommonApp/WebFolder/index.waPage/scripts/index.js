@@ -287,7 +287,16 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	buttonLoadSalesforceData.click = function buttonLoadSalesforceData_click (event)// @startlock
 	{// @endlock
-		
+		Salesforce.loadDataAsync(
+			{
+				onSuccess: function(event) {
+					console.log('Salesforce.loadDataAsync', event);
+				},
+				onError: function(error) {
+					console.log('ERROR: Salesforce.loadDataAsync', error);					
+				}
+			}
+		);
 	};// @lock
 
 	buttonDialogClose.click = function buttonDialogClose_click (event)// @startlock
