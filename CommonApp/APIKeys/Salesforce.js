@@ -1,0 +1,1 @@
+﻿exports.consumer_secret = function() {return '55fa9a4f-8cad-44e0-ae84-7d5088c32831'};exports.consumer_key = function() {return '3MVG9A2kN3Bn17htb2bLOhUPt3zqGTMAiCvkHalWqjEKbZ7gCVhkdri4KDdcuJCUhUm6a5Ci.i7XHunI7q_sw'};exports.refresh_token = function() {return ''};
