@@ -13,6 +13,7 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var iconCloud = {};	// @icon
 	var iconTrashCan = {};	// @icon
 	var iconClearLine = {};	// @icon
 	var buttonCreateFamily = {};	// @button
@@ -47,6 +48,11 @@ function constructor (id) {
 	}
 	
 	// eventHandlers// @lock
+
+	iconCloud.click = function iconCloud_click (event)// @startlock
+	{// @endlock
+		alert('Salesforce search coming soon!');
+	};// @lock
 
 	iconTrashCan.click = function iconTrashCan_click (event)// @startlock
 	{// @endlock
@@ -86,6 +92,7 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_iconCloud", "click", iconCloud.click, "WAF");
 	WAF.addListener(this.id + "_iconTrashCan", "click", iconTrashCan.click, "WAF");
 	WAF.addListener(this.id + "_iconClearLine", "click", iconClearLine.click, "WAF");
 	WAF.addListener(this.id + "_buttonCreateFamily", "click", buttonCreateFamily.click, "WAF");
