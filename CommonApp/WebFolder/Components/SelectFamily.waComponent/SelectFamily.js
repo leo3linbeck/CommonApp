@@ -13,6 +13,9 @@ function constructor (id) {
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
+	var buttonPullDataFromSalesforce = {};	// @button
+	var buttonPushDataToSalesforce = {};	// @button
+	var buttonDialogClose = {};	// @button
 	var iconCloud = {};	// @icon
 	var iconTrashCan = {};	// @icon
 	var iconClearLine = {};	// @icon
@@ -49,9 +52,46 @@ function constructor (id) {
 	
 	// eventHandlers// @lock
 
+	buttonPullDataFromSalesforce.click = function buttonPullDataFromSalesforce_click (event)// @startlock
+	{// @endlock
+		Salesforce.pullDataAsync(
+			{
+				onSuccess: function(event) {
+					console.log('Salesforce.pullDataAsync', event);
+					$$(getHtmlId('dialogSalesforce')).closeDialog();
+				},
+				onError: function(error) {
+					console.log('ERROR: Salesforce.pullDataAsync', error);					
+					$$(getHtmlId('dialogSalesforce')).closeDialog();
+				}
+			}
+		);
+	};// @lock
+
+	buttonPushDataToSalesforce.click = function buttonPushDataToSalesforce_click (event)// @startlock
+	{// @endlock
+		Salesforce.pushDataAsync(
+			{
+				onSuccess: function(event) {
+					console.log('Salesforce.pushDataAsync', event);
+					$$(getHtmlId('dialogSalesforce')).closeDialog();
+				},
+				onError: function(error) {
+					console.log('ERROR: Salesforce.pushDataAsync', error);					
+					$$(getHtmlId('dialogSalesforce')).closeDialog();
+				}
+			}
+		);
+	};// @lock
+
+	buttonDialogClose.click = function buttonDialogClose_click (event)// @startlock
+	{// @endlock
+		$$(getHtmlId('dialogSalesforce')).closeDialog();
+	};// @lock
+
 	iconCloud.click = function iconCloud_click (event)// @startlock
 	{// @endlock
-		alert('Salesforce search coming soon!');
+		$$(getHtmlId('dialogSalesforce')).displayDialog();
 	};// @lock
 
 	iconTrashCan.click = function iconTrashCan_click (event)// @startlock
@@ -92,6 +132,9 @@ function constructor (id) {
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_buttonPullDataFromSalesforce", "click", buttonPullDataFromSalesforce.click, "WAF");
+	WAF.addListener(this.id + "_buttonPushDataToSalesforce", "click", buttonPushDataToSalesforce.click, "WAF");
+	WAF.addListener(this.id + "_buttonDialogClose", "click", buttonDialogClose.click, "WAF");
 	WAF.addListener(this.id + "_iconCloud", "click", iconCloud.click, "WAF");
 	WAF.addListener(this.id + "_iconTrashCan", "click", iconTrashCan.click, "WAF");
 	WAF.addListener(this.id + "_iconClearLine", "click", iconClearLine.click, "WAF");
