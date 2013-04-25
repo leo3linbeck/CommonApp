@@ -140,6 +140,8 @@ L3.Person.addAttribute('isMultiple', 			'storage',			'bool'							);
 L3.Person.addAttribute('livesWith', 			'storage',			'string', 		'cluster'		);
 L3.Person.addAttribute('nextGradeLevel', 		'storage',			'long', 		'cluster'		);
 L3.Person.addAttribute('isApplying', 			'storage',			'bool', 		'cluster'		);
+L3.Person.addAttribute('salesforceID', 			'storage',			'string', 		'btree'			);
+L3.Person.addAttribute('needsPushToSalesforce', 'storage',			'bool', 		'cluster'		);
 L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 	L3.Person.fullName.onGet = L3.personGetFullName;
 L3.Person.addAttribute('ageToday', 				'calculated',		'long'							);

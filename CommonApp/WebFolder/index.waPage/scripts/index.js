@@ -2,7 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
-	var buttonLoadSalesforceData = {};	// @button
+	var buttonPullDataFromSalesforce = {};	// @button
+	var buttonPushDataToSalesforce = {};	// @button
 	var buttonDialogClose = {};	// @button
 	var iconSettings = {};	// @icon
 	var loginMain = {};	// @login
@@ -285,15 +286,33 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
-	buttonLoadSalesforceData.click = function buttonLoadSalesforceData_click (event)// @startlock
+	buttonPullDataFromSalesforce.click = function buttonPullDataFromSalesforce_click (event)// @startlock
 	{// @endlock
-		Salesforce.loadDataAsync(
+		Salesforce.pullDataAsync(
 			{
 				onSuccess: function(event) {
-					console.log('Salesforce.loadDataAsync', event);
+					console.log('Salesforce.pullDataAsync', event);
+					$$('dialogSettings').closeDialog();
 				},
 				onError: function(error) {
-					console.log('ERROR: Salesforce.loadDataAsync', error);					
+					console.log('ERROR: Salesforce.pullDataAsync', error);					
+					$$('dialogSettings').closeDialog();
+				}
+			}
+		);
+	};// @lock
+
+	buttonPushDataToSalesforce.click = function buttonPushDataToSalesforce_click (event)// @startlock
+	{// @endlock
+		Salesforce.pushDataAsync(
+			{
+				onSuccess: function(event) {
+					console.log('Salesforce.pushDataAsync', event);
+					$$('dialogSettings').closeDialog();
+				},
+				onError: function(error) {
+					console.log('ERROR: Salesforce.pushDataAsync', error);					
+					$$('dialogSettings').closeDialog();
 				}
 			}
 		);
@@ -404,7 +423,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
-	WAF.addListener("buttonLoadSalesforceData", "click", buttonLoadSalesforceData.click, "WAF");
+	WAF.addListener("buttonPullDataFromSalesforce", "click", buttonPullDataFromSalesforce.click, "WAF");
+	WAF.addListener("buttonPushDataToSalesforce", "click", buttonPushDataToSalesforce.click, "WAF");
 	WAF.addListener("buttonDialogClose", "click", buttonDialogClose.click, "WAF");
 	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
