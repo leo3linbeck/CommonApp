@@ -1,1 +1,1 @@
-﻿exports.consumer_secret = function() {return '3613041050225934451'};exports.consumer_key = function() {return '3MVG9A2kN3Bn17htb2bLOhUPt3zqGTMAiCvkHalWqjEKbZ7gCVhkdri4KDdcuJCUhUm6a5Ci.i7XHunI7q_sw'};exports.password = function() {return 'C@rd1n@l.Newm@nkwrS9xK9GFsv5kmsimDvulYy'};
+﻿exports.consumer_secret = function() {return '5191401667588854868'};exports.consumer_key = function() {return '3MVG9yZ.WNe6byQAcCEUGWBjvu_LeD2qVsJaboPlNJ5R7jA5aB.120RPXS_khdM4RFxUrFdrQL9A_Srux0huX'};exports.password = function() {return 'C@rd1n@l.Newm@nPhRPsokIWOPa6GWnxwCsinwF'};

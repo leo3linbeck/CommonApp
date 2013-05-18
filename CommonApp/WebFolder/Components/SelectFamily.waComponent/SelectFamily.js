@@ -70,18 +70,19 @@ function constructor (id) {
 
 	buttonPushDataToSalesforce.click = function buttonPushDataToSalesforce_click (event)// @startlock
 	{// @endlock
-		Salesforce.pushDataAsync(
-			{
-				onSuccess: function(event) {
-					console.log('Salesforce.pushDataAsync', event);
-					$$(getHtmlId('dialogSalesforce')).closeDialog();
-				},
-				onError: function(error) {
-					console.log('ERROR: Salesforce.pushDataAsync', error);					
-					$$(getHtmlId('dialogSalesforce')).closeDialog();
-				}
-			}
-		);
+		alert('Not yet implemented.');
+//		Salesforce.pushDataAsync(
+//			{
+//				onSuccess: function(event) {
+//					console.log('Salesforce.pushDataAsync', event);
+//					$$(getHtmlId('dialogSalesforce')).closeDialog();
+//				},
+//				onError: function(error) {
+//					console.log('ERROR: Salesforce.pushDataAsync', error);					
+//					$$(getHtmlId('dialogSalesforce')).closeDialog();
+//				}
+//			}
+//		);
 	};// @lock
 
 	buttonDialogClose.click = function buttonDialogClose_click (event)// @startlock
