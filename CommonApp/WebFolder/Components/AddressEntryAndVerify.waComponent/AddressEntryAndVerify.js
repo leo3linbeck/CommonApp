@@ -24,6 +24,7 @@ function constructor (id) {
 
 	textFieldMainStateEntry.change = function textFieldMainStateEntry_change (event)// @startlock
 	{// @endlock
+		L3.convertAttributeToUpperCase(this);
 		L3.verifyAddress(this);
 	};// @lock
 
