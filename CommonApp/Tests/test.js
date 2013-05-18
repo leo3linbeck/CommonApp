@@ -1,1 +1,1 @@
-﻿(storage)
+﻿	comp = that.id.split('_')[0];	loc = 'Main';	dataSource = sources.family;	required = true;	alertID = comp + '_richTextVerify' + loc + 'AddressStatus';		L3.addressValidation(comp, loc, dataSource, alertID, required, (dontForceReload === undefined || !dontForceReload));

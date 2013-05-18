@@ -25,30 +25,30 @@ function constructor (id) {
 	textFieldMainStateEntry.change = function textFieldMainStateEntry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToUpperCase(this);
-		L3.verifyAddress(this);
+		L3.verifyMainAddress(this);
 	};// @lock
 
 	textFieldMainZipCodeEntry.change = function textFieldMainZipCodeEntry_change (event)// @startlock
 	{// @endlock
-		L3.verifyAddress(this);
+		L3.verifyMainAddress(this);
 	};// @lock
 
 	textFieldMainCityEntry.change = function textFieldMainCityEntry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyMainAddress(this);
 	};// @lock
 
 	textFieldMainStreet2Entry.change = function textFieldMainStreet2Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyMainAddress(this);
 	};// @lock
 
 	textFieldMainStreet1Entry.change = function textFieldMainStreet1Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyMainAddress(this);
 	};// @lock
 	
 

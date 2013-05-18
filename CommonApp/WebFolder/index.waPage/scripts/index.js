@@ -2,7 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
-	var iconSettings = {};	// @icon
+	var iconAdmin = {};	// @icon
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
 	var iconHome = {};	// @icon
@@ -268,24 +268,26 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 	function loginSetup() {
 		if (WAF.directory.currentUser()) {
-			$$('iconSettings').show();
-			$$('richTextSettingsTitle').show();
-			$$('richTextSignInAndStart').hide();
-			$$('buttonStart').show();
+			if (WAF.directory.currentUserBelongsTo('staff')) {
+				$$('iconAdmin').show();
+				$$('richTextAdminTitle').show();		
+			}
+			else {
+				$$('iconAdmin').hide();
+				$$('richTextAdminTitle').hide();						
+			}
 		}
 		else {
-			$$('iconSettings').hide();
-			$$('richTextSettingsTitle').hide();
-			$$('richTextSignInAndStart').show();
-			$$('buttonStart').hide();
+			$$('iconAdmin').hide();
+			$$('richTextAdminTitle').hide();
 		}
 	}
 
 // eventHandlers// @lock
 
-	iconSettings.click = function iconSettings_click (event)// @startlock
+	iconAdmin.click = function iconAdmin_click (event)// @startlock
 	{// @endlock
-		alert('Not yet implemented.');
+		window.open('admin');
 	};// @lock
 
 	loginMain.logout = function loginMain_logout (event)// @startlock
@@ -380,10 +382,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		L3.stack.push(next);
 		transitionButtons('start');
 		transitionPages(null, next);
+
 	};// @lock
 
 // @region eventManager// @startlock
-	WAF.addListener("iconSettings", "click", iconSettings.click, "WAF");
+	WAF.addListener("iconAdmin", "click", iconAdmin.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
 	WAF.addListener("iconLogin", "click", iconLogin.click, "WAF");
