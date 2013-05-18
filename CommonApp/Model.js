@@ -9,6 +9,7 @@ model = new DataStoreCatalog();
 L3.Family = model.addClass('Family','Families');
 L3.Family.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
 L3.Family.addAttribute('name', 					'storage',			'string', 		'btree'			);
+L3.Family.addAttribute('userID', 				'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('mainStreet1', 			'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('mainStreet2', 			'storage',			'string', 		'btree'			);
 L3.Family.addAttribute('mainCity', 				'storage',			'string', 		'cluster'		);
@@ -85,6 +86,7 @@ L3.School.addAttribute('considerationSet',		'relatedEntities', 	'SchoolOptions',
 
 L3.SchoolOption = model.addClass('SchoolOption','SchoolOptions');
 L3.SchoolOption.addAttribute('ID', 				'storage',			'uuid', 		'key auto'		);
+L3.SchoolOption.addAttribute('userID', 			'storage',			'string', 		'btree'			);
 L3.SchoolOption.addAttribute('distance',		'storage',			'number', 		'btree'			);
 L3.SchoolOption.addAttribute('selected',		'storage',			'bool', 		'btree'			);
 L3.SchoolOption.addAttribute('schoolName', 		'alias', 			'string', 		'school.name'			);
@@ -101,6 +103,7 @@ L3.SchoolOption.addAttribute('school', 			'relatedEntity', 	'School', 		'School'
 
 L3.Person = model.addClass('Person','People');
 L3.Person.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
+L3.Person.addAttribute('userID', 				'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('firstName', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('middleName', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('lastName', 				'storage',			'string', 		'btree'			);
@@ -161,6 +164,7 @@ L3.Child = model.addClass('Child','Children','public','Person');
 
 L3.SchoolApplication = model.addClass('SchoolApplication','SchoolApplications');
 L3.SchoolApplication.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
+L3.SchoolApplication.addAttribute('userID', 				'storage',			'string', 		'btree'			);
 L3.SchoolApplication.addAttribute('url',		 			'storage',			'string', 		'btree'			);
 L3.SchoolApplication.addAttribute('preparedOn', 			'storage',			'date', 		'btree'			);
 L3.SchoolApplication.addAttribute('submittedOn', 			'storage',			'date', 		'btree'			);

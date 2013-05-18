@@ -1,4 +1,4 @@
-﻿
+﻿  
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
@@ -71,10 +71,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 	function saveCurrentPage(current) {
 		switch (current) {
-			case 'componentSelectFamily':
-				break;
 			case 'componentAddressEntry':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				sources.family.query('ID === :1',{ params: [currentFamilyID], onSuccess: function(e) { console.log('loadCurrentFamily', currentFamilyID, e); } });
 				break;
 			case 'componentFamilyInfoEntry':
 				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
@@ -217,9 +215,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	function switchPages(current, next) {
 		console.log('switchPages(current, next)', current, next);
 		switch (next) {
-			case 'componentSelectFamily':
-				transitionPages(current, next);
-				break;
 			case 'componentAddressEntry':
 				L3.addressValidation(next, 'Main', sources.family, next + '_richTextVerifyMainAddressStatus', true, false);
 				transitionPages(current, next);
@@ -282,6 +277,10 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			$$('richTextAdminTitle').hide();
 		}
 	}
+	
+	function loadCurrentUserData() {
+		
+	}
 
 // eventHandlers// @lock
 
@@ -338,6 +337,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		sources.family.declareDependencies('mother');
 		sources.family.declareDependencies('guardian');
 		sources.family.declareDependencies('children');
+		currentFamilyID = null;
 	};// @lock
 
 	comboboxLanguage.change = function comboboxLanguage_change (event)// @startlock
@@ -377,11 +377,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	buttonStart.click = function buttonStart_click (event)// @startlock
 	{// @endlock
+		loadCurrentUserData();
 		var next = L3.step[0];
-		
 		L3.stack.push(next);
 		transitionButtons('start');
 		transitionPages(null, next);
+		$$('buttonNextStep').disable();
 
 	};// @lock
 
