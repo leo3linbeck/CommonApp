@@ -44,6 +44,17 @@ L3.Family.addAttribute('schoolOptions', 		'relatedEntities',	'SchoolOptions','fa
 L3.Family.addMethod('addressLookup', 			'dataClass',		L3.familyAddressLookup, 	'public'	);
 L3.Family.addMethod('getNearbySchools', 		'dataClass', 		L3.familyGetNearbySchools, 	'public'	);
 L3.Family.addMethod('getPhoneByType', 			'entity', 			L3.familyGetPhoneType,	 	'public'	);
+L3.Family.addEventListener('onRestrictingQuery',
+	function familyRestrictingQuery() {
+		var session = currentSession();
+		if (session.belongsTo('Staff')) {
+			return ds.Family.all();
+		}
+		else {
+			return ds.Family.query('userID === :1', session.user.ID);
+		}
+	}
+);
 
 L3.SMO = model.addClass('SMO','SMOs');
 L3.SMO.addAttribute('ID', 						'storage',			'uuid', 		'key auto'		);
@@ -87,9 +98,9 @@ L3.School.addAttribute('considerationSet',		'relatedEntities', 	'SchoolOptions',
 
 L3.SchoolOption = model.addClass('SchoolOption','SchoolOptions');
 L3.SchoolOption.addAttribute('ID', 				'storage',			'uuid', 		'key auto'		);
-L3.SchoolOption.addAttribute('userID', 			'storage',			'string', 		'btree'			);
 L3.SchoolOption.addAttribute('distance',		'storage',			'number', 		'btree'			);
 L3.SchoolOption.addAttribute('selected',		'storage',			'bool', 		'btree'			);
+L3.SchoolOption.addAttribute('userID', 			'alias',			'string', 		'family.userID'			);
 L3.SchoolOption.addAttribute('schoolName', 		'alias', 			'string', 		'school.name'			);
 L3.SchoolOption.addAttribute('schoolMapCoords',	'alias', 			'string', 		'school.mapCoords'		);
 L3.SchoolOption.addAttribute('schoolStart',		'alias', 			'string', 		'school.startingGrade'	);
@@ -101,10 +112,20 @@ L3.SchoolOption.addAttribute('schoolAttend',	'alias', 			'string', 		'school.att
 L3.SchoolOption.addAttribute('schoolGraduate',	'alias', 			'string', 		'school.graduationRate'	);
 L3.SchoolOption.addAttribute('family', 			'relatedEntity',	'Family', 		'Family'		);
 L3.SchoolOption.addAttribute('school', 			'relatedEntity', 	'School', 		'School'		);
+L3.SchoolOption.addEventListener('onRestrictingQuery',
+	function schoolOptionRestrictingQuery() {
+		var session = currentSession();
+		if (session.belongsTo('Staff')) {
+			return ds.SchoolOption.all();
+		}
+		else {
+			return ds.SchoolOption.query('userID === :1', session.user.ID);
+		}
+	}
+);
 
 L3.Person = model.addClass('Person','People');
 L3.Person.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
-L3.Person.addAttribute('userID', 				'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('firstName', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('middleName', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('lastName', 				'storage',			'string', 		'btree'			);
@@ -146,6 +167,7 @@ L3.Person.addAttribute('nextGradeLevel', 		'storage',			'long', 		'cluster'		);
 L3.Person.addAttribute('isApplying', 			'storage',			'bool', 		'cluster'		);
 L3.Person.addAttribute('salesforceID', 			'storage',			'string', 		'btree'			);
 L3.Person.addAttribute('needsPushToSalesforce', 'storage',			'bool', 		'cluster'		);
+L3.Person.addAttribute('userID', 				'alias',			'string', 		'childOf.userID'		);
 L3.Person.addAttribute('fullName', 				'calculated',		'string'						);
 	L3.Person.fullName.onGet = L3.personGetFullName;
 L3.Person.addAttribute('ageToday', 				'calculated',		'long'							);
@@ -157,19 +179,27 @@ L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 				'm
 L3.Person.addAttribute('guardianFamilies',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 		'applicant', 	{reversePath: true});
 L3.Person.addMethod('addressLookup', 			'entity',			L3.personAddressLookup, 	'public'	);
-//L3.Person.addMethod('conjureFather', 			'dataClass', 		L3.personConjureFather, 	'public'	);
-//L3.Person.addMethod('conjureMother', 			'dataClass', 		L3.personConjureMother, 	'public'	);
-//L3.Person.addMethod('conjureGuardian', 			'dataClass', 		L3.personConjureGuardian, 	'public'	);
+L3.Person.addEventListener('onRestrictingQuery',
+	function personRestrictingQuery() {
+		var session = currentSession();
+		if (session.belongsTo('Staff')) {
+			return ds.Person.all();
+		}
+		else {
+			return ds.Person.query('userID === :1', session.user.ID);
+		}
+	}
+);
 
 L3.Child = model.addClass('Child','Children','public','Person');
 
 L3.SchoolApplication = model.addClass('SchoolApplication','SchoolApplications');
 L3.SchoolApplication.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
-L3.SchoolApplication.addAttribute('userID', 				'storage',			'string', 		'btree'			);
 L3.SchoolApplication.addAttribute('url',		 			'storage',			'string', 		'btree'			);
 L3.SchoolApplication.addAttribute('preparedOn', 			'storage',			'date', 		'btree'			);
 L3.SchoolApplication.addAttribute('submittedOn', 			'storage',			'date', 		'btree'			);
 L3.SchoolApplication.addAttribute('forSchoolYear', 			'storage',			'long', 		'cluster'		);
+L3.SchoolApplication.addAttribute('userID', 				'alias',			'string', 		'applicant.userID'		);
 L3.SchoolApplication.addAttribute('applicantName', 			'alias', 			'string', 		'applicant.fullName'	);
 L3.SchoolApplication.addAttribute('applicantNickname', 		'alias', 			'string', 		'applicant.nickname'	);
 L3.SchoolApplication.addAttribute('schoolName', 			'alias', 			'string', 		'submittedTo.name'		);
@@ -177,6 +207,17 @@ L3.SchoolApplication.addAttribute('schoolCategory',			'alias', 			'string', 		's
 L3.SchoolApplication.addAttribute('submittedTo',			'relatedEntity', 	'School', 		'School'		);
 L3.SchoolApplication.addAttribute('applicant',				'relatedEntity', 	'Person', 		'Person'		);
 L3.SchoolApplication.addMethod('generateApplication',		'entity',			L3.schoolApplicationGenerate,	 	'public'	);
+L3.SchoolApplication.addEventListener('onRestrictingQuery',
+	function schoolApplicationRestrictingQuery() {
+		var session = currentSession();
+		if (session.belongsTo('Staff')) {
+			return ds.SchoolApplication.all();
+		}
+		else {
+			return ds.SchoolApplication.query('userID === :1', session.user.ID);
+		}
+	}
+);
 
 L3.ApplicationForm = model.addClass('ApplicationForm','ApplicationForms');
 L3.ApplicationForm.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
