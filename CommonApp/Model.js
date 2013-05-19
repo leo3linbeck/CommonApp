@@ -62,6 +62,7 @@ L3.School = model.addClass('School','Schools');
 L3.School.addAttribute('ID', 					'storage',			'uuid', 		'key auto'		);
 L3.School.addAttribute('name', 					'storage',			'string', 		'btree'			);
 L3.School.addAttribute('category', 				'storage',			'string', 		'cluster'		);
+L3.School.addAttribute('url',		 			'storage',			'string', 		'btree'			);
 L3.School.addAttribute('schoolLeader', 			'storage',			'string', 		'btree'			);
 L3.School.addAttribute('startingGrade', 		'storage',			'long', 		'cluster'		);
 L3.School.addAttribute('endingGrade', 			'storage',			'long', 		'cluster'		);

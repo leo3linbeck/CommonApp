@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var buttonRegistrationDialogClose = {};	// @button
 	var iconAdmin = {};	// @icon
 	var loginMain = {};	// @login
 	var iconLogin = {};	// @icon
@@ -72,7 +73,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	function saveCurrentPage(current) {
 		switch (current) {
 			case 'componentAddressEntry':
-				sources.family.query('ID === :1',{ params: [currentFamilyID], onSuccess: function(e) { console.log('loadCurrentFamily', currentFamilyID, e); } });
 				break;
 			case 'componentFamilyInfoEntry':
 				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
@@ -96,6 +96,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentSchoolMap':
 				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				if (WAF.directory.currentUser()) {
+					L3.step.push('componentFamilyInfoEntry');
+				}
+				else {
+					$$('dialogRegistration').displayDialog();
+				}
 				break;
 			case 'componentCreateApplications':
 				break;
@@ -146,11 +152,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				onSuccess: function(event) {
 					console.log('children.serverRefresh', event);
 					event.dataSource.getAttribute('lastName').setValue(sources.family.name);
-//					event.dataSource.getAttribute('homeStreet1').setValue(sources.family.mainStreet1);
-//					event.dataSource.getAttribute('homeStreet2').setValue(sources.family.mainStreet2);
-//					event.dataSource.getAttribute('homeCity').setValue(sources.family.mainCity);
-//					event.dataSource.getAttribute('homeState').setValue(sources.family.mainState);
-//					event.dataSource.getAttribute('homeZipCode').setValue(sources.family.mainZipCode);
 					sources.family.save({ onSuccess: function(event) {console.log('Save children',event);} });
 					$$(next).setChildrenCount(event.dataSource);
 					$$(next).setChildAge(event.dataSource.birthdate);
@@ -249,7 +250,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentSchoolMap':
 				transitionPages(current, next);
-				L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', sources.family.mainMapCoords, sources.family.mainUSPSLine1 + '\n' + sources.family.mainUSPSLine2);
+				sources.family.query('ID === :1',
+					{
+						onSuccess: function(event) {
+							var d = event.dataSource;
+							
+							console.log('loadCurrentFamily', currentFamilyID, event);
+							L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', d.searchDistance, d.mainMapCoords, d.mainUSPSLine1 + '\n' + d.mainUSPSLine2);
+						},
+						params: [currentFamilyID]
+					}
+				);
 				break;
 			case 'componentCreateApplications':
 				selectApplyingChildren(current, next);
@@ -283,6 +294,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 
 // eventHandlers// @lock
+
+	buttonRegistrationDialogClose.click = function buttonRegistrationDialogClose_click (event)// @startlock
+	{// @endlock
+		$$('dialogRegistration').closeDialog();
+	};// @lock
 
 	iconAdmin.click = function iconAdmin_click (event)// @startlock
 	{// @endlock
@@ -333,10 +349,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	{// @endlock
 		loginSetup();
 		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
-		sources.family.declareDependencies('father');
-		sources.family.declareDependencies('mother');
-		sources.family.declareDependencies('guardian');
-		sources.family.declareDependencies('children');
 		currentFamilyID = null;
 	};// @lock
 
@@ -387,6 +399,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("buttonRegistrationDialogClose", "click", buttonRegistrationDialogClose.click, "WAF");
 	WAF.addListener("iconAdmin", "click", iconAdmin.click, "WAF");
 	WAF.addListener("loginMain", "logout", loginMain.logout, "WAF");
 	WAF.addListener("loginMain", "login", loginMain.login, "WAF");
