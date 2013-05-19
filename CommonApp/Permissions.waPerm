@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?><permissions>
 <allow type="module" resource="Localization" action="executeFromClient"/>
 <allow type="module" resource="Salesforce" action="executeFromClient"/>
+<allow type="module" resource="Admin" action="executeFromClient"/>
 </permissions>
