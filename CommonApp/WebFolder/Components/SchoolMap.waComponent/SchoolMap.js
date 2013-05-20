@@ -20,7 +20,6 @@ function constructor (id) {
 	var dataGridSchools = {};	// @dataGrid
 	// @endregion// @endlock
 	
-	
 	function updateSchoolList(recalcDistance) {
 		var d =  parseInt($$(getHtmlId('richTextDistance')).getValue(), 10);
 		
@@ -29,7 +28,7 @@ function constructor (id) {
 		source.family.getNearbySchools(
 			{
 				familyID: sources.family.ID,
-				distance: sources.family.searchDistance,
+				distance: maxDistance,
 				recalc: (recalcDistance || sources.schoolOption.length === 0),
 				selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
 				name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
@@ -39,6 +38,7 @@ function constructor (id) {
 			{
 				onSuccess: function(event) {
 					console.log('family.getNearbySchools', event);
+					sources.family.serverRefresh();
 					if (event.result) {
 						sources.schoolOption.setEntityCollection(event.result);
 						event.result.toArray('schoolName, schoolMapCoords, selected',

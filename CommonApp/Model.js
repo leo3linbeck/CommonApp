@@ -178,7 +178,7 @@ L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 				'f
 L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 				'mother', 		{reversePath: true});
 L3.Person.addAttribute('guardianFamilies',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 		'applicant', 	{reversePath: true});
-L3.Person.addMethod('addressLookup', 			'entity',			L3.personAddressLookup, 	'public'	);
+L3.Person.addMethod('addressLookup', 			'dataClass',		L3.personAddressLookup, 	'public'	);
 L3.Person.addEventListener('onRestrictingQuery',
 	function personRestrictingQuery() {
 		var session = currentSession();

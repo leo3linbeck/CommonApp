@@ -70,46 +70,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
-	function saveCurrentPage(current) {
-		switch (current) {
-			case 'componentAddressEntry':
-				break;
-			case 'componentFamilyInfoEntry':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				L3.buildStepArray(sources.family);
-				contactListID = null;
-				break;
-			case 'componentMotherEntry':
-				sources.mother.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentFatherEntry':
-				sources.father.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentGuardianEntry':
-				sources.guardian.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentChildEntry':
-				sources.children.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentContactInfoEntry':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentSchoolMap':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				if (WAF.directory.currentUser()) {
-					L3.step.push('componentFamilyInfoEntry');
-				}
-				else {
-					$$('dialogRegistration').displayDialog();
-				}
-				break;
-			case 'componentCreateApplications':
-				break;
-			case 'componentReviewAndPrintForms':
-				break;
-		}
-	}
-	
 	function setupFamilyWidgets(next,dataSource) {
 		L3.addressValidation(next, 'Home', dataSource, next + '_richTextVerifyHomeAddressStatus', false, false);
 		L3.addressValidation(next, 'Work', dataSource, next + '_richTextVerifyWorkAddressStatus', false, false);
@@ -122,6 +82,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 	function createFamilyRelation(role, current, next) {
 		if (!sources[role].ID) {
+			sources.family.declareDependencies(role);
 			sources.tempPerson.addNewElement();
 			sources.tempPerson.serverRefresh(
 				{
@@ -213,11 +174,80 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		);
 	}
 	
+	function saveCurrentPage(current) {
+		switch (current) {
+			case 'componentSelectFamily':
+				break;
+			case 'componentAddressEntry':
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentFamilyInfoEntry':
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentMotherEntry':
+				sources.mother.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentFatherEntry':
+				sources.father.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentGuardianEntry':
+				sources.guardian.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentChildEntry':
+				sources.children.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentContactInfoEntry':
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentSchoolMap':
+				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				break;
+			case 'componentCreateApplications':
+				break;
+			case 'componentReviewAndPrintForms':
+				break;
+		}
+	}
+	
+	function prepareNextPage(current) {
+		switch (current) {
+			case 'componentAddressEntry':
+				maxDistance = sources.family.searchDistance;
+				sources.maxDistance.sync();
+				break;
+			case 'componentFamilyInfoEntry':
+				if (L3.step.length < 5) {
+					L3.buildStepArray(sources.family);
+				}
+				contactListID = null;
+				break;
+			case 'componentSchoolMap':
+				if (WAF.directory.currentUser()) {
+					if (L3.step.length < 3) {
+						if (WAF.directory.currentUserBelongsTo('Staff')) {
+							L3.step.push('componentSelectFamily');
+						}
+						L3.step.push('componentFamilyInfoEntry');
+						sources.family.all({ onSuccess: function(e) { console.log('saveCurrentPage family.all', current, e); } });
+					}
+				}
+				else {
+					$$('dialogRegistration').displayDialog();
+				}
+				break;
+		}
+		
+		return L3.step[L3.stack.length];
+	}
+	
 	function switchPages(current, next) {
 		console.log('switchPages(current, next)', current, next);
 		switch (next) {
+			case 'componentSelectFamily':
+				transitionPages(current, next);
+				break;
 			case 'componentAddressEntry':
-				L3.addressValidation(next, 'Main', sources.family, next + '_richTextVerifyMainAddressStatus', true, false);
+//				L3.addressValidation(next, 'Main', sources.family, next + '_richTextVerifyMainAddressStatus', true, false);
 				transitionPages(current, next);
 				break;
 			case 'componentFamilyInfoEntry':
@@ -359,13 +389,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
 	{// @endlock
-		var next;
-		var current = L3.step[L3.stack.length-1];
+		var current = L3.step[L3.stack.length-1], next;
 		
 		saveCurrentPage(current);
 		
-		if (L3.stack.length < L3.step.length) {
-			next = L3.step[L3.stack.length];
+		next = prepareNextPage(current);
+		if (next !== undefined) {
 			L3.stack.push(next);
 			switchPages(current, next);
 		}
