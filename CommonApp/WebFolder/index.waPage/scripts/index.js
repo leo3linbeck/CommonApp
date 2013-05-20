@@ -72,8 +72,18 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 	function setupFamilyWidgets(next,dataSource) {
 		console.log('setupFamilyWidgets', next, dataSource);
-		L3.addressValidation(dataSource.ID, next, 'Home', dataSource, next + '_richTextVerifyHomeAddressStatus', false);
-		L3.addressValidation(dataSource.ID, next, 'Work', dataSource, next + '_richTextVerifyWorkAddressStatus', false);
+		if (dataSource.homeUSPSDeliveryPoint) {
+			L3.verifiedAddress(next + '_richTextVerifyHomeAddressStatus');
+		}
+		else {
+			L3.unverifiedAddress(dataSource, 'home', next + '_richTextVerifyHomeAddressStatus', false)
+		}
+		if (dataSource.workUSPSDeliveryPoint) {
+			L3.verifiedAddress(next + '_richTextVerifyWorkAddressStatus');
+		}
+		else {
+			L3.unverifiedAddress(dataSource, 'work', next + '_richTextVerifyWorkAddressStatus', false)
+		}
 		$$(next + '_textFieldHomeStreet1Entry').setReadOnly(dataSource.homeAddressSameAsMain);
 		$$(next + '_textFieldHomeStreet2Entry').setReadOnly(dataSource.homeAddressSameAsMain);
 		$$(next + '_textFieldHomeCityEntry').setReadOnly(dataSource.homeAddressSameAsMain);
@@ -248,7 +258,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				transitionPages(current, next);
 				break;
 			case 'componentAddressEntry':
-//				L3.addressValidation(next, 'Main', sources.family, next + '_richTextVerifyMainAddressStatus', true, false);
 				transitionPages(current, next);
 				break;
 			case 'componentFamilyInfoEntry':

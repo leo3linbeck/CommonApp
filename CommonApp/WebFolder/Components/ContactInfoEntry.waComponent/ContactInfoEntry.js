@@ -21,6 +21,23 @@ function constructor (id) {
 	var textFieldHomePhone = {};	// @textField
 	// @endregion// @endlock
 	
+	function updateContactData(that, f) {
+		var s = false;
+		var t = sources.contactList.relationship + '_' + f;
+		var v = $$(that.id).getValue();
+		if (t === $$(getHtmlId('comboboxPrimaryContact')).getValue()) {
+			sources.family.getAttribute('primaryPhone').setValue(v);
+			s = true;
+		}
+		if (t === $$(getHtmlId('comboboxSecondaryContact')).getValue()) {
+			sources.family.getAttribute('secondaryPhone').setValue(v);
+			s = true;
+		}
+		if (s) {
+			sources.family.save({ onSuccess: function(e) { console.log('family contact updated', e); } });
+		}
+	}
+	
 	// eventHandlers// @lock
 
 	comboboxSecondaryContact.change = function comboboxSecondaryContact_change (event)// @startlock
@@ -79,6 +96,7 @@ function constructor (id) {
 
 	textFieldEmail.change = function textFieldEmail_change (event)// @startlock
 	{// @endlock
+		updateContactData(this, 'emailAddress');
 		sources.contactList.save(
 			{
 				onSuccess: function(event) {
@@ -91,6 +109,7 @@ function constructor (id) {
 	textFieldCellPhone.change = function textFieldCellPhone_change (event)// @startlock
 	{// @endlock
 		L3.formatPhoneAttribute(this);
+		updateContactData(this, 'cellPhone');
 		sources.contactList.save(
 			{
 				onSuccess: function(event) {
@@ -103,6 +122,7 @@ function constructor (id) {
 	textFieldWorkPhone.change = function textFieldWorkPhone_change (event)// @startlock
 	{// @endlock
 		L3.formatPhoneAttribute(this);
+		updateContactData(this, 'workPhone');
 		sources.contactList.save(
 			{
 				onSuccess: function(event) {
@@ -115,6 +135,7 @@ function constructor (id) {
 	textFieldHomePhone.change = function textFieldHomePhone_change (event)// @startlock
 	{// @endlock
 		L3.formatPhoneAttribute(this);
+		updateContactData(this, 'homePhone');
 		sources.contactList.save(
 			{
 				onSuccess: function(event) {
