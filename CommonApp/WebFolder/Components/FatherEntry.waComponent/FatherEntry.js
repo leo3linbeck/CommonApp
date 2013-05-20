@@ -35,22 +35,22 @@ function constructor (id) {
 
 	textFieldWorkStateEntry.change = function textFieldWorkStateEntry_change (event)// @startlock
 	{// @endlock
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldHomeStateEntry.change = function textFieldHomeStateEntry_change (event)// @startlock
 	{// @endlock
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldWorkZipCodeEntry.change = function textFieldWorkZipCodeEntry_change (event)// @startlock
 	{// @endlock
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldHomeZipCodeEntry.change = function textFieldHomeZipCodeEntry_change (event)// @startlock
 	{// @endlock
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldEmployer.change = function textFieldEmployer_change (event)// @startlock
@@ -71,37 +71,37 @@ function constructor (id) {
 	textFieldWorkCityEntry.change = function textFieldWorkCityEntry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldWorkStreet2Entry.change = function textFieldWorkStreet2Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldWorkStreet1Entry.change = function textFieldWorkStreet1Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldHomeStreet1Entry.change = function textFieldHomeStreet1Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldHomeCityEntry.change = function textFieldHomeCityEntry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldHomeStreet2Entry.change = function textFieldHomeStreet2Entry_change (event)// @startlock
 	{// @endlock
 		L3.convertAttributeToTitleCase(this);
-		L3.verifyAddress(this);
+		L3.verifyPersonAddress(this);
 	};// @lock
 
 	textFieldLastName.change = function textFieldLastName_change (event)// @startlock

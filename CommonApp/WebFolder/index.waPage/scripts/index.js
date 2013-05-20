@@ -71,8 +71,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 	
 	function setupFamilyWidgets(next,dataSource) {
-		L3.addressValidation(next, 'Home', dataSource, next + '_richTextVerifyHomeAddressStatus', false, false);
-		L3.addressValidation(next, 'Work', dataSource, next + '_richTextVerifyWorkAddressStatus', false, false);
+		console.log('setupFamilyWidgets', next, dataSource);
+		L3.addressValidation(dataSource.ID, next, 'Home', dataSource, next + '_richTextVerifyHomeAddressStatus', false);
+		L3.addressValidation(dataSource.ID, next, 'Work', dataSource, next + '_richTextVerifyWorkAddressStatus', false);
 		$$(next + '_textFieldHomeStreet1Entry').setReadOnly(dataSource.homeAddressSameAsMain);
 		$$(next + '_textFieldHomeStreet2Entry').setReadOnly(dataSource.homeAddressSameAsMain);
 		$$(next + '_textFieldHomeCityEntry').setReadOnly(dataSource.homeAddressSameAsMain);
