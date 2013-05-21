@@ -186,45 +186,81 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 	
 	function saveCurrentPage(current) {
+		console.log('saveCurrentPage', current);
+		var dataSource = null;
+		
 		switch (current) {
-			case 'componentSelectFamily':
-				break;
-			case 'componentAddressEntry':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
+			case 'componentSchoolMap':
 			case 'componentFamilyInfoEntry':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+			case 'componentContactInfoEntry':
+				dataSource = sources.family;
 				break;
 			case 'componentMotherEntry':
-				sources.mother.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				dataSource = sources.mother;
 				break;
 			case 'componentFatherEntry':
-				sources.father.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				dataSource = sources.father;
 				break;
 			case 'componentGuardianEntry':
-				sources.guardian.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				dataSource = sources.guardian;
 				break;
 			case 'componentChildEntry':
-				sources.children.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
+				dataSource = sources.children;
 				break;
-			case 'componentContactInfoEntry':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentSchoolMap':
-				sources.family.save({ onSuccess: function(e) { console.log('saveCurrentPage', current, e); } });
-				break;
-			case 'componentCreateApplications':
-				break;
-			case 'componentReviewAndPrintForms':
-				break;
+		}
+		
+		if (dataSource) {
+			dataSource.save(
+				{
+					onSuccess: function(event) {
+						console.log('saveCurrentPage', event); 
+					},
+					onError: function(error) {
+						console.log('ERROR: saveCurrentPage', error); 					
+					}
+				}
+			);
 		}
 	}
 	
-	function prepareNextPage(current) {
-		switch (current) {
-			case 'componentAddressEntry':
-				maxDistance = sources.family.searchDistance;
-				sources.maxDistance.sync();
+	function setupSchoolMap(current, next) {
+		console.log('setupSchoolMap', current, next);
+		if (currentFamilyID) {
+			sources.family.query('ID === :1',
+				{
+					onSuccess: function(event) {
+						var d = event.dataSource;
+						console.log('setupSchoolMap', event);
+						maxDistance = d.searchDistance;
+						sources.maxDistance.sync();
+						transitionPages(current, next);
+						L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', maxDistance, d.mainMapCoords, d.mainUSPSLine1 + '\n' + d.mainUSPSLine2);
+					},
+					onError: function(error) {
+						console.log('ERROR: setupSchoolMap', error);
+					},
+					params: [currentFamilyID]
+				}
+			);
+		}
+	}
+	
+	function switchPages(current, next) {
+		console.log('switchPages', current, next);
+		switch (next) {
+			case 'componentSchoolMap':
+				sources.family.conjureID(L3.getAddressParams(current),
+					{
+						onSuccess: function(event) {
+							console.log('switchPages', next, event);
+							currentFamilyID = event.result;
+							setupSchoolMap(current, next);
+						},
+						onError: function(error) {
+							console.log('ERROR: prepareNextPage', next, error);
+						}
+					}
+				);
 				break;
 			case 'componentFamilyInfoEntry':
 				if (L3.step.length < 5) {
@@ -232,48 +268,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				}
 				contactListID = null;
 				break;
-			case 'componentSchoolMap':
-				if (WAF.directory.currentUser()) {
-					if (L3.step.length < 3) {
-						if (WAF.directory.currentUserBelongsTo('Staff')) {
-							L3.step.push('componentSelectFamily');
-						}
-						L3.step.push('componentFamilyInfoEntry');
-						sources.family.all({ onSuccess: function(e) { console.log('saveCurrentPage family.all', current, e); } });
-					}
-				}
-				else {
-					$$('dialogRegistration').displayDialog();
-				}
-				break;
-		}
-		
-		return L3.step[L3.stack.length];
-	}
-	
-	function switchPages(current, next) {
-		console.log('switchPages(current, next)', current, next);
-		switch (next) {
-			case 'componentSelectFamily':
-				transitionPages(current, next);
-				break;
-			case 'componentAddressEntry':
-				transitionPages(current, next);
-				break;
-			case 'componentFamilyInfoEntry':
-				transitionPages(current, next);
-				break;
 			case 'componentMotherEntry':
 				createFamilyRelation('mother', current, next);
-				transitionPages(current, next);
 				break;
 			case 'componentFatherEntry':
 				createFamilyRelation('father', current, next);
-				transitionPages(current, next);
 				break;
 			case 'componentGuardianEntry':
 				createFamilyRelation('guardian', current, next);
-				transitionPages(current, next);
 				break;
 			case 'componentChildEntry':
 				if (sources.family.numberOfChildren === 0) {
@@ -284,32 +286,41 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					$$(next).setChildAge(sources.children.birthdate);
 					transitionPages(current, next);
 				}
+				go = false;
 				break;
 			case 'componentContactInfoEntry':
 				loadContactList(current, next);
-				break;
-			case 'componentSchoolMap':
-				transitionPages(current, next);
-				sources.family.query('ID === :1',
-					{
-						onSuccess: function(event) {
-							var d = event.dataSource;
-							
-							console.log('loadCurrentFamily', currentFamilyID, event);
-							L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', d.searchDistance, d.mainMapCoords, d.mainUSPSLine1 + '\n' + d.mainUSPSLine2);
-						},
-						params: [currentFamilyID]
-					}
-				);
+				go = false;
 				break;
 			case 'componentCreateApplications':
 				selectApplyingChildren(current, next);
-				transitionPages(current, next);
-				break;
-			case 'componentReviewAndPrintForms':
-				transitionPages(current, next);
 				break;
 		}
+	}
+	
+	function getNextPage(current) {
+		console.log('getNextPage', current);
+		if (current === 'componentSchoolMap') {
+			if (WAF.directory.currentUser()) {
+				if (L3.step.length < 3) {
+					if (WAF.directory.currentUserBelongsTo('Staff')) {
+						L3.step.push('componentSelectFamily');
+					}
+					L3.step.push('componentFamilyInfoEntry');
+					sources.family.all({ onSuccess: function(e) { console.log('saveCurrentPage family.all', current, e); } });
+				}
+			}
+			else {
+				$$('dialogRegistration').displayDialog();
+				return null;
+			}
+		}
+		
+		if ((current === 'componentFamilyInfoEntry') && (L3.step.length < 5)) {
+			L3.buildStepArray(sources.family);
+		}
+
+		return L3.step[L3.stack.length];
 	}
 	
 	function loginSetup() {
@@ -403,8 +414,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		
 		saveCurrentPage(current);
 		
-		next = prepareNextPage(current);
-		if (next !== undefined) {
+		next = getNextPage(current);
+		
+		if (next) {
 			L3.stack.push(next);
 			switchPages(current, next);
 		}
