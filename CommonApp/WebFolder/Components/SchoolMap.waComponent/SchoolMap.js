@@ -25,38 +25,37 @@ function constructor (id) {
 		
 		L3.clearGoogleMapMarkers();
 
-		source.family.getNearbySchools(
-			{
-				familyID: sources.family.ID,
-				distance: maxDistance,
-				recalc: (recalcDistance || sources.schoolOption.length === 0),
-				selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
-				name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
-				category: $$(getHtmlId('comboboxCategory')).getValue(),
-				debug: false 
-			},
+		Addresses.getNearbySchoolsAsync(
 			{
 				onSuccess: function(event) {
 					console.log('family.getNearbySchools', event);
-					sources.family.serverRefresh();
-					if (event.result) {
-						sources.schoolOption.setEntityCollection(event.result);
-						event.result.toArray('schoolName, schoolMapCoords, selected',
+					if (event) {
+						L3.googleMapLoadMarkers(event.result);
+						sources.schoolOption.query(event.queryString,
 							{
-								onSuccess: function(evt) {
-									console.log('family.getNearbySchools getMarkerData', evt);
-									L3.googleMapLoadMarkers(evt.result);
+								onSuccess: function (evt) {
+									console.log('schoolOption.query', evt);
 								},
 								onError: function(err) {
-									console.log('ERROR: family.getNearbySchools getMarkerData', err);
-								}
+									console.log('ERROR: schoolOption.query', err);
+								},
+								orderBy: 'distance'
 							}
 						);
 					}
 				},
 				onError: function(error) {
 					console.log('ERROR: family.getNearbySchools', error);
-				}
+				},
+				params: [{
+					familyID: currentFamilyID,
+					distance: maxDistance,
+					recalc: (recalcDistance || sources.schoolOption.length === 0),
+					selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
+					name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
+					category: $$(getHtmlId('comboboxCategory')).getValue(),
+					debug: false 
+				}]
 			}
 		);
 	}
@@ -66,9 +65,10 @@ function constructor (id) {
 	sliderDistance.slidechange = function sliderDistance_slidechange (event)// @startlock
 	{// @endlock
 		updateSchoolList(true);
-
 		if (L3.googleMap) {
-			L3.googleMap.setZoom(L3.googleMapCalculateZoom(sources.family.searchDistance));
+			sources.family.searchDistance = maxDistance;
+			sources.family.save({onSuccess: function(e) { console.log('sources.family.save slider', e) } });
+			L3.googleMap.setZoom(L3.googleMapCalculateZoom(maxDistance));
 		}
 	};// @lock
 
@@ -82,20 +82,14 @@ function constructor (id) {
 		updateSchoolList(false);
 	};// @lock
 	
-	function getInfoWindowText(d) {
-		return ('<h4>' + d.schoolName + '</h4><span>' +
-				'<br/>Starting Grade: ' + L3.gradeMap[d.schoolStart] + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +
-				'Ending Grade: ' + L3.gradeMap[d.schoolEnd] + 
-				'<br/>Enrollment: ' + d.schoolEnroll +  '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +
-				'Rating: ' + d.schoolRating + ' (out of 100)' +
-				'<br/>Attendance: ' + d.schoolAttend +  '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' +
-				'Graduation: ' + d.schoolGraduate + '</span>'
-			);
-	}
-
 	checkboxShowSelected.change = function checkboxShowSelected_change (event)// @startlock
 	{// @endlock
 		updateSchoolList(false);
+	};// @lock
+
+	dataGridSchools.onRowClick = function dataGridSchools_onRowClick (event)// @startlock
+	{// @endlock
+		google.maps.event.trigger(L3.markerMap[sources.schoolOption.ID], 'click');
 	};// @lock
 
 	dataGridSchools.onRowDblClick = function dataGridSchools_onRowDblClick (event)// @startlock
@@ -107,10 +101,11 @@ function constructor (id) {
 		v = a.getValue() ? false : true;
 		a.setValue(v);
 		sources.schoolOption.save({ onSuccess: function() {} });
-		L3.googleMapAddMarker(sources.schoolOption.schoolMapCoords, (v ? 'green' : 'blue'), sources.schoolOption.schoolName, getInfoWindowText(sources.schoolOption));
+
 	};// @lock
 
 	// @region eventManager// @startlock
+	WAF.addListener(this.id + "_dataGridSchools", "onRowClick", dataGridSchools.onRowClick, "WAF");
 	WAF.addListener(this.id + "_sliderDistance", "slidechange", sliderDistance.slidechange, "WAF");
 	WAF.addListener(this.id + "_textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
 	WAF.addListener(this.id + "_comboboxCategory", "change", comboboxCategory.change, "WAF");

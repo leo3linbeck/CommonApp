@@ -42,8 +42,8 @@ L3.Family.addAttribute('guardian', 				'relatedEntity', 	'Person', 		'Person'		)
 L3.Family.addAttribute('children', 				'relatedEntities',	'People',		'childOf',		{reversePath: true});
 L3.Family.addAttribute('schoolOptions', 		'relatedEntities',	'SchoolOptions','family', 		{reversePath: true});
 L3.Family.addMethod('conjureID',	 			'dataClass',		L3.familyConjureID, 		'public'	);
-L3.Family.addMethod('addressLookup', 			'dataClass',		L3.familyAddressLookup, 	'public'	);
-L3.Family.addMethod('getNearbySchools', 		'dataClass', 		L3.familyGetNearbySchools, 	'public'	);
+//L3.Family.addMethod('addressLookup', 			'dataClass',		L3.familyAddressLookup, 	'public'	);
+//L3.Family.addMethod('getNearbySchools', 		'dataClass', 		L3.familyGetNearbySchools, 	'public'	);
 L3.Family.addMethod('getPhoneByType', 			'entity', 			L3.familyGetPhoneType,	 	'public'	);
 L3.Family.addEventListener('onRestrictingQuery',
 	function familyRestrictingQuery() {
