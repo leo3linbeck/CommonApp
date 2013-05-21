@@ -2,4 +2,5 @@
 <allow type="module" resource="Localization" action="executeFromClient"/>
 <allow type="module" resource="Salesforce" action="executeFromClient"/>
 <allow type="module" resource="Admin" action="executeFromClient"/>
+<allow type="module" resource="Addresses" action="executeFromClient"/>
 </permissions>
