@@ -36,6 +36,27 @@ function constructor (id) {
 	this.setChildAge = function setChildAge(v) {
 		$$(getHtmlId('textFieldAge')).setValue(L3.calcAgeOnSept1(v));
 	}
+	
+	this.addNewChild = function addNewChild(current, next) {
+		console.log('Enter addNewChild', current, next);
+		sources.children.addNewElement();
+		sources.children.serverRefresh(
+			{
+				onSuccess: function(event) {
+					console.log('children.serverRefresh', event);
+					event.dataSource.getAttribute('lastName').setValue(sources.family.name);
+					sources.family.save({ onSuccess: function(event) {console.log('Save children',event);} });
+					$$(next).setChildrenCount(event.dataSource);
+					$$(next).setChildAge(event.dataSource.birthdate);
+					L3.transitionPages(current, next);
+					contactListID = null;
+				},
+				onError: function(error) {
+					console.log('ERROR: children.serverRefresh', error);
+				}
+			}
+		);
+	}
 
 	this.load = function (data) {// @lock
 
@@ -50,6 +71,17 @@ function constructor (id) {
 	var textFieldMiddleName = {};	// @textField
 	var textFieldFirstName = {};	// @textField
 	// @endregion// @endlock
+
+	sources.school.all(
+		{
+			onSuccess: function(event) {
+				console.log('Loading all schools', event);
+			},
+			onError: function(error) {
+				console.log('ERROR: Loading all schools', error);
+			}
+		}
+	);
 
 	// eventHandlers// @lock
 

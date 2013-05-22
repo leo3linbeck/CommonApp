@@ -14,86 +14,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	var buttonStart = {};	// @button
 // @endregion// @endlock
 
-	function transitionPages(hideThis, showThis, dir) {
-		var effect = 'slide', easing = 'easeOutQuad', speed = 500;
-		dir = dir || 'forward';
-
-		if (hideThis) {
-			$('#' + hideThis).hide({
-				effect: effect,
-				direction: (dir === 'forward' ? 'left' : 'right'),
-				easing: easing,
-				duration: speed
-			});
-		}
-		if (showThis) {
-			$('#' + showThis).show({
-				effect: effect,
-				direction: (dir === 'forward' ? 'right' : 'left'),
-				easing: easing,
-				duration: speed
-			});
-			$('#' + showThis + '_' + L3.focusField[showThis]).select();
-		}
-	}
-	
-	function transitionButtons(mode) {
-		var effect = 'slide', easing = 'easeOutQuad', speed = 500;
-
-		if (mode === 'start') {
-			$('#buttonStart').hide({
-				effect: effect,
-				direction: 'down',
-				easing: easing,
-				duration: speed
-			});
-			$('#containerButtons').show({
-				effect: effect,
-				direction: 'up',
-				easing: easing,
-				duration: speed
-			});
-		}
-		else {
-			$('#containerButtons').hide({
-				effect: effect,
-				direction: 'up',
-				easing: easing,
-				duration: speed
-			});
-			$('#buttonStart').show({
-				effect: effect,
-				direction: 'down',
-				easing: easing,
-				duration: speed
-			});
-		}
-	}
-	
-	function setupFamilyWidgets(next,dataSource) {
-		console.log('setupFamilyWidgets', next, dataSource);
-		if (dataSource.homeUSPSDeliveryPoint) {
-			L3.verifiedAddress(next + '_richTextVerifyHomeAddressStatus');
-		}
-		else {
-			L3.unverifiedAddress(dataSource, 'home', next + '_richTextVerifyHomeAddressStatus', false)
-		}
-		if (dataSource.workUSPSDeliveryPoint) {
-			L3.verifiedAddress(next + '_richTextVerifyWorkAddressStatus');
-		}
-		else {
-			L3.unverifiedAddress(dataSource, 'work', next + '_richTextVerifyWorkAddressStatus', false)
-		}
-		$$(next + '_textFieldHomeStreet1Entry').setReadOnly(dataSource.homeAddressSameAsMain);
-		$$(next + '_textFieldHomeStreet2Entry').setReadOnly(dataSource.homeAddressSameAsMain);
-		$$(next + '_textFieldHomeCityEntry').setReadOnly(dataSource.homeAddressSameAsMain);
-		$$(next + '_textFieldHomeStateEntry').setReadOnly(dataSource.homeAddressSameAsMain);
-		$$(next + '_textFieldHomeZipCodeEntry').setReadOnly(dataSource.homeAddressSameAsMain);
-	}
-	
 	function createFamilyRelation(role, current, next) {
+		console.log('Enter createFamilyRelation', current, next);
 		if (!sources[role].ID) {
-			sources.family.declareDependencies(role);
 			sources.tempPerson.addNewElement();
 			sources.tempPerson.serverRefresh(
 				{
@@ -102,9 +25,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						event.dataSource.getAttribute('lastName').setValue(sources.family.name);
 						event.dataSource.getAttribute('relationship').setValue(role);
 						sources.family[role].set(event.dataSource);
-//						sources.family.save({ onSuccess: function(evt) {console.log('Save family.' + role, evt);} });
-						contactListID = null;
-						setupFamilyWidgets(next, event.dataSource);
+						L3.setupFamilyWidgets(next, event.dataSource);
+						L3.transitionPages(current, next);
 					},
 					onError: function(error) {
 						console.log('ERROR: tempPerson.serverRefresh', error);
@@ -113,80 +35,13 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			);
 		}
 		else {
-			setupFamilyWidgets(next, sources[role]);
+			L3.setupFamilyWidgets(next, sources[role]);
+			L3.transitionPages(current, next);
 		}
 	}
-	
-	function addNewChild(current, next) {
-		sources.children.addNewElement();
-		sources.children.serverRefresh(
-			{
-				onSuccess: function(event) {
-					console.log('children.serverRefresh', event);
-					event.dataSource.getAttribute('lastName').setValue(sources.family.name);
-					sources.family.save({ onSuccess: function(event) {console.log('Save children',event);} });
-					$$(next).setChildrenCount(event.dataSource);
-					$$(next).setChildAge(event.dataSource.birthdate);
-					transitionPages(current, next);
-					contactListID = null;
-				},
-				onError: function(error) {
-					console.log('ERROR: children.serverRefresh', error);
-				}
-			}
-		);
-	}
-	
-	function loadContactList(current, next) {
-		$$(next+'_comboboxPrimaryContact').setValue(sources.family.primaryPhoneType);
-		$$(next+'_comboboxSecondaryContact').setValue(sources.family.secondaryPhoneType);
-		if (sources.family.ID !== contactListID) {
-			sources.contactList.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianFamilies.ID === :1',
-				{
-					onSuccess: function(event) {
-						console.log('load contactList', event);
-						transitionPages(current, next);
-						contactListID = sources.family.ID;
-					},
-					onError: function(error) {
-						console.log('ERROR: load contactList', error);
-					},
-					orderBy: 'birthdate',
-					params: [sources.family.ID]
-				}
-			);
-		}
-		else {
-			transitionPages(current, next);
-		}
-	}
-	
-	function selectApplyingChildren(current, next) {
-		$$(next).sources.applyingChildren.query('childOf.ID === :1 AND isApplying === true',
-			{
-				onSuccess: function(event) {
-					console.log('load applyingChildren', event);
-					L3.loadSchoolOptions();
-					sources.schoolApplication.query('applicant.childOf.ID === :1',
-						{
-							onSuccess: function(evt) {
-								console.log('load schoolApplication', evt);
-							},
-							params: [sources.family.ID]
-						}
-					);
-				},
-				onError: function(error) {
-					console.log('ERROR: load applyingChildren', error);
-				},
-				orderBy: 'birthdate',
-				params: [sources.family.ID]
-			}
-		);
-	}
-	
+			
 	function saveCurrentPage(current) {
-		console.log('saveCurrentPage', current);
+		console.log('Enter saveCurrentPage', current);
 		var dataSource = null;
 		
 		switch (current) {
@@ -223,50 +78,34 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
-	function setupSchoolMap(current, next) {
-		console.log('setupSchoolMap', current, next);
-		if (currentFamilyID) {
-			sources.family.query('ID === :1',
-				{
-					onSuccess: function(event) {
-						var d = event.dataSource;
-						console.log('setupSchoolMap', event);
-						maxDistance = d.searchDistance;
-						sources.maxDistance.sync();
-						transitionPages(current, next);
-						L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', maxDistance, d.mainMapCoords, d.mainUSPSLine1 + '\n' + d.mainUSPSLine2);
-					},
-					onError: function(error) {
-						console.log('ERROR: setupSchoolMap', error);
-					},
-					params: [currentFamilyID]
+	function loadFamilyAndSetupSchoolMap(current, next) {
+		sources.family.conjureID(L3.getMainAddressParams(current),
+			{
+				onSuccess: function(event) {
+					console.log('switchPages', next, event);
+					currentFamilyID = event.result;
+					contactListID = null;
+					L3.markers = [];
+					$$(next).setupSchoolMap(current, next);
+				},
+				onError: function(error) {
+					console.log('ERROR: switchPages', next, error);
 				}
-			);
-		}
+			}
+		);
 	}
 	
 	function switchPages(current, next) {
-		console.log('switchPages', current, next);
+		console.log('Enter switchPages', current, next);
 		switch (next) {
 			case 'componentSchoolMap':
-				sources.family.conjureID(L3.getAddressParams(current),
-					{
-						onSuccess: function(event) {
-							console.log('switchPages', next, event);
-							currentFamilyID = event.result;
-							setupSchoolMap(current, next);
-						},
-						onError: function(error) {
-							console.log('ERROR: prepareNextPage', next, error);
-						}
-					}
-				);
+				loadFamilyAndSetupSchoolMap(current, next);
+				break;
+			case 'componentSelectFamily':
+				L3.transitionPages(current, next);
 				break;
 			case 'componentFamilyInfoEntry':
-				if (L3.step.length < 5) {
-					L3.buildStepArray(sources.family);
-				}
-				contactListID = null;
+				L3.transitionPages(current, next);
 				break;
 			case 'componentMotherEntry':
 				createFamilyRelation('mother', current, next);
@@ -279,27 +118,32 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				break;
 			case 'componentChildEntry':
 				if (sources.family.numberOfChildren === 0) {
-					addNewChild(current, next);
+					L3.addNewChild(current, next);
 				}
 				else {
 					$$(next).setChildrenCount(sources.children);
 					$$(next).setChildAge(sources.children.birthdate);
-					transitionPages(current, next);
+					L3.transitionPages(current, next);
 				}
 				go = false;
 				break;
 			case 'componentContactInfoEntry':
-				loadContactList(current, next);
+				$$(next).loadContactList(current, next);
 				go = false;
 				break;
 			case 'componentCreateApplications':
-				selectApplyingChildren(current, next);
+				$$(next).selectApplyingChildren(current, next);
+				break;
+			case 'componentReviewAndPrintForms':
+				L3.transitionPages(current, next);
 				break;
 		}
 	}
 	
 	function getNextPage(current) {
-		console.log('getNextPage', current);
+		var next = null;
+		
+		console.log('Enter getNextPage', current);
 		if (current === 'componentSchoolMap') {
 			if (WAF.directory.currentUser()) {
 				if (L3.step.length < 3) {
@@ -307,20 +151,21 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 						L3.step.push('componentSelectFamily');
 					}
 					L3.step.push('componentFamilyInfoEntry');
-					sources.family.all({ onSuccess: function(e) { console.log('saveCurrentPage family.all', current, e); } });
 				}
+				next = L3.step[2];
 			}
 			else {
 				$$('dialogRegistration').displayDialog();
-				return null;
 			}
 		}
-		
-		if ((current === 'componentFamilyInfoEntry') && (L3.step.length < 5)) {
-			L3.buildStepArray(sources.family);
+		else {
+			if ((current === 'componentFamilyInfoEntry') && (L3.step.length < 5)) {
+				L3.buildStepArray($$(current + '_comboboxApplicant').getValue());
+			}
+			next = L3.step[L3.stack.length]
 		}
 
-		return L3.step[L3.stack.length];
+		return next;
 	}
 	
 	function loginSetup() {
@@ -338,11 +183,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			$$('iconAdmin').hide();
 			$$('richTextAdminTitle').hide();
 		}
+		if (L3.stack.length) {
+			location.reload();
+		}
 	}
 	
-	function loadCurrentUserData() {
-		
-	}
 
 // eventHandlers// @lock
 
@@ -391,8 +236,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		var old = L3.stack.pop();
 		
 		saveCurrentPage(old);
-		transitionPages(old, null, 'backward');
-		transitionButtons('return');
+		L3.transitionPages(old, null, 'backward');
+		L3.transitionButtons('return');
 		L3.stack.length = 0;
 	};// @lock
 
@@ -400,6 +245,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	{// @endlock
 		loginSetup();
 		L3.localization.changeLanguage($$('comboboxLanguage').getValue());
+		sources.family.declareDependencies('father');
+		sources.family.declareDependencies('mother');
+		sources.family.declareDependencies('guardian');
 		currentFamilyID = null;
 	};// @lock
 
@@ -429,22 +277,21 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		saveCurrentPage(old);
 		
 		if (L3.stack.length === 0) {
-			transitionPages(old, null, 'backward');
-			transitionButtons('return');
+			L3.transitionPages(old, null, 'backward');
+			L3.transitionButtons('return');
 		}
 		else {
-			transitionPages(old, L3.stack[L3.stack.length-1], 'backward');
+			L3.transitionPages(old, L3.stack[L3.stack.length-1], 'backward');
 			$$('buttonNextStep').enable();
 		}
 	};// @lock
 
 	buttonStart.click = function buttonStart_click (event)// @startlock
 	{// @endlock
-		loadCurrentUserData();
 		var next = L3.step[0];
 		L3.stack.push(next);
-		transitionButtons('start');
-		transitionPages(null, next);
+		L3.transitionButtons('start');
+		L3.transitionPages(null, next);
 		$$('buttonNextStep').disable();
 
 	};// @lock

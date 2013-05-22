@@ -42,8 +42,6 @@ L3.Family.addAttribute('guardian', 				'relatedEntity', 	'Person', 		'Person'		)
 L3.Family.addAttribute('children', 				'relatedEntities',	'People',		'childOf',		{reversePath: true});
 L3.Family.addAttribute('schoolOptions', 		'relatedEntities',	'SchoolOptions','family', 		{reversePath: true});
 L3.Family.addMethod('conjureID',	 			'dataClass',		L3.familyConjureID, 		'public'	);
-//L3.Family.addMethod('addressLookup', 			'dataClass',		L3.familyAddressLookup, 	'public'	);
-//L3.Family.addMethod('getNearbySchools', 		'dataClass', 		L3.familyGetNearbySchools, 	'public'	);
 L3.Family.addMethod('getPhoneByType', 			'entity', 			L3.familyGetPhoneType,	 	'public'	);
 L3.Family.addEventListener('onRestrictingQuery',
 	function familyRestrictingQuery() {
@@ -179,7 +177,6 @@ L3.Person.addAttribute('fatherFamilies',		'relatedEntities', 	'Families', 				'f
 L3.Person.addAttribute('motherFamilies',		'relatedEntities', 	'Families', 				'mother', 		{reversePath: true});
 L3.Person.addAttribute('guardianFamilies',		'relatedEntities', 	'Families', 				'guardian', 	{reversePath: true});
 L3.Person.addAttribute('submittedApplications',	'relatedEntities', 	'SchoolApplications', 		'applicant', 	{reversePath: true});
-L3.Person.addMethod('addressLookup', 			'dataClass',		L3.personAddressLookup, 	'public'	);
 L3.Person.addEventListener('onRestrictingQuery',
 	function personRestrictingQuery() {
 		var session = currentSession();
@@ -207,7 +204,7 @@ L3.SchoolApplication.addAttribute('schoolName', 			'alias', 			'string', 		'subm
 L3.SchoolApplication.addAttribute('schoolCategory',			'alias', 			'string', 		'submittedTo.category'	);
 L3.SchoolApplication.addAttribute('submittedTo',			'relatedEntity', 	'School', 		'School'		);
 L3.SchoolApplication.addAttribute('applicant',				'relatedEntity', 	'Person', 		'Person'		);
-L3.SchoolApplication.addMethod('generateApplication',		'entity',			L3.schoolApplicationGenerate,	 	'public'	);
+L3.SchoolApplication.addMethod('applicationDoesNotExist',	'dataClass',		L3.applicationDoesNotExist,		 	'public'	);
 L3.SchoolApplication.addEventListener('onRestrictingQuery',
 	function schoolApplicationRestrictingQuery() {
 		var session = currentSession();

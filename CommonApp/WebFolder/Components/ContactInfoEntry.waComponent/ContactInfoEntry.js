@@ -10,6 +10,31 @@ function constructor (id) {
 	this.name = 'ContactInfoEntry';
 	// @endregion// @endlock
 	
+	this.loadContactList = function loadContactList(current, next) {
+		console.log('Enter loadContactList', current, next);
+		$$(next+'_comboboxPrimaryContact').setValue(sources.family.primaryPhoneType);
+		$$(next+'_comboboxSecondaryContact').setValue(sources.family.secondaryPhoneType);
+		if (sources.family.ID !== contactListID) {
+			sources.contactList.query('childOf.ID === :1 OR fatherFamilies.ID === :1 OR motherFamilies.ID === :1 OR guardianFamilies.ID === :1',
+				{
+					onSuccess: function(event) {
+						console.log('load contactList', event);
+						L3.transitionPages(current, next);
+						contactListID = sources.family.ID;
+					},
+					onError: function(error) {
+						console.log('ERROR: load contactList', error);
+					},
+					orderBy: 'birthdate',
+					params: [sources.family.ID]
+				}
+			);
+		}
+		else {
+			L3.transitionPages(current, next);
+		}
+	}
+
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock

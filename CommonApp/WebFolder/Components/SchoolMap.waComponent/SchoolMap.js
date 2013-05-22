@@ -10,6 +10,28 @@ function constructor (id) {
 	this.name = 'SchoolMap';
 	// @endregion// @endlock
 	
+	this.setupSchoolMap = function setupSchoolMap(current, next) {
+		console.log('setupSchoolMap', current, next);
+		if (currentFamilyID) {
+			sources.family.query('ID === :1',
+				{
+					onSuccess: function(event) {
+						var d = event.dataSource;
+						console.log('setupSchoolMap', event);
+						maxDistance = d.searchDistance;
+						sources.maxDistance.sync();
+						L3.transitionPages(current, next);
+						L3.loadGoogleMap('componentSchoolMap_containerGoogleMap', maxDistance, d.mainMapCoords, d.mainUSPSLine1 + '\n' + d.mainUSPSLine2);
+					},
+					onError: function(error) {
+						console.log('ERROR: setupSchoolMap', error);
+					},
+					params: [currentFamilyID]
+				}
+			);
+		}
+	}
+	
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock

@@ -1,1 +1,1 @@
-﻿//include('Javascript/d3.js')L3.schoolApplicationGenerate = function schoolApplicationGenerate() {	}
+﻿L3.applicationDoesNotExist = function applicationDoesNotExist(childID, schoolID) {	var a = ds.SchoolApplication.find('applicant.ID === :1 AND submittedTo.ID === :2', childID, schoolID);		return (a === null);}

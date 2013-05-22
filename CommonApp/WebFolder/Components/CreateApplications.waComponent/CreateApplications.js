@@ -10,6 +10,35 @@ function constructor (id) {
 	this.name = 'CreateApplications';
 	// @endregion// @endlock
 
+	this.selectApplyingChildren = function selectApplyingChildren(current, next) {
+		console.log('Enter selectApplyingChildren', current, next);
+		$comp.sources.applyingChildren.query('childOf.ID === :1 AND isApplying === true',
+			{
+				onSuccess: function(event) {
+					console.log('load applyingChildren', event);
+					L3.loadSchoolOptions();
+					sources.schoolApplication.query('applicant.childOf.ID === :1',
+						{
+							onSuccess: function(evt) {
+								console.log('load schoolApplication', evt);
+								L3.transitionPages(current, next);
+							},
+							onError: function(err) {
+								console.log('ERROR: load applyingChildren', err);
+							},
+							params: [sources.family.ID]
+						}
+					);
+				},
+				onError: function(error) {
+					console.log('ERROR: load applyingChildren', error);
+				},
+				orderBy: 'birthdate',
+				params: [sources.family.ID]
+			}
+		);
+	}
+	
 	this.load = function (data) {// @lock
 
 	// @region namespaceDeclaration// @startlock
@@ -19,6 +48,7 @@ function constructor (id) {
 
 	$comp.sourcesVar.forSchoolYear = 2013;
 	$comp.sources.forSchoolYear.sync();
+
 
 	// eventHandlers// @lock
 
@@ -31,8 +61,8 @@ function constructor (id) {
 	{// @endlock
 		var a = sources.schoolApplication;
 		var c = $comp.sources.schoolChoice;
-		var sel = $$(getHtmlId('dataGridSelectSchool')).getSelectedRows();
-		sel.forEach(
+
+		$$(getHtmlId('dataGridSelectSchool')).getSelectedRows().forEach(
 			function(e) {
 				c.select(e,
 					{

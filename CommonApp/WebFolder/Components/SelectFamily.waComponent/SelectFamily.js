@@ -23,31 +23,35 @@ function constructor (id) {
 	var textFieldFamilyName = {};	// @textField
 	// @endregion// @endlock
 	
-	sources.family.all(
-		{
-			onSuccess: function(event) {
-				console.log('family.all', event);
-			},
-			onError: function(error) {
-				console.log('ERROR: family.all', error);
-			},
-			orderBy: 'name'
-		}
-	)
-	
 	function searchFamilyName() {
-		sources.family.query('name == :1',
-			{
-				onSuccess: function(event) {
-					console.log('textFieldFamilyName.keyup', event);
-				},
-				onError: function(error) {
-					console.log('ERROR: textFieldFamilyName.keyup', error);
-				},
-				orderBy: 'name',
-				params: [ $$(getHtmlId('textFieldFamilyName')).getValue() + WAF.wildchar ]
-			}
-		);
+		var name = $$(getHtmlId('textFieldFamilyName')).getValue();
+		if (name) {
+			sources.family.query('name == :1',
+				{
+					onSuccess: function(event) {
+						console.log('searchFamilyName query', event);
+					},
+					onError: function(error) {
+						console.log('ERROR: searchFamilyName query', error);
+					},
+					orderBy: 'name',
+					params: [ name + WAF.wildchar ]
+				}
+			);
+		}
+		else {
+			sources.family.all(
+				{
+					onSuccess: function(event) {
+						console.log('searchFamilyName all', event);
+					},
+					onError: function(error) {
+						console.log('ERROR: searchFamilyName all', error);
+					},
+					orderBy: 'name'
+				}
+			);
+		}
 	}
 	
 	// eventHandlers// @lock
