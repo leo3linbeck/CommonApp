@@ -23,3 +23,5 @@ bkpts.json
 # Wakanda backup
 *.waBackup
 
+
+/CommonApp/Javascript/server.url.js
