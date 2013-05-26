@@ -44,7 +44,7 @@ var jsPDF = (function () {
 // this will run on <=IE9, possibly some niche browsers
 // new webkit-based, FireFox, IE10 already have native version of this.
     if (typeof btoa === 'undefined') {
-        window.btoa = function (data) {
+        application.btoa = function (data) {
         // DO NOT ADD UTF8 ENCODING CODE HERE!!!!
 
         // UTF8 encoding encodes bytes over char code 128
@@ -138,7 +138,7 @@ var jsPDF = (function () {
     }
 
     if (typeof atob === 'undefined') {
-        window.atob = function (data) {
+        application.atob = function (data) {
         // http://kevin.vanzonneveld.net
         // +   original by: Tyler Akins (http://rumkin.com)
         // +   improved by: Thunder.m
@@ -153,7 +153,7 @@ var jsPDF = (function () {
         // *     returns 1: 'Kevin van Zonneveld'
         // mozilla has this native
         // - but breaks in 2.0.0.12!
-        //if (typeof this.window['atob'] == 'function') {
+        //if (typeof this.application['atob'] == 'function') {
         //    return atob(data);
         //}
             var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
