@@ -23,3 +23,5 @@ bkpts.json
 # Wakanda backup
 *.waBackup
 /CommonApp/WebFolder/savedReports/
+
+/CommonApp/Javascript/server.url.js
