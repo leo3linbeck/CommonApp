@@ -64,6 +64,9 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 			L3.stack.push(next);
 			switchPages(current, next);
 		}
+		else {
+			L3.generateReport();
+		}
 		if (L3.stack.length === L3.step.length) {
 			this.setValue('Report');
 		}
