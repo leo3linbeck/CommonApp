@@ -22,8 +22,4 @@ studio_log*
 bkpts.json
 # Wakanda backup
 *.waBackup
-
-
-/CommonApp/Javascript/server.url.js
-
 /CommonApp/WebFolder/savedReports/
