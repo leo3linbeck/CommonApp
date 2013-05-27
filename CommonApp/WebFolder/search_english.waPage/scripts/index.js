@@ -17,6 +17,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					contactListID = null;
 					L3.markers = [];
 					$$(next).setupSearchMap(current, next);
+					$$('buttonNextStep').setValue('PDF Report');
 				},
 				onError: function(error) {
 					console.log('ERROR: switchPages', next, error);
@@ -50,7 +51,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		L3.stack.push(next);
 		L3.transitionButtons('startSearch');
 		L3.transitionPages(null, next);
-		$$('buttonNextStep').disable();
+		if ($$('componentAddressEntry_richTextUSPSLine1').getValue()) {
+			$$('buttonNextStep').enable();
+		}
+		else {
+			$$('buttonNextStep').disable();
+		}
 
 	};// @lock
 
@@ -67,10 +73,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		else {
 			L3.generateReport();
 		}
-		if (L3.stack.length === L3.step.length) {
-			this.setValue('Report');
-		}
-		else {
+		if (L3.stack.length !== L3.step.length) {
 			this.setValue('Next Step');
 		}
 	};// @lock

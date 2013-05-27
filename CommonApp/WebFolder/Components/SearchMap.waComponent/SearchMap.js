@@ -20,12 +20,12 @@ function constructor (id) {
 						console.log('setupSearchMap', event);
 						$comp.sourcesVar.maxDistance = d.searchDistance;
 						$comp.sources.maxDistance.sync();
-						L3.transitionPages(current, next);
 						L3.loadGoogleMap(next + '_containerGoogleMap',
 							$comp.sourcesVar.maxDistance,
 							d.mainMapCoords, d.mainUSPSLine1 + '\n' + d.mainUSPSLine2,
 							$comp.sources.schoolOption
 						);
+						L3.transitionPages(current, next);
 					},
 					onError: function(error) {
 						console.log('ERROR: setupSearchMap', error);
