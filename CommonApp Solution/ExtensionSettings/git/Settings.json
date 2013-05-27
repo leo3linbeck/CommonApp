@@ -1,6 +1,6 @@
 ﻿{
-	"gitIsPrivateRepository":"false",
-	"gitURL":"https://github.com/leo3linbeck",
+	"serverType":"github",
 	"gitEmail":"leo3@linbeck.com",
-	"serverType":"github"
+	"gitIsPrivateRepository":"false",
+	"gitURL":"https://github.com/leo3linbeck"
 }
