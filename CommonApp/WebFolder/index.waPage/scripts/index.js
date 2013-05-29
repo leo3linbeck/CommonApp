@@ -85,7 +85,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 					console.log('switchPages', next, event);
 					currentFamilyID = event.result;
 					contactListID = null;
-					L3.markers = [];
 					$$(next).setupSchoolMap(current, next);
 				},
 				onError: function(error) {

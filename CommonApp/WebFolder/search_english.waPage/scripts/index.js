@@ -14,8 +14,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				onSuccess: function(event) {
 					console.log('switchPages', next, event);
 					currentFamilyID = event.result;
-					contactListID = null;
-					L3.markers = [];
 					$$(next).setupSearchMap(current, next);
 					$$('buttonNextStep').setValue('PDF Report');
 				},

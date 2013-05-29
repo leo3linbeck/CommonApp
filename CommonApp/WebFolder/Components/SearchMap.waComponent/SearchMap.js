@@ -50,8 +50,6 @@ function constructor (id) {
 	function updateSchoolList(recalcDistance) {
 		var d =  parseInt($$(getHtmlId('richTextDistance')).getValue(), 10);
 		
-//		L3.clearGoogleMapMarkers();
-
 		Addresses.getNearbySchoolsAsync(
 			{
 				onSuccess: function(event) {
