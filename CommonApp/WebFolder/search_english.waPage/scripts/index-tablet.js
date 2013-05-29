@@ -152,6 +152,16 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		loadFamilyAndSetupSearchMap();
 	};// @lock
 
+	documentEvent.onorientationchange = function documentEvent_onorientationchange (event)// @startlock
+	{// @endlock
+		if (window.innerWidth <= 768) { // portrait
+			$$('containerSearch').mobileSplitView(true);
+		}
+		else { // landscape
+			$$('containerSearch').mobileSplitView(false);
+		}
+	};// @lock
+
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
 		L3.localization.changeLanguage('en');
@@ -188,6 +198,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("document", "onorientationchange", documentEvent.onorientationchange, "WAF");
 	WAF.addListener("dataGridSchoolOptions", "onRowClick", dataGridSchoolOptions.onRowClick, "WAF");
 	WAF.addListener("dataGridSchoolOptions", "onRowDblClick", dataGridSchoolOptions.onRowDblClick, "WAF");
 	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
