@@ -2,7 +2,12 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
-	var buttonNextStep = {};	// @button
+	var buttonReport = {};	// @button
+	var textFieldSchoolName = {};	// @textField
+	var switchboxShowSelected = {};	// @switchbox
+	var selectCategory = {};	// @select
+	var sliderDistance = {};	// @slider
+	var buttonLoad = {};	// @button
 	var documentEvent = {};	// @document
 	var textFieldMainZipCodeEntry = {};	// @textField
 	var textFieldMainStateEntry = {};	// @textField
@@ -30,7 +35,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 							d.mainUSPSLine1 + '\n' + d.mainUSPSLine2
 						);
 						google.maps.event.trigger(L3.googleMap, 'resize');
-						loadSchoolMarkers();
 					},
 					onError: function(error) {
 						console.log('ERROR: setupSearchMap', error);
@@ -41,7 +45,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		}
 	}
 	
-	function loadSchoolMarkers() {
+	function updateSchoolList(recalcDistance) {
 		Addresses.getNearbySchoolsAsync(
 			{
 				onSuccess: function(event) {
@@ -67,13 +71,10 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 				params: [{
 					familyID: currentFamilyID,
 					distance: maxDistance,
-					recalc: (sources.schoolOption.length === 0),
-					selected: false,
-					name: WAF.wildchar,
-					category: 'All',
-//					selected: $$(getHtmlId('checkboxShowSelected')).getValue(),
-//					name: $$(getHtmlId('textFieldSchoolName')).getValue() + WAF.wildchar,
-//					category: $$(getHtmlId('comboboxCategory')).getValue(),
+					recalc: (recalcDistance || (sources.schoolOption.length === 0)),
+					selected: showSelectedSchools,
+					name: ($$('textFieldSchoolName').getValue() || '') + WAF.wildchar,
+					category: $$('selectCategory').getValue(),
 					debug: false 
 				}]
 			}
@@ -97,7 +98,39 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
-	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
+	buttonReport.click = function buttonReport_click (event)// @startlock
+	{// @endlock
+		if (currentFamilyID) {
+			L3.generateReport();
+		}
+	};// @lock
+
+	textFieldSchoolName.keyup = function textFieldSchoolName_keyup (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
+	switchboxShowSelected.click = function switchboxShowSelected_click (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
+	selectCategory.change = function selectCategory_change (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
+	sliderDistance.slidechange = function sliderDistance_slidechange (event)// @startlock
+	{// @endlock
+		updateSchoolList(true);
+		if (L3.googleMap) {
+			sources.family.searchDistance = maxDistance;
+			sources.family.save({onSuccess: function(e) { console.log('sources.family.save slider', e) } });
+			L3.googleMap.setZoom(L3.googleMapCalculateZoom(maxDistance));
+		}
+	};// @lock
+
+	buttonLoad.click = function buttonLoad_click (event)// @startlock
 	{// @endlock
 		loadFamilyAndSetupSearchMap();
 	};// @lock
@@ -105,7 +138,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
 		L3.localization.changeLanguage('en');
-		$$('buttonNextStep').disable();
+		$$('buttonLoad').disable();
 	};// @lock
 
 	textFieldMainZipCodeEntry.change = function textFieldMainZipCodeEntry_change (event)// @startlock
@@ -138,7 +171,12 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
-	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
+	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
+	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
+	WAF.addListener("switchboxShowSelected", "click", switchboxShowSelected.click, "WAF");
+	WAF.addListener("selectCategory", "change", selectCategory.change, "WAF");
+	WAF.addListener("sliderDistance", "slidechange", sliderDistance.slidechange, "WAF");
+	WAF.addListener("buttonLoad", "click", buttonLoad.click, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");
 	WAF.addListener("textFieldMainZipCodeEntry", "change", textFieldMainZipCodeEntry.change, "WAF");
 	WAF.addListener("textFieldMainStateEntry", "change", textFieldMainStateEntry.change, "WAF");
