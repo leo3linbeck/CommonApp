@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var dataGridSchoolOptions = {};	// @dataGrid
 	var buttonReport = {};	// @button
 	var textFieldSchoolName = {};	// @textField
 	var switchboxShowSelected = {};	// @switchbox
@@ -98,6 +99,22 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	dataGridSchoolOptions.onRowClick = function dataGridSchoolOptions_onRowClick (event)// @startlock
+	{// @endlock
+		google.maps.event.trigger(L3.markerMap[sources.schoolOption.ID], 'click');
+	};// @lock
+
+	dataGridSchoolOptions.onRowDblClick = function dataGridSchoolOptions_onRowDblClick (event)// @startlock
+	{// @endlock
+		var a, v;
+		
+		console.log('dataGridSchools.onRowDblClick', event);
+		a = sources.schoolOption.getAttribute('selected');
+		v = a.getValue() ? false : true;
+		a.setValue(v);
+		sources.schoolOption.save({ onSuccess: function() {} });
+	};// @lock
+
 	buttonReport.click = function buttonReport_click (event)// @startlock
 	{// @endlock
 		if (currentFamilyID) {
@@ -171,6 +188,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("dataGridSchoolOptions", "onRowClick", dataGridSchoolOptions.onRowClick, "WAF");
+	WAF.addListener("dataGridSchoolOptions", "onRowDblClick", dataGridSchoolOptions.onRowDblClick, "WAF");
 	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
 	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
 	WAF.addListener("switchboxShowSelected", "click", switchboxShowSelected.click, "WAF");
