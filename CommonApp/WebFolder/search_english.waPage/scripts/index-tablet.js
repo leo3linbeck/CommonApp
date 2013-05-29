@@ -13,7 +13,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	var textFieldMainStateEntry = {};	// @textField
 	var textFieldMainCityEntry = {};	// @textField
 	var textFieldMainStreet2Entry = {};	// @textField
-	var textFieldMainStreet1Entry = {};	// @textField
 // @endregion// @endlock
 
 	function updateSchoolList(recalcDistance) {
@@ -140,12 +139,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 		L3.verifyMainAddress(this, 'tablet');
 	};// @lock
 
-	textFieldMainStreet1Entry.change = function textFieldMainStreet1Entry_change (event)// @startlock
-	{// @endlock
-		L3.convertAttributeToTitleCase(this);
-		L3.verifyMainAddress(this, 'tablet');
-	};// @lock
-
 // @region eventManager// @startlock
 	WAF.addListener("document", "onorientationchange", documentEvent.onorientationchange, "WAF");
 	WAF.addListener("dataGridSchoolOptions", "onRowClick", dataGridSchoolOptions.onRowClick, "WAF");
@@ -160,6 +153,5 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	WAF.addListener("textFieldMainStateEntry", "change", textFieldMainStateEntry.change, "WAF");
 	WAF.addListener("textFieldMainCityEntry", "change", textFieldMainCityEntry.change, "WAF");
 	WAF.addListener("textFieldMainStreet2Entry", "change", textFieldMainStreet2Entry.change, "WAF");
-	WAF.addListener("textFieldMainStreet1Entry", "change", textFieldMainStreet1Entry.change, "WAF");
 // @endregion
 };// @endlock
