@@ -2,12 +2,14 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var buttonNextStep = {};	// @button
+	var textFieldMainStreet1Entry = {};	// @textField
+	var switchboxShowSelected = {};	// @switchbox
+	var sliderDistance = {};	// @slider
+	var selectCategory = {};	// @select
+	var textFieldSchoolName = {};	// @textField
 	var dataGridSchoolOptions = {};	// @dataGrid
 	var buttonReport = {};	// @button
-	var textFieldSchoolName = {};	// @textField
-	var switchboxShowSelected = {};	// @switchbox
-	var selectCategory = {};	// @select
-	var sliderDistance = {};	// @slider
 	var documentEvent = {};	// @document
 	var textFieldMainZipCodeEntry = {};	// @textField
 	var textFieldMainStateEntry = {};	// @textField
@@ -53,6 +55,42 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 // eventHandlers// @lock
 
+	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
+	{// @endlock
+		$$('navigationViewData').goToView(1);
+	};// @lock
+
+	textFieldMainStreet1Entry.change = function textFieldMainStreet1Entry_change (event)// @startlock
+	{// @endlock
+		L3.convertAttributeToTitleCase(this);
+		L3.verifyMainAddress(this, 'tablet');
+	};// @lock
+
+	switchboxShowSelected.click = function switchboxShowSelected_click (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
+	sliderDistance.slidechange = function sliderDistance_slidechange (event)// @startlock
+	{// @endlock
+		updateSchoolList(true);
+		if (L3.googleMap) {
+			sources.family.searchDistance = maxDistance;
+			sources.family.save({onSuccess: function(e) { console.log('sources.family.save slider', e) } });
+			L3.googleMap.setZoom(L3.googleMapCalculateZoom(maxDistance));
+		}
+	};// @lock
+
+	selectCategory.change = function selectCategory_change (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
+	textFieldSchoolName.keyup = function textFieldSchoolName_keyup (event)// @startlock
+	{// @endlock
+		updateSchoolList(false);
+	};// @lock
+
 	dataGridSchoolOptions.onRowClick = function dataGridSchoolOptions_onRowClick (event)// @startlock
 	{// @endlock
 		google.maps.event.trigger(L3.markerMap[sources.schoolOption.ID], 'click');
@@ -72,32 +110,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	buttonReport.click = function buttonReport_click (event)// @startlock
 	{// @endlock
 		if (currentFamilyID) {
-			L3.generateReport();
-		}
-	};// @lock
-
-	textFieldSchoolName.keyup = function textFieldSchoolName_keyup (event)// @startlock
-	{// @endlock
-		updateSchoolList(false);
-	};// @lock
-
-	switchboxShowSelected.click = function switchboxShowSelected_click (event)// @startlock
-	{// @endlock
-		updateSchoolList(false);
-	};// @lock
-
-	selectCategory.change = function selectCategory_change (event)// @startlock
-	{// @endlock
-		updateSchoolList(false);
-	};// @lock
-
-	sliderDistance.slidechange = function sliderDistance_slidechange (event)// @startlock
-	{// @endlock
-		updateSchoolList(true);
-		if (L3.googleMap) {
-			sources.family.searchDistance = maxDistance;
-			sources.family.save({onSuccess: function(e) { console.log('sources.family.save slider', e) } });
-			L3.googleMap.setZoom(L3.googleMapCalculateZoom(maxDistance));
+			L3.generateReport('tablet');
 		}
 	};// @lock
 
@@ -114,6 +127,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
 		L3.localization.changeLanguage('en');
+		$$('buttonNextStep').disable();
 	};// @lock
 
 	textFieldMainZipCodeEntry.change = function textFieldMainZipCodeEntry_change (event)// @startlock
@@ -140,14 +154,16 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
-	WAF.addListener("document", "onorientationchange", documentEvent.onorientationchange, "WAF");
+	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
+	WAF.addListener("textFieldMainStreet1Entry", "change", textFieldMainStreet1Entry.change, "WAF");
+	WAF.addListener("switchboxShowSelected", "click", switchboxShowSelected.click, "WAF");
+	WAF.addListener("sliderDistance", "slidechange", sliderDistance.slidechange, "WAF");
+	WAF.addListener("selectCategory", "change", selectCategory.change, "WAF");
+	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
 	WAF.addListener("dataGridSchoolOptions", "onRowClick", dataGridSchoolOptions.onRowClick, "WAF");
 	WAF.addListener("dataGridSchoolOptions", "onRowDblClick", dataGridSchoolOptions.onRowDblClick, "WAF");
+	WAF.addListener("document", "onorientationchange", documentEvent.onorientationchange, "WAF");
 	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
-	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
-	WAF.addListener("switchboxShowSelected", "click", switchboxShowSelected.click, "WAF");
-	WAF.addListener("selectCategory", "change", selectCategory.change, "WAF");
-	WAF.addListener("sliderDistance", "slidechange", sliderDistance.slidechange, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");
 	WAF.addListener("textFieldMainZipCodeEntry", "change", textFieldMainZipCodeEntry.change, "WAF");
 	WAF.addListener("textFieldMainStateEntry", "change", textFieldMainStateEntry.change, "WAF");

@@ -2,6 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var buttonNextStep = {};	// @button
+	var buttonReport = {};	// @button
 	var textFieldSchoolName = {};	// @textField
 	var selectCategory = {};	// @select
 	var sliderDistance = {};	// @slider
@@ -52,6 +54,18 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 
 // eventHandlers// @lock
 
+	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
+	{// @endlock
+		$$('navigationViewData').goToNextView();
+	};// @lock
+
+	buttonReport.click = function buttonReport_click (event)// @startlock
+	{// @endlock
+		if (currentFamilyID) {
+			L3.generateReport('smartphone');
+		}
+	};// @lock
+
 	textFieldSchoolName.keyup = function textFieldSchoolName_keyup (event)// @startlock
 	{// @endlock
 		updateSchoolList(false);
@@ -80,6 +94,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	documentEvent.onLoad = function documentEvent_onLoad (event)// @startlock
 	{// @endlock
 		L3.localization.changeLanguage('en');
+		$$('buttonNextStep').disable();
 	};// @lock
 
 	textFieldMainStreet1Entry.change = function textFieldMainStreet1Entry_change (event)// @startlock
@@ -112,6 +127,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
+	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
 	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
 	WAF.addListener("selectCategory", "change", selectCategory.change, "WAF");
 	WAF.addListener("sliderDistance", "slidechange", sliderDistance.slidechange, "WAF");
