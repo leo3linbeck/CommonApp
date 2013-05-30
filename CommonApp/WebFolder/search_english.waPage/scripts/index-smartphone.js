@@ -2,6 +2,8 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var row2 = {};	// @container
+	var sideImage2 = {};	// @image
 	var buttonNextStep = {};	// @button
 	var buttonReport = {};	// @button
 	var textFieldSchoolName = {};	// @textField
@@ -53,6 +55,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 
 // eventHandlers// @lock
+
+	row2.touchend = function row2_touchend (event)// @startlock
+	{// @endlock
+		google.maps.event.trigger(L3.markerMap[sources.schoolOption.ID], 'click');
+	};// @lock
+
+	sideImage2.touchend = function sideImage2_touchend (event)// @startlock
+	{// @endlock
+		sources.schoolOption.selected = !sources.schoolOption.selected;
+		sources.schoolOption.save({onSuccess: function(e) { console.log('sources.schoolOption.save', e) } });
+	};// @lock
 
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
 	{// @endlock
@@ -127,6 +140,8 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("sideImage2", "touchend", sideImage2.touchend, "WAF");
+	WAF.addListener("row2", "touchend", row2.touchend, "WAF");
 	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
 	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
 	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");

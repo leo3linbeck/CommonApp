@@ -2,6 +2,7 @@
 
 include('Javascript/Family.js');
 include('Javascript/Person.js');
+include('Javascript/SchoolOption.js');
 include('Javascript/SchoolApplication.js');
 
 model = new DataStoreCatalog();
@@ -102,6 +103,8 @@ L3.SchoolOption = model.addClass('SchoolOption','SchoolOptions');
 L3.SchoolOption.addAttribute('ID', 				'storage',			'uuid', 		'key auto'		);
 L3.SchoolOption.addAttribute('distance',		'storage',			'number', 		'btree'			);
 L3.SchoolOption.addAttribute('selected',		'storage',			'bool', 		'btree'			);
+L3.SchoolOption.addAttribute('selectedIcon', 	'calculated',		'string'						);
+	L3.SchoolOption.selectedIcon.onGet = L3.schoolOptionSelectedIcon;
 L3.SchoolOption.addAttribute('userID', 			'alias',			'string', 		'family.userID'			);
 L3.SchoolOption.addAttribute('schoolName', 		'alias', 			'string', 		'school.name'			);
 L3.SchoolOption.addAttribute('schoolUSPSLine1',	'alias', 			'string', 		'school.uspsLine1'		);

@@ -2,13 +2,14 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var sideImage2 = {};	// @image
+	var row2 = {};	// @container
 	var buttonNextStep = {};	// @button
 	var textFieldMainStreet1Entry = {};	// @textField
 	var switchboxShowSelected = {};	// @switchbox
 	var sliderDistance = {};	// @slider
 	var selectCategory = {};	// @select
 	var textFieldSchoolName = {};	// @textField
-	var dataGridSchoolOptions = {};	// @dataGrid
 	var buttonReport = {};	// @button
 	var documentEvent = {};	// @document
 	var textFieldMainZipCodeEntry = {};	// @textField
@@ -55,6 +56,17 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	
 // eventHandlers// @lock
 
+	sideImage2.touchend = function sideImage2_touchend (event)// @startlock
+	{// @endlock
+		sources.schoolOption.selected = !sources.schoolOption.selected;
+		sources.schoolOption.save({onSuccess: function(e) { console.log('sources.schoolOption.save', e) } });
+	};// @lock
+
+	row2.touchend = function row2_touchend (event)// @startlock
+	{// @endlock
+		google.maps.event.trigger(L3.markerMap[sources.schoolOption.ID], 'click');
+	};// @lock
+
 	buttonNextStep.click = function buttonNextStep_click (event)// @startlock
 	{// @endlock
 		$$('navigationViewData').goToView(1);
@@ -89,22 +101,6 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	textFieldSchoolName.keyup = function textFieldSchoolName_keyup (event)// @startlock
 	{// @endlock
 		updateSchoolList(false);
-	};// @lock
-
-	dataGridSchoolOptions.onRowClick = function dataGridSchoolOptions_onRowClick (event)// @startlock
-	{// @endlock
-		google.maps.event.trigger(L3.markerMap[sources.schoolOption.ID], 'click');
-	};// @lock
-
-	dataGridSchoolOptions.onRowDblClick = function dataGridSchoolOptions_onRowDblClick (event)// @startlock
-	{// @endlock
-		var a, v;
-		
-		console.log('dataGridSchools.onRowDblClick', event);
-		a = sources.schoolOption.getAttribute('selected');
-		v = a.getValue() ? false : true;
-		a.setValue(v);
-		sources.schoolOption.save({ onSuccess: function() {} });
 	};// @lock
 
 	buttonReport.click = function buttonReport_click (event)// @startlock
@@ -154,14 +150,14 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("row2", "touchend", row2.touchend, "WAF");
+	WAF.addListener("sideImage2", "touchend", sideImage2.touchend, "WAF");
 	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
 	WAF.addListener("textFieldMainStreet1Entry", "change", textFieldMainStreet1Entry.change, "WAF");
 	WAF.addListener("switchboxShowSelected", "click", switchboxShowSelected.click, "WAF");
 	WAF.addListener("sliderDistance", "slidechange", sliderDistance.slidechange, "WAF");
 	WAF.addListener("selectCategory", "change", selectCategory.change, "WAF");
 	WAF.addListener("textFieldSchoolName", "keyup", textFieldSchoolName.keyup, "WAF");
-	WAF.addListener("dataGridSchoolOptions", "onRowClick", dataGridSchoolOptions.onRowClick, "WAF");
-	WAF.addListener("dataGridSchoolOptions", "onRowDblClick", dataGridSchoolOptions.onRowDblClick, "WAF");
 	WAF.addListener("document", "onorientationchange", documentEvent.onorientationchange, "WAF");
 	WAF.addListener("buttonReport", "click", buttonReport.click, "WAF");
 	WAF.addListener("document", "onLoad", documentEvent.onLoad, "WAF");
