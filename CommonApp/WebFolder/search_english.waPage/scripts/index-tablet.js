@@ -2,6 +2,7 @@
 WAF.onAfterInit = function onAfterInit() {// @lock
 
 // @region namespaceDeclaration// @startlock
+	var buttonOpen = {};	// @button
 	var sideImage2 = {};	// @image
 	var row2 = {};	// @container
 	var buttonNextStep = {};	// @button
@@ -55,6 +56,11 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	}
 	
 // eventHandlers// @lock
+
+	buttonOpen.click = function buttonOpen_click (event)// @startlock
+	{// @endlock
+		window.open($$('framePDF').getValue());
+	};// @lock
 
 	sideImage2.touchend = function sideImage2_touchend (event)// @startlock
 	{// @endlock
@@ -150,6 +156,7 @@ WAF.onAfterInit = function onAfterInit() {// @lock
 	};// @lock
 
 // @region eventManager// @startlock
+	WAF.addListener("buttonOpen", "click", buttonOpen.click, "WAF");
 	WAF.addListener("row2", "touchend", row2.touchend, "WAF");
 	WAF.addListener("sideImage2", "touchend", sideImage2.touchend, "WAF");
 	WAF.addListener("buttonNextStep", "click", buttonNextStep.click, "WAF");
